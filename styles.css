@@ -1,3 +1,17 @@
 body {
     background: gray;
+    color: wheat;
+}
+
+a:link {
+    color: wheat;
+    text-decoration: underline dotted;
+}
+
+a:hover {
+    color: rgb(0, 0, 0);
+}
+
+a:active {
+    color: white;
 }
