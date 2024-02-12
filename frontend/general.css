@@ -1,4 +1,6 @@
-body {
+html, body {
+    margin: 10px 0 0 10px;
+
     background: gray;
     color: wheat;
 }
@@ -14,4 +16,12 @@ a:hover {
 
 a:active {
     color: white;
+}
+
+#navigation-bar {
+    margin-bottom: 10px;
+}
+
+#content-area {
+    margin-bottom: 10px;
 }

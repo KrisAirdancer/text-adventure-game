@@ -4,14 +4,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./styles.css">
-    <script src="./scripts.js"></script>
+    <link rel="stylesheet" href="./frontend/general.css">
+    <link rel="stylesheet" href="./frontend/navigation-bar.css">
+    <!-- <script src="./scripts.js"></script> -->
     <title>Text Adventure Game</title>
 </head>
 <body>
-    <p id="headerText"></p>
-    <!-- <p>Current Location: <span id="headerText"></span></p> -->
-    <p id="mainText"></p>
-    <p id="navigationText"></p>
+    <div id="navigation-bar">
+        <a href="javascript:GameUI.reportAction('navigation/inventory')">Inventory</a>
+        <a href="javascript:GameUI.reportAction('navigation/equipment')">Equipment</a>
+        <a href="javascript:GameUI.reportAction('navigation/map')">Map (not functional)</a>
+    </div>
+    <div id="content-area"></div>
+    <div id="actions-bar"></div>
+
+    <!-- ORIGINAL VERSION -->
+    <!-- <p id="headerText"></p> -->
+    <!-- <p id="mainText"></p> -->
+    <!-- <p id="navigationText"></p> -->
 </body>
+<script src="./main.js"></script>
+<script src="./backend/game.js"></script>
+<script src="./frontend/gameUI.js"></script>
 </html>
