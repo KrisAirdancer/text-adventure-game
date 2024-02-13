@@ -1,25 +1,39 @@
 let Game = {
     start: function()
     {
-        // Note: The frontend should send a request to the backend when it initializes to get the data it needs to initialize.
+        // Nothing to see here...
     },
     sendRequest: function(request)
     {
         console.log("AT: Game.sendRequest()")
         console.log("request:", request)
 
-        return {
-            location: "Thistlewood",
-            playerData: {
-                name: "KrisAirdancer",
-                currentHP: "10",
-                maxHP: "12",
-                inventory: {
-                    "leather coif": 1,
-                    "bronse buckler": 1,
-                    "bronze sword": 1
-                }
-            }
+        let route = request.route.split("/")
+
+        switch (route[0])
+        {
+            case "navigation":
+                return this.navigationRouter(request)
+            case "gameState":
+                return this.getGameState(request)
+            default:
+                throw new Error(`Invalid route: ${request.route}`)
         }
+    },
+    getGameState: function()
+    {
+        // TODO: Eventually, initialize the GameState from save data here.
+
+        return GameState
+
+    },
+    navigationRouter: function()
+    {
+        console.log("AT: navigationRouter()")
+        throw new Error("NotImplementedException")
+    },
+    getLocationDataByID: function(locationID)
+    {
+        return Locations[locationID];
     }
 }

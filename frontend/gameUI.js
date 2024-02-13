@@ -1,42 +1,42 @@
 let GameUI = {
+    navigationBar: document.getElementById("navigation-bar"),
+    contentArea: document.getElementById("content-area"),
+    actionsBar: document.getElementById("actions-bar"),
+
+    // This function only needs to initialize the UI. So the logic here is specific to setting up the UI only when the game first launches.
     initialize: function()
     {
-        this.navigationBar = document.getElementById("navigation-bar")
-        this.contentArea = document.getElementById("content-area")
-        this.actionsBar = document.getElementById("actions-bar")
-
         // Get the current game state.
         let stateData = Game.sendRequest({
-            requestType: "GET",
-            route: "initialize"
+            route: "gameState/"
         })
         console.log("stateData:", stateData)
 
         // Update the UI.
-        this.contentArea.innerHTML = this.buildContentHTML()
-        this.actionsBar.innerHTML = this.buildActionsBarHTML({
-            functionCall: "GameUI.reportAction",
-            route: "navigation/thistlewood",
-            text: "Go to Thistlewood"
+        let locationData = Game.getLocationDataByID(stateData.currentLocation)
+        this.contentArea.innerHTML = this.buildContentHTML(locationData.description)
+        this.actionsBar.innerHTML = this.buildActionsBarHTML(locationData.navigationOptions)
+    },
+    buildContentHTML: function(content)
+    {
+        return `<p>${content}</p>`
+    },
+    buildActionsBarHTML: function(navigationOptions)
+    {
+        let actionsBarHTML = ""
+        navigationOptions.forEach(locationID => {
+            let locationData = Game.getLocationDataByID(locationID)
+            actionsBarHTML += this.buildLinkHTML("GameUI.reportAction", `navigation/${locationData.id}/`, locationData.name) + "<br>"
         })
-    },
-    buildContentHTML: function()
-    {
-        return "A simple one room log cabin in the trees on the edge of Thistlewood."
-    },
-    buildActionsBarHTML: function(data)
-    {
-        return GameUIUtils.buildLinkHTML(data.functionCall, data.route, data.text)
+        return actionsBarHTML.substring(0, actionsBarHTML.lastIndexOf("<br>"))
     },
     reportAction: function(request)
     {
         console.log("AT: GameUI.reportAction()")
         console.log("request:", request)
-    }
-}
 
-// TODO: Move to separate script file.
-let GameUIUtils = {
+        throw new Error("NotImplementedException")
+    },
     buildLinkHTML: function(functionCall, route, text)
     {
         return `<a href="javascript:${functionCall}('${route}')">${text}</a>`
