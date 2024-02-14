@@ -8,7 +8,7 @@ let GameUI = {
     {
         // Get the current game state.
         let stateData = Game.sendRequest({
-            route: "gameState/"
+            route: "gameState"
         })
         console.log("stateData:", stateData)
 
@@ -16,6 +16,21 @@ let GameUI = {
         let locationData = Game.getLocationDataByID(stateData.currentLocation)
         this.contentArea.innerHTML = this.buildContentHTML(locationData.description)
         this.actionsBar.innerHTML = this.buildActionsBarHTML(locationData.navigationOptions)
+    },
+    reportAction: function(route)
+    {
+        console.log("AT: GameUI.reportAction()")
+        console.log("request:", route)
+
+        let response = Game.sendRequest({
+            route: route
+        })
+        console.log("response:", response)
+
+        // Need:
+            // Content panel data
+            // Actions bar data - a list of actions to take and locations to visit.
+                // Split into two lists in the response object: "actions" and "locations"
     },
     buildContentHTML: function(content)
     {
@@ -26,16 +41,9 @@ let GameUI = {
         let actionsBarHTML = ""
         navigationOptions.forEach(locationID => {
             let locationData = Game.getLocationDataByID(locationID)
-            actionsBarHTML += this.buildLinkHTML("GameUI.reportAction", `navigation/${locationData.id}/`, locationData.name) + "<br>"
+            actionsBarHTML += this.buildLinkHTML("GameUI.reportAction", `navigation/${locationData.id}`, locationData.name) + "<br>"
         })
         return actionsBarHTML.substring(0, actionsBarHTML.lastIndexOf("<br>"))
-    },
-    reportAction: function(request)
-    {
-        console.log("AT: GameUI.reportAction()")
-        console.log("request:", request)
-
-        throw new Error("NotImplementedException")
     },
     buildLinkHTML: function(functionCall, route, text)
     {

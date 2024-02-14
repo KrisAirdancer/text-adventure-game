@@ -9,11 +9,12 @@ let Game = {
         console.log("request:", request)
 
         let route = request.route.split("/")
+        console.log(route)
 
         switch (route[0])
         {
             case "navigation":
-                return this.navigationRouter(request)
+                return this.navigationRouter(route[1])
             case "gameState":
                 return this.getGameState(request)
             default:
@@ -27,10 +28,11 @@ let Game = {
         return GameState
 
     },
-    navigationRouter: function()
+    navigationRouter: function(locationID)
     {
         console.log("AT: navigationRouter()")
-        throw new Error("NotImplementedException")
+        
+        return Locations[locationID].visit()
     },
     getLocationDataByID: function(locationID)
     {
