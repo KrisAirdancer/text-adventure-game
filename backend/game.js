@@ -1,7 +1,21 @@
 let Game = {
-    start: function()
+    locations: null,
+    actions: null,
+    initialize: function()
     {
-        // Nothing to see here...
+        // Initialize locations map
+        this.locations = new Map()
+        Locations.forEach(location => {
+            this.locations[location.id] = location
+        })
+
+        // Initialize actions map
+        this.actions = new Map()
+        Actions.forEach(action => {
+            this.actions[action.id] = action
+        })
+
+        console.log("Game successfully initialized.")
     },
     sendRequest: function(request)
     {
@@ -9,33 +23,55 @@ let Game = {
         console.log("request:", request)
 
         let route = request.route.split("/")
-        console.log(route)
-
+        console.log("route:", route)
         switch (route[0])
         {
-            case "navigation":
-                return this.navigationRouter(route[1])
-            case "gameState":
-                return this.getGameState(request)
+            case "navigation": // Player navigates to (visits) a location.
+                return this.handleNavigationRequest(request)
+            case "action": // Player takes (executes) an action.
+                return this.handleActionRequest(request)
+            case "data": // UI requests data about the game or game state.
+                return this.handleDataRequest(request)
             default:
                 throw new Error(`Invalid route: ${request.route}`)
         }
     },
+    handleDataRequest: function(request)
+    {
+        let route = request.route.split("/")
+        switch (route[1])
+        {
+            case "game-state":
+                return this.getGameState()
+            case "location":
+                return this.getLocationByID(route[2])
+            case "action":
+                return this.getActionByID(route[2])
+            default:
+                throw new Error(`Invalid route: ${request.route}`)
+        }
+    },
+    handleNavigationRequest: function(request)
+    {
+        let route = request.route.split("/")
+        return this.locations[route[1]].visit()
+    },
+    handleActionRequest: function(request)
+    {
+        // TODO: Implement this route.
+        throw new Error("NotImplementedException")
+    },
     getGameState: function()
     {
         // TODO: Eventually, initialize the GameState from save data here.
-
         return GameState
-
     },
-    navigationRouter: function(locationID)
+    getLocationByID: function(locationID)
     {
-        console.log("AT: navigationRouter()")
-        
-        return Locations[locationID].visit()
+        return this.locations[locationID]
     },
-    getLocationDataByID: function(locationID)
+    getActionByID: function(actionID)
     {
-        return Locations[locationID];
+        return this.actions[actionID]
     }
 }

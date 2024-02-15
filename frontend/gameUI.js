@@ -1,21 +1,24 @@
 let GameUI = {
     navigationBar: document.getElementById("navigation-bar"),
     contentArea: document.getElementById("content-area"),
-    actionsBar: document.getElementById("actions-bar"),
+    controlsBar: document.getElementById("controls-bar"),
 
     // This function only needs to initialize the UI. So the logic here is specific to setting up the UI only when the game first launches.
     initialize: function()
     {
         // Get the current game state.
         let stateData = Game.sendRequest({
-            route: "gameState"
+            route: "data/game-state"
         })
-        console.log("stateData:", stateData)
 
         // Update the UI.
-        let locationData = Game.getLocationDataByID(stateData.currentLocation)
+        let locationData = Game.sendRequest({
+            route: `data/location/${stateData.currentLocation}`
+        })
         this.contentArea.innerHTML = this.buildContentHTML(locationData.description)
-        this.actionsBar.innerHTML = this.buildActionsBarHTML(locationData.navigationOptions)
+        this.controlsBar.innerHTML = this.buildControlsBarHTML(locationData.connectedLocations, locationData.actions)
+
+        console.log("UI successfully initialized.")
     },
     reportAction: function(route)
     {
@@ -27,6 +30,8 @@ let GameUI = {
         })
         console.log("response:", response)
 
+        throw new Error("NotImplementedException")
+
         // Need:
             // Content panel data
             // Actions bar data - a list of actions to take and locations to visit.
@@ -36,17 +41,34 @@ let GameUI = {
     {
         return `<p>${content}</p>`
     },
-    buildActionsBarHTML: function(navigationOptions)
+    buildControlsBarHTML: function(locations, actions)
     {
-        let actionsBarHTML = ""
-        navigationOptions.forEach(locationID => {
-            let locationData = Game.getLocationDataByID(locationID)
-            actionsBarHTML += this.buildLinkHTML("GameUI.reportAction", `navigation/${locationData.id}`, locationData.name) + "<br>"
-        })
-        return actionsBarHTML.substring(0, actionsBarHTML.lastIndexOf("<br>"))
+        return this.buildActionsHTML(actions) + this.buildLocationsNavLinksHTML(locations)
     },
-    buildLinkHTML: function(functionCall, route, text)
+    buildActionsHTML: function(actions)
     {
-        return `<a href="javascript:${functionCall}('${route}')">${text}</a>`
+        let actionLinksHTML = ""
+        actions.forEach(actionID => {
+            let actionData = Game.sendRequest({
+                route: `data/action/${actionID}`
+            })
+            actionLinksHTML += "<p>" + this.buildLinkHTML("GameUI.reportAction", `action/${actionData.id}`, actionData.name) + "</p>"
+        })
+        return actionLinksHTML
+    },
+    buildLocationsNavLinksHTML: function(locations)
+    {
+        let locationLinksHTML = ""
+        locations.forEach(locationID => {
+            let locationData = Game.sendRequest({
+                route: `data/location/${locationID}`
+            })
+            locationLinksHTML += "<p>" + this.buildLinkHTML("GameUI.reportAction", `navigation/${locationData.id}`, `Go to ${locationData.name}`) + "</p>"
+        })
+        return locationLinksHTML
+    },
+    buildLinkHTML: function(nameOfFunctionToCall, route, text)
+    {
+        return `<a href="javascript:${nameOfFunctionToCall}('${route}')">${text}</a>`
     }
 }

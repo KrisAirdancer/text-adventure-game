@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./frontend/general.css">
     <link rel="stylesheet" href="./frontend/navigation-bar.css">
+    <link rel="stylesheet" href="./frontend/controls-bar.css">
+    <link rel="stylesheet" href="./frontend/content-area.css">
     <link rel="icon" type="image/x-icon" href="/frontend/favicon.png">
     <title>Text Adventure Game</title>
 </head>
@@ -13,10 +15,10 @@
     <div id="navigation-bar">
         <a href="javascript:GameUI.reportAction('navigation/inventory')">Inventory</a>
         <a href="javascript:GameUI.reportAction('navigation/equipment')">Equipment</a>
-        <a href="javascript:GameUI.reportAction('navigation/map')">Map (not functional)</a>
+        <a href="javascript:GameUI.reportAction('navigation/map')">Map</a>
     </div>
     <div id="content-area"></div>
-    <div id="actions-bar"></div>
+    <div id="controls-bar"></div>
 
     <!-- ORIGINAL VERSION -->
     <!-- <p id="headerText"></p> -->
@@ -25,6 +27,7 @@
 </body>
 <script src="./main.js"></script>
 <script src="./backend/locations.js"></script>
+<script src="./backend/actions.js"></script>
 <script src="./backend/gameState.js"></script>
 <script src="./backend/game.js"></script>
 <script src="./frontend/gameUI.js"></script>
