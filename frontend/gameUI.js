@@ -36,26 +36,25 @@ let GameUI = {
         switch (routeTokens[0])
         {
             case "navigation":
-                this.updateUI(response)
+                this.updateUIWithLocationData(response)
                 break
             default:
                 throw new Error(`Invalid route: ${request.route}`)
         }
-
-        // throw new Error("NotImplementedException")
-
-        // Need:
-            // Content panel data
-            // Actions bar data - a list of actions to take and locations to visit.
-                // Split into two lists in the response object: "actions" and "locations"
     },
-    // Update this function to take in the completed HTML and have it only apply it to the UI. The content to be displayed should be generated elsewhere.
-    updateUI: function(locationData)
+    updateUI: function(contentHTML, controlsBarHTML, currentLocationName)
     {
         // TODO: Update the UI to list the player's current location between the content area and the navigation-bar.
 
-        this.contentArea.innerHTML = locationData.description
-        this.controlsBar.innerHTML = this.buildControlsBarHTML(locationData.connectedLocations, locationData.actions)
+        this.contentArea.innerHTML = contentHTML
+        this.controlsBar.innerHTML = controlsBarHTML
+    },
+    updateUIWithLocationData: function(locationData)
+    {
+        this.updateUI(
+            locationData.description,
+            this.buildControlsBarHTML(locationData.connectedLocations, locationData.actions)
+        )
     },
     buildContentHTML: function(content)
     {
