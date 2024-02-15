@@ -12,6 +12,7 @@ let GameUI = {
         })
 
         // Update the UI.
+        // TODO: It might be incorrect to ever request location data directly. I think this might cause errors down the road when the game first launches and a location is visited without calling .visit(). Look into this.
         let locationData = Game.sendRequest({
             route: `data/location/${stateData.currentLocation}`
         })
