@@ -7,6 +7,8 @@ let GameUI = {
     // This function only needs to initialize the UI. So the logic here is specific to setting up the UI only when the game first launches.
     initialize: function()
     {
+        this.initializeNavigationBar();
+
         // Get the current game state.
         let stateData = Game.sendRequest({
             route: "data/game-state"
@@ -89,5 +91,22 @@ let GameUI = {
     buildLinkHTML: function(nameOfFunctionToCall, route, text)
     {
         return `<a href="javascript:${nameOfFunctionToCall}('${route}')">${text}</a>`;
+    },
+    initializeNavigationBar: function()
+    {
+        let navBarHTML = ""
+
+        navBarHTML += UiUtils.generateNavigationBarLinkHTML("navigation/inventory", "Inventory");
+        navBarHTML += UiUtils.generateNavigationBarLinkHTML("navigation/equipment", "Equipment");
+        navBarHTML += UiUtils.generateNavigationBarLinkHTML("navigation/map", "Map");
+
+        this.navigationBar.innerHTML = navBarHTML;
+    },
+}
+
+let UiUtils = {
+    generateNavigationBarLinkHTML: function(route, linkText)
+    {
+        return `<a href="javascript:GameUI.reportAction('${route}')">${linkText}</a>`;
     }
 }
