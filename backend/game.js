@@ -3,13 +3,13 @@ let Game = {
     actions: null,
     initialize: function()
     {
-        // Initialize locations map
+        // Initialize locations Map()
         this.locations = new Map()
         Locations.forEach(location => {
             this.locations[location.id] = location
         })
 
-        // Initialize actions map
+        // Initialize actions Map()
         this.actions = new Map()
         Actions.forEach(action => {
             this.actions[action.id] = action
