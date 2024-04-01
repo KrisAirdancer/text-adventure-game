@@ -8,7 +8,7 @@ let Locations = [
         actions: [1, 2],
         visit: function()
         {
-            return LocationsUtils.generateLocationDataObject(this)
+            return LocationsUtils.generateLocationDataObject(this);
         }
     },
     {
@@ -22,7 +22,7 @@ let Locations = [
         {
             // When .visit() is called, the location data object should be returned to the UI so that the proper data can be displayed.
             // Note that the .visit() function must be called so that any special logic associated with visiting the location runs to update the game state.
-            return LocationsUtils.generateLocationDataObject(this)
+            return LocationsUtils.generateLocationDataObject(this);
         }
     },
     {
@@ -33,7 +33,7 @@ let Locations = [
         actions: [1],
         visit: function()
         {
-            return LocationsUtils.generateLocationDataObject(this)
+            return LocationsUtils.generateLocationDataObject(this);
         }
     }
 ]

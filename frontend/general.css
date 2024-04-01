@@ -1,6 +1,8 @@
 html, body {
     margin: 10px 0 0 10px;
 
+    text-align: center;
+
     background: gray;
     color: wheat;
 }
@@ -19,6 +21,14 @@ a:active {
 }
 
 #navigation-bar {
+    margin-bottom: 10px;
+}
+
+#navigation-bar a {
+    margin-right: 10px;
+}
+
+#location-header {
     margin-bottom: 10px;
 }
 

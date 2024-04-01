@@ -5,7 +5,7 @@ let Actions = [
         actionHandler: function()
         {
             // This is an example of an action handler as should be called by the executeAction() function.
-            throw new Error("NotImplementedException")
+            throw new Error("NotImplementedException");
         }
     },
     {
@@ -14,7 +14,7 @@ let Actions = [
         actionHandler: function()
         {
             // This is an example of an action handler as should be called by the executeAction() function.
-            throw new Error("NotImplementedException")
+            throw new Error("NotImplementedException");
         }
     }
 ]
