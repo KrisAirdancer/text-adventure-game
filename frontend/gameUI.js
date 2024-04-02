@@ -4,7 +4,9 @@ let GameUI = {
     contentArea: document.getElementById("content-area"),
     controlsBar: document.getElementById("controls-bar"),
 
-    // This function only needs to initialize the UI. So the logic here is specific to setting up the UI only when the game first launches.
+    /*
+        This function only needs to initialize the UI. So the logic here is specific to setting up the UI only when the game first launches.
+    */
     initialize: function()
     {
         this.initializeNavigationBar();
