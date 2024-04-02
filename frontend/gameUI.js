@@ -16,7 +16,7 @@ let GameUI = {
 
         // Update the UI.
         let locationData = Game.sendRequest({
-            route: `navigation/${stateData.currentLocation}`
+            route: `location/${stateData.currentLocation}`
         });
         this.updateUIWithLocationData(locationData);
 
@@ -25,20 +25,21 @@ let GameUI = {
     reportAction: function(route)
     {
         console.log("AT: GameUI.reportAction()");
-        console.log("request:", route);
 
         let response = Game.sendRequest({
             route: route
         });
-        console.log("response:", response);
 
         let routeTokens = route.split("/");
-        console.log("routeTokens:", routeTokens);
+
         switch (routeTokens[0])
         {
-            case "navigation":
+            case "location":
+                // TODO: Need to differentiate between taking an action and visiting a location.
                 this.updateUIWithLocationData(response);
                 break;
+            case "menu":
+                throw new Error("NotImplementedException");
             default:
                 throw new Error(`Invalid route: ${request.route}`);
         }
@@ -53,7 +54,7 @@ let GameUI = {
     {
         this.updateUI(
             locationData.description,
-            this.buildControlsBarHTML(locationData.connectedLocations, locationData.actions),
+            this.buildControlsBarHTML(locationData),
             locationData.locationName.toUpperCase()
         );
     },
@@ -61,18 +62,15 @@ let GameUI = {
     {
         return `<p>${content}</p>`;
     },
-    buildControlsBarHTML: function(locations, actions)
+    buildControlsBarHTML: function(locationData)
     {
-        return this.buildActionsHTML(actions) + this.buildLocationsNavLinksHTML(locations);
+        return this.buildActionsHTML(locationData.locationID, locationData.actions) + this.buildLocationsNavLinksHTML(locationData.connectedLocations);
     },
-    buildActionsHTML: function(actions)
+    buildActionsHTML: function(locationID, actions)
     {
         let actionLinksHTML = "";
-        actions.forEach(actionID => {
-            let actionData = Game.sendRequest({
-                route: `data/action/${actionID}`
-            });
-            actionLinksHTML += "<p>" + this.buildLinkHTML("GameUI.reportAction", `action/${actionData.id}`, actionData.name) + "</p>";
+        Object.values(actions).forEach(action => {
+            actionLinksHTML += "<p>" + this.buildLinkHTML("GameUI.reportAction", `location/${locationID}?action_id=${action.id}`, action.name) + "</p>";
         })
         return actionLinksHTML;
     },
@@ -83,7 +81,7 @@ let GameUI = {
             let locationData = Game.sendRequest({
                 route: `data/location/${locationID}`
             });
-            locationLinksHTML += "<p>" + this.buildLinkHTML("GameUI.reportAction", `navigation/${locationData.id}`, `Go to ${locationData.name}`) + "</p>";
+            locationLinksHTML += "<p>" + this.buildLinkHTML("GameUI.reportAction", `location/${locationData.id}`, `Go to ${locationData.name}`) + "</p>";
         })
         return locationLinksHTML;
     },
@@ -95,15 +93,16 @@ let GameUI = {
     {
         let navBarHTML = ""
 
-        navBarHTML += UiUtils.generateNavigationBarLinkHTML("navigation/inventory", "Inventory");
-        navBarHTML += UiUtils.generateNavigationBarLinkHTML("navigation/equipment", "Equipment");
-        navBarHTML += UiUtils.generateNavigationBarLinkHTML("navigation/map", "Map");
+        navBarHTML += UiUtils.generateNavigationBarLinkHTML("menu/inventory", "Inventory");
+        navBarHTML += UiUtils.generateNavigationBarLinkHTML("menu/equipment", "Equipment");
+        navBarHTML += UiUtils.generateNavigationBarLinkHTML("menu/map", "Map");
 
         this.navigationBar.innerHTML = navBarHTML;
     },
 }
 
 let UiUtils = {
+    // TODO: This should be replaced with the buildLinkHTML() function.
     generateNavigationBarLinkHTML: function(route, linkText)
     {
         return `<a href="javascript:GameUI.reportAction('${route}')">${linkText}</a>`;
