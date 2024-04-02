@@ -5,7 +5,7 @@ let Locations = [
         description: "A simple one room log cabin in the trees on the edge of Thistlewood.",
         // Contains a list of locationIDs that specify which locations are accessible from this location.
         connectedLocations: [2],
-        actions: [1, 2],
+        actions: [1],
         visit: function()
         {
             return LocationsUtils.generateLocationDataObject(this);
@@ -17,7 +17,7 @@ let Locations = [
         description: "A description of Thistlewood.",
         connectedLocations: [1, 3],
         // Contains a list of actions that can be executed from this location.
-        actions: [1],
+        actions: [],
         visit: function()
         {
             // When .visit() is called, the location data object should be returned to the UI so that the proper data can be displayed.
@@ -27,10 +27,10 @@ let Locations = [
     },
     {
         id: 3,
-        name: "Dummy Location 1",
-        description: "A dummy location.",
+        name: "Thistlewood Forest",
+        description: "The forest of Thistlewood.",
         connectedLocations: [2],
-        actions: [1],
+        actions: [2],
         visit: function()
         {
             return LocationsUtils.generateLocationDataObject(this);
