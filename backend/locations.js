@@ -7,16 +7,28 @@ let Locations = {
         connectedLocations: [2],
         visit: function()
         {
-            return LocationsUtils.generateLocationDataObject(this);
+            return Utils.generateLocationDataObject(this);
         },
         actions: {
             1: {
                     id: 1,
                     name: "Rest in bed",
+                    // This is an example of an action handler as should be called by the executeAction() function.
                     actionHandler: function()
                     {
-                        // This is an example of an action handler as should be called by the executeAction() function.
-                        throw new Error("NotImplementedException");
+                        let maxHitPoints = GameState.player.maxHitPoints;
+                        let hitPoints = GameState.player.hitPoints;
+
+                        // Restore 5-10% of player's HP.
+                        let hpGained = Utils.getRandomInt( maxHitPoints * 0.05, maxHitPoints * 0.1);
+                        if (hpGained < 1) { hpGained = 1; }
+
+                        hitPoints += hpGained;
+
+                        if (hitPoints > maxHitPoints) { hitPoints = maxHitPoints; }
+                        GameState.hitPoints = hitPoints;
+
+                        return Utils.generateGameStateDataObject();
                     }
             }
         }
@@ -31,7 +43,7 @@ let Locations = {
         {
             // When .visit() is called, the location data object should be returned to the UI so that the proper data can be displayed.
             // Note that the .visit() function must be called so that any special logic associated with visiting the location runs to update the game state.
-            return LocationsUtils.generateLocationDataObject(this);
+            return Utils.generateLocationDataObject(this);
         },
         actions: []
     },
@@ -42,7 +54,7 @@ let Locations = {
         connectedLocations: [2],
         visit: function()
         {
-            return LocationsUtils.generateLocationDataObject(this);
+            return Utils.generateLocationDataObject(this);
         },
         actions: {
             1: {
@@ -54,19 +66,6 @@ let Locations = {
                         throw new Error("NotImplementedException");
                     }
             }
-        }
-    }
-}
-
-let LocationsUtils = {
-    generateLocationDataObject: function(locationObject)
-    {
-        return {
-            locationID: locationObject.id,
-            locationName: locationObject.name,
-            description: locationObject.description,
-            connectedLocations: locationObject.connectedLocations,
-            actions: locationObject.actions
         }
     }
 }
