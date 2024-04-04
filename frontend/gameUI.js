@@ -95,18 +95,10 @@ let GameUI = {
     {
         let navBarHTML = ""
 
-        navBarHTML += UiUtils.generateNavigationBarLinkHTML("menu/inventory", "Inventory");
-        navBarHTML += UiUtils.generateNavigationBarLinkHTML("menu/equipment", "Equipment");
-        navBarHTML += UiUtils.generateNavigationBarLinkHTML("menu/map", "Map");
+        navBarHTML += FrontendUtils.generateNavigationBarLinkHTML("menu/inventory", "Inventory");
+        navBarHTML += FrontendUtils.generateNavigationBarLinkHTML("menu/equipment", "Equipment");
+        navBarHTML += FrontendUtils.generateNavigationBarLinkHTML("menu/map", "Map");
 
         this.navigationBar.innerHTML = navBarHTML;
     },
-}
-
-let UiUtils = {
-    // TODO: This should be replaced with the buildLinkHTML() function.
-    generateNavigationBarLinkHTML: function(route, linkText)
-    {
-        return `<a href="javascript:GameUI.reportAction('${route}')">${linkText}</a>`;
-    }
 }

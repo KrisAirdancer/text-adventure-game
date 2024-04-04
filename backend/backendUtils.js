@@ -1,4 +1,4 @@
-let Utils = {
+let BackendUtils = {
     generateLocationDataObject: function(locationObject)
     {
         return {

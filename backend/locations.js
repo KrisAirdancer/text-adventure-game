@@ -7,7 +7,7 @@ let Locations = {
         connectedLocations: [2],
         visit: function()
         {
-            return Utils.generateLocationDataObject(this);
+            return BackendUtils.generateLocationDataObject(this);
         },
         actions: {
             1: {
@@ -20,7 +20,7 @@ let Locations = {
                         let hitPoints = GameState.player.hitPoints;
 
                         // Restore 5-10% of player's HP.
-                        let hpGained = Utils.getRandomInt( maxHitPoints * 0.05, maxHitPoints * 0.1);
+                        let hpGained = BackendUtils.getRandomInt( maxHitPoints * 0.05, maxHitPoints * 0.1);
                         if (hpGained < 1) { hpGained = 1; }
 
                         hitPoints += hpGained;
@@ -28,7 +28,7 @@ let Locations = {
                         if (hitPoints > maxHitPoints) { hitPoints = maxHitPoints; }
                         GameState.hitPoints = hitPoints;
 
-                        return Utils.generateGameStateDataObject();
+                        return BackendUtils.generateGameStateDataObject();
                     }
             }
         }
@@ -43,7 +43,7 @@ let Locations = {
         {
             // When .visit() is called, the location data object should be returned to the UI so that the proper data can be displayed.
             // Note that the .visit() function must be called so that any special logic associated with visiting the location runs to update the game state.
-            return Utils.generateLocationDataObject(this);
+            return BackendUtils.generateLocationDataObject(this);
         },
         actions: []
     },
@@ -54,7 +54,7 @@ let Locations = {
         connectedLocations: [2],
         visit: function()
         {
-            return Utils.generateLocationDataObject(this);
+            return BackendUtils.generateLocationDataObject(this);
         },
         actions: {
             1: {
