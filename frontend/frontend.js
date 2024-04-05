@@ -5,7 +5,7 @@ let Frontend = {
 
         // Nothing to initialize...
 
-        console.log("Game successfully initialized.");
+        console.log("Frontend successfully initialized.");
     },
     send: function()
     {
