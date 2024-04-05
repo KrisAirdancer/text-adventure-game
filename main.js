@@ -1,4 +1,4 @@
 window.onload = () => {
-    Game.initialize()
-    GameUI.initialize()
+    Backend.initialize();
+    Frontend.initialize();
 }

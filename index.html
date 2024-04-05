@@ -7,30 +7,29 @@
     <title>TEST FRONTEND</title>
 </head>
 <body>
-    <button onclick="send();">SEND</button>
-
-    <!-- None of this stuff is being used. It's just here so I don't have to disable stuff in the frontend code (and then forget to reenable it later.) -->
-    <div id="navigation-bar"></div>
-    <div id="location-header"></div>
-    <div id="content-area"></div>
-    <div id="controls-bar"></div>
+    <button onclick="Frontend.send();">SEND</button>
 </body>
 <script src="./main.js"></script>
 <script src="./backend/locations.js"></script>
-<script src="./backend/gameState.js"></script>
-<script src="./backend/game.js"></script>
+<script src="./backend/player.js"></script>
+<script src="./backend/backend.js"></script>
 <script src="./backend/backendUtils.js"></script>
-<script src="./frontend/gameUI.js"></script>
-<script src="./frontend/frontendUtils.js"></script>
+<script src="./frontend/frontend.js"></script>
 <script>
-    function send()
-    {
-        console.log("AT: send()");
-        let response = Game.sendRequest({
-            route: "location/2"
-        });
-        console.log("response:");
-        console.log(response);
-    }
+    // function send()
+    // {
+    //     console.log("AT: send()");
+        
+    //     // JSON.stringify() required to ensure that the data is sent, not an object reference.
+    //     let response = Backend.sendRequest(JSON.stringify({
+    //         "method": "GET",
+    //         "route": "location/1?action_id=3",
+    //     }));
+    //     console.log("response: ", response);
+        
+    //     // Convert response JSON string into an object.
+    //     response = JSON.parse(response);
+    //     console.log("post destringing: ", response);
+    // }
 </script>
 </html>

@@ -1,7 +1,7 @@
 // This object represents the game state.
-let GameState = {
-    currentLocation: 1,
+let Player = {
     player: {
+        currentLocation: 1,
         hitPoints: 5,
         maxHitPoints: 10,
         inventory: []

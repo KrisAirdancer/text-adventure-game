@@ -16,8 +16,8 @@ let Locations = {
                     // This is an example of an action handler as should be called by the executeAction() function.
                     actionHandler: function()
                     {
-                        let maxHitPoints = GameState.player.maxHitPoints;
-                        let hitPoints = GameState.player.hitPoints;
+                        let maxHitPoints = Player.maxHitPoints;
+                        let hitPoints = Player.hitPoints;
 
                         // Restore 5-10% of player's HP.
                         let hpGained = BackendUtils.getRandomInt( maxHitPoints * 0.05, maxHitPoints * 0.1);
@@ -26,9 +26,8 @@ let Locations = {
                         hitPoints += hpGained;
 
                         if (hitPoints > maxHitPoints) { hitPoints = maxHitPoints; }
-                        GameState.hitPoints = hitPoints;
+                        Player.hitPoints = hitPoints;
 
-                        return BackendUtils.generateGameStateDataObject();
                     }
             }
         }
