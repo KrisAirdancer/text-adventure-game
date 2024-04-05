@@ -26,9 +26,13 @@ let Backend = {
         console.log("post parsing: ", request);
 
         // TODO: Add routing.
-        
-        // TODO: Return populated response object.
-        return JSON.stringify({});
+        switch(request.pathParams[0])
+        {
+            case "location":
+                return LocationRouter.handleLocationRequest(request);
+            default:
+                throw new Error(`Invalid route: ${request.route}`);
+        }
     },
     parseRequest: function(request)
     {

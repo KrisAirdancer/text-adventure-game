@@ -7,7 +7,7 @@ let Locations = {
         connectedLocations: [2],
         visit: function()
         {
-            return BackendUtils.generateLocationDataObject(this);
+            // No special logic needed for this location.
         },
         actions: {
             1: {
@@ -27,7 +27,6 @@ let Locations = {
 
                         if (hitPoints > maxHitPoints) { hitPoints = maxHitPoints; }
                         Player.hitPoints = hitPoints;
-
                     }
             }
         }
@@ -40,9 +39,7 @@ let Locations = {
         // Contains a list of actions that can be executed from this location.
         visit: function()
         {
-            // When .visit() is called, the location data object should be returned to the UI so that the proper data can be displayed.
-            // Note that the .visit() function must be called so that any special logic associated with visiting the location runs to update the game state.
-            return BackendUtils.generateLocationDataObject(this);
+            // No special logic needed for this location.
         },
         actions: []
     },
@@ -53,7 +50,7 @@ let Locations = {
         connectedLocations: [2],
         visit: function()
         {
-            return BackendUtils.generateLocationDataObject(this);
+            // No special logic needed for this location.
         },
         actions: {
             1: {
