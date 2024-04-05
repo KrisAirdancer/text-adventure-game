@@ -1,4 +1,8 @@
 let BackendUtils = {
+    generateActionResultObject: function()
+    {
+
+    },
     generateLocationDataObject: function(locationObject)
     {
         return {

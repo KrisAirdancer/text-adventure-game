@@ -2,14 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./frontend/styles.css">
+    <link rel="stylesheet" href="./frontend/controls-bar.css">
+    <link rel="stylesheet" href="./frontend/content-area.css">
     <link rel="icon" type="image/x-icon" href="/frontend/favicon.png">
-    <title>TEST FRONTEND</title>
+    <title>Text Adventure Game</title>
 </head>
 <body>
-    <button onclick="send();">SEND</button>
-
-    <!-- None of this stuff is being used. It's just here so I don't have to disable stuff in the frontend code (and then forget to reenable it later.) -->
     <div id="navigation-bar"></div>
     <div id="location-header"></div>
     <div id="content-area"></div>
@@ -22,15 +23,4 @@
 <script src="./backend/backendUtils.js"></script>
 <script src="./frontend/gameUI.js"></script>
 <script src="./frontend/frontendUtils.js"></script>
-<script>
-    function send()
-    {
-        console.log("AT: send()");
-        let response = Game.sendRequest({
-            route: "location/2"
-        });
-        console.log("response:");
-        console.log(response);
-    }
-</script>
 </html>
