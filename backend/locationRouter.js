@@ -8,7 +8,7 @@ let LocationRouter = {
         console.log("routerString: ", routerString);
         switch(true)
         {
-            case (/GET location\/\d+/).test(routerString):
+            case (/^GET location\/\d+$/).test(routerString):
                 return this.handleVisitLocation(request);
             default:
                 throw new Error(`Invalid route: ${request.route}`);
