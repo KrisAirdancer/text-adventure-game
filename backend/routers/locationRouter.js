@@ -57,20 +57,13 @@ let LocationRouter = {
     {
         console.log("AT: LocationRouter.handleLocationActionRequest()");
 
-        console.log(request);
-
         let location = Locations[request.pathParams[1]];
-        // console.log("location: ", location);
-        // console.log("action_id: ", request.queryParams.action_id);
         let action = location.actions[request.queryParams.action_id];
-        // console.log("action: ", action);
         
         // Execute action
         let results = action.actionHandler();
 
         // Return the gameState and the events list.
         return BackendUtils.generateGameStateDataObject(results);
-
-        // throw new Error("Not implemented exception.");
     }
 }
