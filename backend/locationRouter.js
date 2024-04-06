@@ -8,9 +8,9 @@ let LocationRouter = {
         console.log("routerString: ", routerString);
         switch(true)
         {
-            case (/^POST location\/\d+$/).test(routerString):
+            case (/^POST location\/\d+$/).test(routerString): // Visit location.
                 return this.handleVisitLocation(request);
-            case (/^GET location\/\d+$/).test(routerString):
+            case (/^GET location\/\d+$/).test(routerString): // Get location data.
                 return this.handleVisitLocation(request);
             default:
                 throw new Error(`Invalid route: ${request.route}`);

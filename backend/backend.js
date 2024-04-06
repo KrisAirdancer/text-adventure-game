@@ -16,7 +16,7 @@ let Backend = {
         console.log(request);
         
         // This check must be the first statement to run when a request comes into the backend.
-        if ((typeof request) !== "string") { throw new Error("Request is not a string.") }
+        this.validateRequest(request);
         
         // Convert the request JSON string to an object.
         request = JSON.parse(request);
@@ -33,6 +33,10 @@ let Backend = {
             default:
                 throw new Error(`Invalid route: ${request.route}`);
         }
+    },
+    validateRequest: function(request)
+    {
+        if ((typeof request) !== "string") { throw new Error("Request is not a string.") }
     },
     parseRequest: function(request)
     {
