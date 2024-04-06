@@ -8,6 +8,8 @@ let LocationRouter = {
         console.log("routerString: ", routerString);
         switch(true)
         {
+            case (/^POST location\/\d+\?action_id=\d+$/).test(routerString):
+                return this.handleActionRequest();
             case (/^POST location\/\d+$/).test(routerString): // Visit location.
                 return this.handleVisitLocation(request);
             case (/^GET location\/\d+$/).test(routerString): // Get location data.
@@ -47,5 +49,14 @@ let LocationRouter = {
         requestedLocation.visit();
 
         return BackendUtils.generateLocationDataObject(requestedLocation, true);
+    },
+    /*
+        Executes the specified action.
+    */
+    handleActionRequest: function()
+    {
+        console.log("AT: LocationRouter.handleLocationActionRequest()");
+
+        throw new Error("Not implemented exception.");
     }
 }
