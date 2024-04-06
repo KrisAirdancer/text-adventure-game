@@ -1,4 +1,4 @@
-let Locations = {
+const Locations = {
     1: {
         id: 1,
         name: "Player Cabin",
@@ -8,6 +8,8 @@ let Locations = {
         visit: function()
         {
             // No special logic needed for this location.
+
+            // TODO: Return a list of events that occurred by visiting this location.
         },
         actions: {
             1: {
@@ -27,6 +29,11 @@ let Locations = {
 
                         if (hitPoints > maxHitPoints) { hitPoints = maxHitPoints; }
                         Player.hitPoints = hitPoints;
+
+                        // Return a list of events that occurred as a result of taking this action.
+                        return [
+                            Events.generateHpChangeEvent(hpGained)
+                        ]
                     }
             }
         }

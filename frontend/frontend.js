@@ -15,8 +15,11 @@ let Frontend = {
         let response = Backend.sendRequest(JSON.stringify({
             // "method": "GET",
             "method": "POST",
-            "route": "location/1?action_id=3",
+            "route": "location/1?action_id=1",
             // "route": "location/3",
+            "body": {
+
+            }
         }));
         console.log("response: ", response);
         

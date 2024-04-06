@@ -25,14 +25,17 @@ let Backend = {
         request = this.parseRequest(request);
         console.log("post parsing: ", request);
 
-        // TODO: Add routing.
+        let response = undefined;
         switch(request.pathParams[0])
         {
             case "location":
-                return LocationRouter.handleLocationRequest(request);
+                response = LocationRouter.handleLocationRequest(request);
+                break;
             default:
                 throw new Error(`Invalid route: ${request.route}`);
         }
+
+        return JSON.stringify(response);
     },
     validateRequest: function(request)
     {
@@ -62,3 +65,5 @@ let Backend = {
         return request;
     }
 }
+
+// TODO: Implement a route to return the player's inventory. The full data objects for each item. Not just the ID and quantity.

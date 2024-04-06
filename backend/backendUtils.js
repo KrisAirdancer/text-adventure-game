@@ -31,7 +31,7 @@ let BackendUtils = {
             }
         };
 
-        return JSON.stringify({
+        return {
             location: {
                 id: locationObject.id,
                 name: locationObject.name,
@@ -39,6 +39,27 @@ let BackendUtils = {
                 connectedLocations: locationObject.connectedLocations,
                 actions: actionsData
             }
+        };
+    },
+    /*
+        Generates an object representing the game state.
+    */
+    generateGameStateDataObject: function(eventsList)
+    {
+        console.log("AT: BackendUtils.generateGameStateObject()");
+
+        if (!Array.isArray(eventsList)) { throw new Error(`eventsList must be a list. Got (${typeof eventsList})`); }
+
+        let eventsObject = {}
+        eventsList.forEach(event => {
+            eventsObject[event.name] = event;
         });
+
+        return {
+            gameState: {
+                player: Player
+            },
+            events: eventsObject
+        }
     }
 }
