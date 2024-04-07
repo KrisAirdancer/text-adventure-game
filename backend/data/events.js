@@ -8,5 +8,12 @@ const Events = {
             name: "HP_CHANGE_EVENT",
             HPDelta: HPDelta
         }
+   },
+   generateInventoryUpdateEvent: function(items)
+   {
+        return {
+            name: "INVENTORY_UPDATE_EVENT",
+            // TODO:
+        }
    }
 }

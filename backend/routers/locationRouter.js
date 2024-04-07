@@ -62,6 +62,7 @@ let LocationRouter = {
         
         // Execute action
         let results = action.actionHandler();
+        console.log("action results: ", results);
 
         // Return the gameState and the events list.
         return BackendUtils.generateGameStateDataObject(results);

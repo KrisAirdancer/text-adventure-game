@@ -28,6 +28,7 @@ const Locations = {
                         hitPoints += hpGained;
 
                         if (hitPoints > maxHitPoints) { hitPoints = maxHitPoints; }
+                        // TODO: Create a function to update the player's HP. Could have this return the HP_CHANGE_EVENT.
                         Player.hitPoints = hitPoints;
 
                         // Return a list of events that occurred as a result of taking this action.
@@ -65,8 +66,38 @@ const Locations = {
                     name: "Search the forest",
                     actionHandler: function()
                     {
-                        // This is an example of an action handler as should be called by the executeAction() function.
-                        throw new Error("NotImplementedException");
+                        // Randomly select an item from a list of findable items.
+                        let probability = BackendUtils.getRandomInt(1, 100);
+
+                        let foundItems = [];
+                        if (probability <= 10)
+                        { // Return a Morel Mushroom.
+                            foundItems.push(3);
+                        }
+                        if (probability > 10 && probability <= 90)
+                        { // Return a single item: Sticks or a Thistle Head.
+                            let possibleItems = [4, 5];
+                            let index = BackendUtils.getRandomInt(0, possibleItems.length);
+                            foundItems.push({}[possibleItems[index]] = 1); // Create an object of type: { itemID: quantity }
+                            
+                            if (probability > 75 && probability < 90)
+                            { // Additional item found.
+                                for (let i = 0; i < 1; i++)
+                                {
+                                    index = BackendUtils.getRandomInt(0, possibleItems.length + 1);
+                                    foundItems.push(possibleItems[index]);
+                                }
+                            }
+                        }
+                        // Else, no items found.
+
+                        console.log("foundItems: ", foundItems);
+
+                        // Add the new item(s) to the player's inventory and return an INVENTORY_UPDATE_EVENT.
+                        return (foundItems.length > 0) ? [
+                            BackendUtils.addItemToPlayerInventory(foundItems) // Returns an INVENTORY_UPDATE_EVENT
+                        ] :
+                        [] // If nothing was found, return no events.
                     }
             }
         }

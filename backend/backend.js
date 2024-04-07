@@ -67,3 +67,6 @@ let Backend = {
 }
 
 // TODO: Implement a route to return the player's inventory. The full data objects for each item. Not just the ID and quantity.
+// TODO: Add logic to return events from the .visit() functions for locations.
+// TODO: Add logic to the Backend.initialize() function to iterate over all of the locations and items to ensure that the ID being used as the key in the dictionary matches the ID of the item the key is associated with.
+// > Note: This might not make sense to add as part of the game logic directly. Instead, it should be part of the deployment pipeline so that it doesn't run every time someone launches the game.

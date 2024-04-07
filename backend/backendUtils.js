@@ -50,10 +50,15 @@ let BackendUtils = {
 
         if (!Array.isArray(eventsList)) { throw new Error(`eventsList must be a list. Got (${typeof eventsList})`); }
 
+        console.log("eventsList: ", eventsList);
+        console.log("length: ", eventsList.length);
         let eventsObject = {}
-        eventsList.forEach(event => {
-            eventsObject[event.name] = event;
-        });
+        if (eventsList.length > 0)
+        {
+            eventsList.forEach(event => {
+                eventsObject[event.name] = event;
+            });
+        }
 
         return {
             gameState: {
@@ -61,5 +66,24 @@ let BackendUtils = {
             },
             events: eventsObject
         }
+    },
+    /*
+        Adds the given items to the player's inventory.
+    */
+    addItemToPlayerInventory: function(items)
+    {
+        console.log("AT: BackendUtils.addItemToPlayerInventory()");
+        
+        console.log("items: ", items);
+        if (!Array.isArray(items)) { throw new Error(`eventsList must be a list. Got (${typeof eventsList})`); }
+
+        if (items.length < 1) { throw new Error("Items list must be non-empty."); }
+
+        // Add items to player inventory.
+
+        // Return events.
+
+        // TODO: 
+        // return Events.generateInventoryUpdateEvent(...);
     }
 }
