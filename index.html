@@ -3,20 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="/frontend/favicon.png">
+    <link rel="icon" type="image/x-icon" href="./favicon.png">
     <title>TEST FRONTEND</title>
 </head>
 <body>
-    <button onclick="Frontend.send();">SEND</button>
+    <button onclick="UI.executeCommand('DUMMY_COMMAND');">EXEC</button>
 </body>
 <script src="./main.js"></script>
-<!-- BACKEND SCRIPTS -->
-<script src="./backend/backend.js"></script>
-<script src="./backend/backendUtils.js"></script>
-<script src="./backend/data/locations.js"></script>
-<script src="./backend/data/player.js"></script>
-<script src="./backend/data/events.js"></script>
-<script src="./backend/routers/locationRouter.js"></script>
-<!-- FRONTEND SCRIPTS -->
-<script src="./frontend/frontend.js"></script>
+<script src="./game.js"></script>
+<script src="./utils.js"></script>
+<script src="./ui.js"></script>
+<script src="./router.js"></script>
+<script src="./data/locations.js"></script>
+<script src="./data/gameState.js"></script>
+<script src="./data/events.js"></script>
 </html>
