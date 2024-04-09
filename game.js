@@ -38,61 +38,61 @@ let Game = {
     /*
         Adds the given items to the player's inventory.
     */
-        updatePlayerInventory: function(items)
+    updatePlayerInventory: function(items)
+    {
+        console.log("AT: Utils.addItemToPlayerInventory()");
+        
+        if (!Array.isArray(items)) { throw new Error(`eventsList must be a list. Got (${typeof eventsList})`); }
+
+        // No items to add. Return without mutating the gameState.
+        if (items.length < 1) { return; }
+
+        let itemDeltas = []
+
+        // Add items to player inventory.
+        for (let i = 0; i < items.length; i++)
         {
-            console.log("AT: Utils.addItemToPlayerInventory()");
-            
-            if (!Array.isArray(items)) { throw new Error(`eventsList must be a list. Got (${typeof eventsList})`); }
-    
-            // No items to add. Return without mutating the gameState.
-            if (items.length < 1) { return; }
-    
-            let itemDeltas = []
+            let item = items[i];
 
-            // Add items to player inventory.
-            for (let i = 0; i < items.length; i++)
-            {
-                let item = items[i];
+            let itemID = item[0];
+            let quantity = item[1];
 
-                let itemID = item[0];
-                let quantity = item[1];
+            if (quantity === 0) { continue; }
 
-                if (quantity === 0) { continue; }
+            if (quantity < 0)
+            { // Remove item from inventory.
+                if (itemID in GameState.player.inventory)
+                {
+                    let initialQuantity = GameState.player.inventory[itemID];
+                    let newQuantity = initialQuantity + quantity;
 
-                if (quantity < 0)
-                { // Remove item from inventory.
-                    if (itemID in GameState.player.inventory)
+                    if (newQuantity <= 0)
                     {
-                        let initialQuantity = GameState.player.inventory[itemID];
-                        let newQuantity = initialQuantity + quantity;
-
-                        if (newQuantity <= 0)
-                        {
-                            delete GameState.player.inventory[itemID];
-                            itemDeltas.push([itemID, -initialQuantity]);
-                        }
-                        else
-                        {
-                            GameState.player.inventory[itemID] = newQuantity;
-                            itemDeltas.push([itemID, quantity]);
-                        }
-                    }
-                    // If the item is not already in the player's inventory, don't remove it.
-                }
-                else
-                { // Add item to inventory.
-                    if (itemID in GameState.player.inventory)
-                    {
-                        GameState.player.inventory[itemID] += quantity
+                        delete GameState.player.inventory[itemID];
+                        itemDeltas.push([itemID, -initialQuantity]);
                     }
                     else
                     {
-                        GameState.player.inventory[itemID] = quantity;
+                        GameState.player.inventory[itemID] = newQuantity;
+                        itemDeltas.push([itemID, quantity]);
                     }
-                    itemDeltas.push([itemID, quantity]);
                 }
+                // If the item is not already in the player's inventory, don't remove it.
             }
-    
-            Game.reportEvent(Events.generateInventoryUpdateEvent(itemDeltas));
+            else
+            { // Add item to inventory.
+                if (itemID in GameState.player.inventory)
+                {
+                    GameState.player.inventory[itemID] += quantity
+                }
+                else
+                {
+                    GameState.player.inventory[itemID] = quantity;
+                }
+                itemDeltas.push([itemID, quantity]);
+            }
         }
+
+        Game.reportEvent(Events.generateInventoryUpdateEvent(itemDeltas));
+    }
 }
