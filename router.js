@@ -10,7 +10,7 @@ let Router = {
 
         switch(true)
         {
-            case (/^location\/\d+/).test(command.commandString):
+            case (/^location\/id_\d+/).test(command.commandString):
                 this.handleLocationRequest(command);
                 break;
             default:
@@ -24,9 +24,9 @@ let Router = {
 
         switch(true)
         {
-            case (/^location\/\d+\?action_id=\d+$/).test(command.commandString): // Execute an action.
+            case (/^location\/id_\d+\?action_id=id_\d+$/).test(command.commandString): // Execute an action.
                 return this.handleActionRequest(command);
-            case (/^location\/\d+$/).test(command.commandString): // Visit location.
+            case (/^location\/id_\d+$/).test(command.commandString): // Visit location.
                 return this.handleVisitLocation(command);
             default:
                 throw new Error(`Invalid command: ${command}`);

@@ -1,12 +1,10 @@
-// TODO: Update all IDs in the entire system to use a string formatted ID. Including in the URL paths.
-// > Ex. id_3
 const Locations = {
-    1: {
-        id: 1,
+    "id_1": {
+        id: "id_1",
         name: "Player Cabin",
         description: "A simple one room log cabin in the trees on the edge of Thistlewood.",
         // Contains a list of locationIDs that specify which locations are accessible from this location.
-        connectedLocations: [2],
+        connectedLocations: ["id_2"],
         visit: function()
         {
             // No special logic needed for this location.
@@ -14,8 +12,8 @@ const Locations = {
             // TODO: Return a list of events that occurred by visiting this location.
         },
         actions: {
-            1: {
-                    id: 1,
+            "id_1": {
+                    id: "id_1",
                     name: "Rest in bed",
                     // This is an example of an action handler as should be called by the executeAction() function.
                     actionHandler: function()
@@ -33,30 +31,30 @@ const Locations = {
             }
         }
     },
-    2: {
-        id: 2,
+    "id_2": {
+        id: "id_2",
         name: "Thistlewood",
         description: "A description of Thistlewood.",
-        connectedLocations: [1, 3],
+        connectedLocations: ["id_1", "id_3"],
         // Contains a list of actions that can be executed from this location.
         visit: function()
         {
             // No special logic needed for this location.
         },
-        actions: []
+        actions: {}
     },
-    3: {
-        id: 3,
+    "id_3": {
+        id: "id_3",
         name: "Thistlewood Forest",
         description: "The forest of Thistlewood.",
-        connectedLocations: [2],
+        connectedLocations: ["id_2"],
         visit: function()
         {
             // No special logic needed for this location.
         },
         actions: {
-            1: {
-                    id: 1,
+            "id_1": {
+                    id: "id_1",
                     name: "Search the forest",
                     actionHandler: function()
                     {

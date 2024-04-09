@@ -17,8 +17,10 @@ let Game = {
         GameState.events.push(event);
     },
 
-    //  TODO: Implement functions that update the GameState here.
-
+    /**********************
+     * GAMESTATE MUTATORS *
+     **********************/
+    
     updatePlayerHp: function(hpDelta)
     {
         console.log("AT: Game.updatePlayerHp()");

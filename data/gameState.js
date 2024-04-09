@@ -1,7 +1,7 @@
 // This object represents the game state.
 let GameState = {
     player: {
-        currentLocation: 1,
+        currentLocation: "id_1",
         hitPoints: 5,
         maxHitPoints: 10,
         // Inventory is a dictionary.
