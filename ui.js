@@ -34,6 +34,7 @@ let UI = {
         console.log("GameState: ", GameState);
 
         /* CLEANUP */
+        // TODO: Add a function to the Game object that resets the game state for the next cycle.
         // GameState.events = []; // After fully updating the UI, certain fields in the GameState need to be reset. This should be the last step in the game cycle.
 
         throw new Error("Not implemented exception.");
