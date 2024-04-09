@@ -6,7 +6,7 @@ let GameState = {
         maxHitPoints: 10,
         // Inventory is a dictionary.
         inventory: {
-            1: 100 // The player has 100 of the item with ID=1.
+            "id_1": 100 // The player has 100 of the item with ID=1.
         }
     },
     events: []

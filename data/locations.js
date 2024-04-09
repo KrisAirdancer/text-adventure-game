@@ -1,3 +1,5 @@
+// TODO: Update all IDs in the entire system to use a string formatted ID. Including in the URL paths.
+// > Ex. id_3
 const Locations = {
     1: {
         id: 1,
@@ -58,7 +60,15 @@ const Locations = {
                     name: "Search the forest",
                     actionHandler: function()
                     {
-                        throw new Error("Not implemented exception");
+                        // TODO: Modify this function to return differing quantities of each item.
+                        // TODO: Modify this function to return 0 or more items.
+                        // TODO: Modify this function to yield different items at different rates.
+                        let availableItems = ["id_3", "id_4", "id_5"];
+
+                        let itemID = availableItems[Utils.getRandomInt(0, availableItems.length - 1)];
+                        let quantity = 1;
+
+                        Game.updatePlayerInventory([ [itemID, quantity] ]);
                     }
             }
         }

@@ -15,7 +15,7 @@ let UI = {
         
         // Temporary override of dummy command.
         // command = "location/1" // Visit location 1
-        command = "location/1?action_id=1" // Take action 1 at location 1
+        command = "location/3?action_id=1" // Take action 1 at location 1
         console.log("Command Override: ", command);
         
         // Call routing function with the command.

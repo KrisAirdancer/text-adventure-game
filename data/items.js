@@ -1,22 +1,22 @@
 const Items = {
-    1: {
-        id: 1,
+    "id_1": {
+        id: "id_1",
         name: "Gold"
     },
-    2: {
-        id: 2,
+    "id_2": {
+        id: "id_2",
         name: "Bronze Sword"
     },
-    3: {
-        id: 3,
+    "id_3": {
+        id: "id_3",
         name: "Morel Mushroom"
     },
-    4: {
-        id: 4,
+    "id_4": {
+        id: "id_4",
         name: "Sticks"
     },
-    5: {
-        id: 5,
+    "id_5": {
+        id: "id_5",
         name: "Thistle Flower"
     }
 }

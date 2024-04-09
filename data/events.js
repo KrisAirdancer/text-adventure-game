@@ -11,13 +11,14 @@ const Events = {
             HPDelta: hpDelta
         }
     },
-    generateInventoryUpdateEvent: function(items)
+    // TODO: Update this function to aggregate item counts into a single entry for each item ID.
+    generateInventoryUpdateEvent: function(itemDeltas)
     {
         console.log("AT: Events.generateInventoryUpdateEvent()");
 
         return {
             name: "INVENTORY_UPDATE_EVENT",
-            // TODO: Implement this event.
+            itemDeltas: itemDeltas
         }
    }
 }
