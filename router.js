@@ -10,14 +10,31 @@ let Router = {
 
         switch(true)
         {
-            case (/^location\/id_\d+/).test(command.commandString):
-                this.handleLocationRequest(command);
+            case (/^location\//).test(command.commandString):
+                this.routeLocationRequest(command);
+                break;
+            case (/^menu\//).test(command.commandString):
+                this.routeMenuRequest(command);
                 break;
             default:
                 throw new Error(`Invalid command: ${command}`);
         }
     },
-    handleLocationRequest: function(command)
+    routeMenuRequest: function(command)
+    {
+        console.log("AT: Router, handleMenuRequest()");
+        console.log("command: ", command);
+        
+        switch(true)
+        {
+            case (/^menu\/equipment\/id_\d+\?equipped=(true|false)$/).test(command.commandString):
+                RequestHandlers.handleEquipmentChangeRequest(command);
+                break;
+            default:
+                throw new Error(`Invalid command: ${command.commandString}`);
+        }
+    },
+    routeLocationRequest: function(command)
     {
         console.log("AT: Router.handleLocationRequest()");
         console.log("command: ", command);
@@ -25,41 +42,11 @@ let Router = {
         switch(true)
         {
             case (/^location\/id_\d+\?action_id=id_\d+$/).test(command.commandString): // Execute an action.
-                return this.handleActionRequest(command);
+                return RequestHandlers.handleActionRequest(command);
             case (/^location\/id_\d+$/).test(command.commandString): // Visit location.
-                return this.handleVisitLocation(command);
+                return RequestHandlers.handleVisitLocationRequest(command);
             default:
                 throw new Error(`Invalid command: ${command}`);
         }
-    },
-    /*
-        Visits the requested location.
-    */
-    handleVisitLocation: function(command)
-    {
-        console.log("AT: Router.handleVisitLocation()");
-        console.log("command: ", command);
-
-        let requestedLocation = Locations[command.pathParams[1]];
-
-        GameState.player.currentLocation = requestedLocation.id;
-        requestedLocation.visit();
-
-        // Nothing to return. We only need to update the GameState.
-    },
-    /*
-        Executes the specified action.
-    */
-    handleActionRequest: function(command)
-    {
-        console.log("AT: Router.handleLocationActionRequest()");
-
-        let location = Locations[command.pathParams[1]];
-        let action = location.actions[command.queryParams.action_id];
-        
-        // Execute action
-        action.actionHandler();
-
-        // Nothing to return. We only need to update the GameState.
     }
 }
