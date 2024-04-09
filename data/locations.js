@@ -24,6 +24,7 @@ const Locations = {
                         // Restore 5-10% of player's HP.
                         let hpGained = Utils.getRandomInt( maxHitPoints * 0.05, maxHitPoints * 0.1);
                         if (hpGained < 1) { hpGained = 1; }
+                        if (hitPoints + hpGained > maxHitPoints) { hpGained = maxHitPoints - hitPoints; }
 
                         Game.updatePlayerHp(hpGained);
                     }
