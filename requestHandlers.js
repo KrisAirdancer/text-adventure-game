@@ -16,7 +16,7 @@ let RequestHandlers = {
 
         let requestedLocation = Locations[command.pathParams[1]];
 
-        GameState.player.currentLocation = requestedLocation.id;
+        Game.setPlayerLocation(requestedLocation.id);
         requestedLocation.visit();
 
         // Nothing to return. We only need to update the GameState.

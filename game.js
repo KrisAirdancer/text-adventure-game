@@ -96,5 +96,9 @@ let Game = {
         }
 
         Game.reportEvent(Events.generateInventoryUpdateEvent(itemDeltas));
+    },
+    setPlayerLocation: function(locationId)
+    {
+        GameState.player.currentLocation = locationId;
     }
 }
