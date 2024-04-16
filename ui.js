@@ -17,6 +17,7 @@ let UI = {
         // command = "location/id_1" // Visit location 1
         // command = "location/id_3?action_id=id_1" // Take action 1 at location 1
         command = "menu/equipment/id_2?equipped=true" // Equip the item with ID=2
+        // command = "menu/equipment/id_1?equipped=true" // Attempt to equip an unequipable item
         console.log("Command Override: ", command);
         
         // Call routing function with the command.

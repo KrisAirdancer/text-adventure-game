@@ -42,7 +42,7 @@ let Game = {
     */
     updatePlayerInventory: function(items)
     {
-        console.log("AT: Utils.addItemToPlayerInventory()");
+        console.log("AT: Game.addItemToPlayerInventory()");
         
         if (!Array.isArray(items)) { throw new Error(`eventsList must be a list. Got (${typeof eventsList})`); }
 
@@ -99,6 +99,50 @@ let Game = {
     },
     setPlayerLocation: function(locationId)
     {
+        console.log("AT: Game.setPlayerLocation()");
+
         GameState.player.currentLocation = locationId;
+    },
+    changeEquipment: function(itemId, equipOrUnequip)
+    {
+        console.log("AT: Game.changeEquipment()");
+
+        const item = Items[itemId];
+
+        if (!item) { throw new Error(`Invalid item ID: (${itemId})`); }
+        if (!(itemId in GameState.player.inventory)) { throw new Error(`Item not in player inventory: (${itemId})`); }
+
+        switch (item.type)
+        {
+            case Enums.equipmentTypes.HEAD:
+                GameState.player.equipment.HEAD = itemId;
+                break;
+            case Enums.equipmentTypes.NECK:
+                GameState.player.equipment.NECK = itemId;
+                break;
+            case Enums.equipmentTypes.BODY:
+                GameState.player.equipment.BODY = itemId;
+                break;
+            case Enums.equipmentTypes.HANDS:
+                GameState.player.equipment.HANDS = itemId;
+                break;
+            case Enums.equipmentTypes.ON_HAND:
+                GameState.player.equipment.ON_HAND = itemId;
+                break;
+            case Enums.equipmentTypes.OFF_HAND:
+                GameState.player.equipment.OFF_HAND = itemId;
+                break;
+            case Enums.equipmentTypes.RING:
+                GameState.player.equipment.RING = itemId;
+                break;
+            case Enums.equipmentTypes.LEGS:
+                GameState.player.equipment.LEGS = itemId;
+                break;
+            case Enums.equipmentTypes.FEET:
+                GameState.player.equipment.FEET = itemId;
+                break;
+            default:
+                throw new Error(`Item type not equipable: (${item.type})`);
+        }
     }
 }

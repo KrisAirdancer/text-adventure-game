@@ -2,9 +2,11 @@ let RequestHandlers = {
     handleEquipmentChangeRequest: function(command)
     {
         console.log("AT: RequestHandlers.handleEquipmentChangeRequest()");
-        console.log(command);
 
-        throw new Error("Not implemented exception");
+        let itemId = command.pathParams[2];
+        let equipped = command.queryParams.equipped;
+
+        Game.changeEquipment(itemId, equipped);
     },
     /*
         Visits the requested location.
