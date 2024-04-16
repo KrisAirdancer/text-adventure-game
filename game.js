@@ -115,31 +115,49 @@ let Game = {
         switch (item.type)
         {
             case Enums.equipmentTypes.HEAD:
-                GameState.player.equipment.HEAD = itemId;
+                equipOrUnequip ?
+                GameState.player.equipment.HEAD = itemId :
+                GameState.player.equipment.HEAD = null;
                 break;
             case Enums.equipmentTypes.NECK:
-                GameState.player.equipment.NECK = itemId;
+                equipOrUnequip ?
+                GameState.player.equipment.NECK = itemId :
+                GameState.player.equipment.NECK = null;
                 break;
             case Enums.equipmentTypes.BODY:
-                GameState.player.equipment.BODY = itemId;
+                equipOrUnequip ?
+                GameState.player.equipment.BODY = itemId :
+                GameState.player.equipment.BODY = null;
                 break;
             case Enums.equipmentTypes.HANDS:
-                GameState.player.equipment.HANDS = itemId;
+                equipOrUnequip ?
+                GameState.player.equipment.HANDS = itemId :
+                GameState.player.equipment.HANDS = null;
                 break;
             case Enums.equipmentTypes.ON_HAND:
-                GameState.player.equipment.ON_HAND = itemId;
+                equipOrUnequip ?
+                GameState.player.equipment.ON_HAND = itemId :
+                GameState.player.equipment.ON_HAND = null;
                 break;
             case Enums.equipmentTypes.OFF_HAND:
-                GameState.player.equipment.OFF_HAND = itemId;
+                equipOrUnequip ?
+                GameState.player.equipment.OFF_HAND = itemId :
+                GameState.player.equipment.OFF_HAND = null;
                 break;
             case Enums.equipmentTypes.RING:
-                GameState.player.equipment.RING = itemId;
+                equipOrUnequip ?
+                GameState.player.equipment.RING = itemId :
+                GameState.player.equipment.RING = null;
                 break;
             case Enums.equipmentTypes.LEGS:
-                GameState.player.equipment.LEGS = itemId;
+                equipOrUnequip ?
+                GameState.player.equipment.LEGS = itemId :
+                GameState.player.equipment.LEGS = null;
                 break;
             case Enums.equipmentTypes.FEET:
-                GameState.player.equipment.FEET = itemId;
+                equipOrUnequip ?
+                GameState.player.equipment.FEET = itemId :
+                GameState.player.equipment.FEET = null;
                 break;
             default:
                 throw new Error(`Item type not equipable: (${item.type})`);
