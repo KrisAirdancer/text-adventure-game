@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url'
 
 export default class Game
 {
-    LOCATIONS = undefined
+    LOCATIONS = {}
 
     constructor()
     {
@@ -17,6 +17,10 @@ export default class Game
         const __dirname = path.dirname(__filename)
         const filePath = path.resolve(__dirname, './data/locations.json')
         let fileData = fs.readFileSync(filePath, 'utf-8')
-        this.LOCATIONS = JSON.parse(fileData)
+        const locationsJSON = JSON.parse(fileData)
+
+        locationsJSON.forEach(location => {
+            this.LOCATIONS[location['id']] = location
+        })
     }
 }

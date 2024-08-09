@@ -7,11 +7,21 @@ const PORT = 3000
 /***** GAME INITIALIZATION *****/
 
 let GAME = new Game()
+// console.log(GAME.LOCATIONS)
 
 /***** ROUTES *****/
 
-app.get('/', (req, res) => {
-  res.send('Hello, World!')
+app.get('/location', (req, res) => {
+  const location_id = req.query.location_id
+
+  if (location_id in GAME.LOCATIONS)
+  {
+    res.send(GAME.LOCATIONS[location_id])
+  }
+  else
+  {
+    res.status(404).send(`location_id ${location_id} not a valid location`)
+  }
 })
 
 app.listen(
