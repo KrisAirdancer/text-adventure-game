@@ -1,8 +1,14 @@
 import Game from './game.js'
 import express from 'express'
+import cors from 'cors'
 
 const app = express()
 const PORT = 3000
+
+let corsOptions = {
+  origin: 'http://127.0.0.1:4200'
+}
+app.use(cors(corsOptions))
 
 /***** GAME INITIALIZATION *****/
 
@@ -11,6 +17,7 @@ let GAME = new Game()
 
 /***** ROUTES *****/
 
+// app.get('/location', cors(corsOptions), (req, res) => {
 app.get('/location', (req, res) => {
   const location_id = req.query.location_id
 
