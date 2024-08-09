@@ -2,8 +2,9 @@
   "name": "backend",
   "version": "0.1.0",
   "main": "app.js",
+  "type":"module",
   "scripts": {
-    "dev": "nodemon app.js"
+    "dev": "nodemon ./src/app.js"
   },
   "author": "",
   "license": "ISC",
