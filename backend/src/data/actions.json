@@ -1,0 +1,29 @@
+[
+    {
+        "id": "TRAVEL_THISTLEWOOD",
+        "name": "Travel to Thistlewood",
+        "description": "Travels the player to Thistlewood.",
+        "travelDestinationId": "THISTLEWOOD"
+    },
+    {
+        "id": "TRAVEL_PLAYERCABIN",
+        "name": "Travel to Your Cabin",
+        "description": "Travels the player to their cabin in Thistlewood.",
+        "travelDestinationId": "PLAYERCABIN"
+    },
+    {
+        "id": "DUMMY_ACTION_1",
+        "name": "Dummy action 1",
+        "description": ""
+    },
+    {
+        "id": "DUMMY_ACTION_3",
+        "name": "Dummy action 3",
+        "description": ""
+    },
+    {
+        "id": "DUMMY_ACTION_2",
+        "name": "Dummy action 2",
+        "description": ""
+    }
+]

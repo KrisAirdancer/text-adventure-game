@@ -1,14 +1,18 @@
 [
     {
-        "id": "1",
+        "id": "PLAYERCABIN",
         "name": "Player Cabin",
         "description": "A simple one room log cabin in the trees on the edge of Thistlewood.",
-        "connectedLocations": [2]
+        "actions": [
+            "TRAVEL_THISTLEWOOD"
+        ]
     },
     {
-        "id": "2",
+        "id": "THISTLEWOOD",
         "name": "Thistlewood",
         "description": "A small town in the woods.",
-        "connectedLocations": [1]
+        "actions": [
+            "TRAVEL_PLAYERCABIN"
+        ]
     }
 ]

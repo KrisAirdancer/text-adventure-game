@@ -6,6 +6,12 @@
     {{locationDescription}}
   </div>
   <div>
-    Actions...
+    @for (action of actions; track action.id) {
+      <div
+        id="{{ action.id }}"
+        class="cusomLink"
+        (click)="onClick($event)"
+      >{{action.name}}</div>
+    }
   </div>
 </div>

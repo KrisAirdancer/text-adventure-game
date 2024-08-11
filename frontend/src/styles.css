@@ -9,17 +9,17 @@ html, body {
     color: wheat;
 }
 
-a:link {
-    color: wheat;
+.cusomLink {
     text-decoration: underline dotted;
 }
 
-a:hover {
-    color: rgb(0, 0, 0);
+.cusomLink:hover {
+    color: rgb(255, 255, 255);
+    cursor: pointer;
 }
 
-a:active {
-    color: white;
+.cusomLink:active {
+    color: rgb(0, 0, 0);
 }
 
 #navigation-bar {

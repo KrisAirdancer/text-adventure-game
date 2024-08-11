@@ -13,21 +13,22 @@ app.use(cors(corsOptions))
 /***** GAME INITIALIZATION *****/
 
 let GAME = new Game()
-// console.log(GAME.LOCATIONS)
+// console.log(GAME.ACTIONS)
 
 /***** ROUTES *****/
 
-// app.get('/location', cors(corsOptions), (req, res) => {
-app.get('/location', (req, res) => {
-  const location_id = req.query.location_id
+// TODO: This, and most of the requests, should be POST requests b/c they are updating the state of the backend.
+app.get('/action', (req, res) => {
+  const actionId = req.query.actionId
+  console.log(actionId)
 
-  if (location_id in GAME.LOCATIONS)
+  if (actionId in GAME.ACTIONS)
   {
-    res.send(GAME.LOCATIONS[location_id])
+    res.send(GAME.handleAction(actionId))
   }
   else
   {
-    res.status(404).send(`location_id ${location_id} not a valid location`)
+    res.status(404).send(`action_id ${actionId} not a valid action`)
   }
 })
 
