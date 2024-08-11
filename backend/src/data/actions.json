@@ -12,18 +12,9 @@
         "travelDestinationId": "PLAYERCABIN"
     },
     {
-        "id": "DUMMY_ACTION_1",
-        "name": "Dummy action 1",
-        "description": ""
-    },
-    {
-        "id": "DUMMY_ACTION_3",
-        "name": "Dummy action 3",
-        "description": ""
-    },
-    {
-        "id": "DUMMY_ACTION_2",
-        "name": "Dummy action 2",
-        "description": ""
+        "id": "TRAVEL_THISTLEWOODFOREST",
+        "name": "Travel to Thistlewood Forest",
+        "description": "Travels the player to Thistlewood Forest.",
+        "travelDestinationId": "THISTLEWOODFOREST"
     }
 ]
