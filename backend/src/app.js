@@ -22,6 +22,9 @@ app.get('/action', (req, res) => {
   const actionId = req.query.actionId
   console.log(actionId)
 
+  // TODO: Create a function to convert the STATE to a proper format before sending it.
+  // > Ex. Convert all date and time data to 1-indexed dates.
+
   if (actionId in GAME.ACTIONS)
   {
     res.send(GAME.handleAction(actionId))
