@@ -13,7 +13,6 @@ app.use(cors(corsOptions))
 /***** GAME INITIALIZATION *****/
 
 let GAME = new Game()
-// console.log(GAME.ACTIONS)
 
 /***** ROUTES *****/
 
@@ -25,7 +24,7 @@ app.get('/action', (req, res) => {
   if (actionId in GAME.ACTIONS)
   {
     GAME.handleAction(actionId)
-    res.send(getResponseState())
+    res.send(GAME.getResponseState())
   }
   else
   {
@@ -37,28 +36,3 @@ app.listen(
     PORT,
     () => {console.log(`Listening at http://localhost:${PORT}`)}
 )
-
-/***** HELPER FUNCTIONS *****/
-
-function getResponseState(options)
-{
-  let state = JSON.parse(JSON.stringify(GAME.STATE))
-
-  // Shift datetime to 1-indexed format.
-  state.currentDateTime.day += 1
-  state.currentDateTime.month += 1
-  state.currentDateTime.monthOfSeason += 1
-  state.currentDateTime.year += 1
-
-  if (options.locationData)
-  {
-    // TODO: Add location objects to response.
-  }
-
-  if (options.actionsData)
-  {
-    // TODO: Add action objects to response.
-  }
-
-  return state
-}

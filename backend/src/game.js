@@ -10,8 +10,8 @@ export default class Game
     STATE = {
         currentLocationId: "PLAYERCABIN",
         currentDateTime: {
-            minutes: 0, // Minutes since midnight. When 1440 is reached, rollover to 0. That is, go from 1439 to 0 (of the next day).
-            time: "12:00 AM",
+            minutes: 450, // Minutes since midnight. When 1440 is reached, rollover to 0. That is, go from 1439 to 0 (of the next day).
+            time: "7:30 AM",
             day: 0, // The day number of the current month. 0-29
             month: 0, // The month number of the current year. 0-11
             monthOfSeason: 0, // The current month of the current season. 0-2
@@ -109,27 +109,32 @@ export default class Game
 
     handleTravelAction(action)
     {
-        console.log("AT: handleTravelAction()")
-
         this.STATE.currentLocationId = action.travelDestinationId
+    }
 
-        let currentLocation = this.LOCATIONS[this.STATE.currentLocationId]
-        let response = {
-            currentLocation: JSON.parse(JSON.stringify(currentLocation))
-        }
+    getResponseState()
+    {
+        let state = JSON.parse(JSON.stringify(this.STATE))
 
+        // Shift datetime to 1-indexed format.
+        state.currentDateTime.day += 1
+        state.currentDateTime.month += 1
+        state.currentDateTime.monthOfSeason += 1
+        state.currentDateTime.year += 1
+
+        // Add the current location's data.
+        state.currentLocation = JSON.parse(JSON.stringify(this.LOCATIONS[this.STATE.currentLocationId]))
+
+        // Populate the actions data for the current location.
         let actionObjects = []
-        response.currentLocation.actions.forEach(actionId => {
+        state.currentLocation.actions.forEach(actionId => {
             actionObjects.push(this.ACTIONS[actionId])
         })
-        response.currentLocation.actions = actionObjects
+        state.currentLocation.actions = actionObjects
 
-        console.log("STATE: ", this.STATE)
-        return response
+        // Remove duplicate/unnecessary fields.
+        delete state.currentLocationId
+
+        return state
     }
 }
-
-// NEXT: Finish implementing getResponseState()
-// > The function should take in options that specify which data to include in the response object.
-// > The logic in thte getResponseFunction() should replace the logic in the handleTravelAction() function above.
-// > Ultimately, the getResponseFunction() function should be the only one that is building the response. All other logic should only modify the STATE object.
