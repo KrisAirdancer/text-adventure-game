@@ -11,12 +11,12 @@ export default class Game
         currentLocationId: "PLAYERCABIN",
         currentDateTime: {
             minutes: 0, // Minutes since midnight. When 1440 is reached, rollover to 0. That is, go from 1439 to 0 (of the next day).
-            time: "",
-            days: 0, // The number of days passed this month.
-            months: 0, // The month of the current year. 0-11
+            time: "12:00 AM",
+            day: 0, // The day number of the current month. 0-29
+            month: 0, // The month number of the current year. 0-11
             monthOfSeason: 0, // The current month of the current season. 0-2
             season: "SPRING",
-            years: 0 // The number of years passed.
+            year: 0 // The year number.
         }
         // TODO: Add currentHp, maxHp, inventory, etc.
     }
@@ -72,28 +72,28 @@ export default class Game
         // Update minutes
         // TODO: Check that this is rolling over at 1440. That is, thre should never be a 1440, only a 1439. 1440 becomes 0 of the next day.
         date.minutes = minutesPassed % 1440
-        let daysPassed = ((minutesPassed - date.minutes) / 1440) + date.days
+        let daysPassed = ((minutesPassed - date.minutes) / 1440) + date.day
 
         // Update days
-        date.days = daysPassed % 30
-        let monthsPassed = ((daysPassed - date.days) / 30) + date.months
+        date.day = daysPassed % 30
+        let monthsPassed = ((daysPassed - date.day) / 30) + date.month
 
         // Update years
-        date.months = monthsPassed % 12
-        let yearsPassed = ((monthsPassed - date.months) / 12) + date.years
-        date.years = yearsPassed
+        date.month = monthsPassed % 12
+        let yearsPassed = ((monthsPassed - date.month) / 12) + date.year
+        date.year = yearsPassed
 
         // Update season
-        if (date.months >= 0 && date.months <= 2) { date.season = "SPRING" }
-        else if (date.months >= 3 && date.months <= 5) { date.season = "SUMMER" }
-        else if (date.months >= 6 && date.months <= 8) { date.season = "FALL" }
-        else if (date.months >= 9 && date.months <= 11) { date.season = "WINTER" }
-        else { throw Error(`monthNumber ${date.months} not in the valid range of 0-11`) }
+        if (date.month >= 0 && date.month <= 2) { date.season = "SPRING" }
+        else if (date.month >= 3 && date.month <= 5) { date.season = "SUMMER" }
+        else if (date.month >= 6 && date.month <= 8) { date.season = "FALL" }
+        else if (date.month >= 9 && date.month <= 11) { date.season = "WINTER" }
+        else { throw Error(`monthNumber ${date.month} not in the valid range of 0-11`) }
 
         // Update monthOfSeason
-        if (date.months % 3 === 0) { date.monthOfSeason = 0 }
-        else if (date.months % 3 === 1) { date.monthOfSeason = 1 }
-        else if (date.months % 3 === 2) { date.monthOfSeason = 2 }
+        if (date.month % 3 === 0) { date.monthOfSeason = 0 }
+        else if (date.month % 3 === 1) { date.monthOfSeason = 1 }
+        else if (date.month % 3 === 2) { date.monthOfSeason = 2 }
         else { throw Error("Unable to set monthOfSeason") }
 
         // Generate human-readable time.
@@ -128,3 +128,8 @@ export default class Game
         return response
     }
 }
+
+// NEXT: Finish implementing getResponseState()
+// > The function should take in options that specify which data to include in the response object.
+// > The logic in thte getResponseFunction() should replace the logic in the handleTravelAction() function above.
+// > Ultimately, the getResponseFunction() function should be the only one that is building the response. All other logic should only modify the STATE object.

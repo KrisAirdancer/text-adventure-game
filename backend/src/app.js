@@ -22,12 +22,10 @@ app.get('/action', (req, res) => {
   const actionId = req.query.actionId
   console.log(actionId)
 
-  // TODO: Create a function to convert the STATE to a proper format before sending it.
-  // > Ex. Convert all date and time data to 1-indexed dates.
-
   if (actionId in GAME.ACTIONS)
   {
-    res.send(GAME.handleAction(actionId))
+    GAME.handleAction(actionId)
+    res.send(getResponseState())
   }
   else
   {
@@ -39,3 +37,28 @@ app.listen(
     PORT,
     () => {console.log(`Listening at http://localhost:${PORT}`)}
 )
+
+/***** HELPER FUNCTIONS *****/
+
+function getResponseState(options)
+{
+  let state = JSON.parse(JSON.stringify(GAME.STATE))
+
+  // Shift datetime to 1-indexed format.
+  state.currentDateTime.day += 1
+  state.currentDateTime.month += 1
+  state.currentDateTime.monthOfSeason += 1
+  state.currentDateTime.year += 1
+
+  if (options.locationData)
+  {
+    // TODO: Add location objects to response.
+  }
+
+  if (options.actionsData)
+  {
+    // TODO: Add action objects to response.
+  }
+
+  return state
+}
