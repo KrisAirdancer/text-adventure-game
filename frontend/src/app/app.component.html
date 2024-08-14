@@ -1,16 +1,24 @@
 <div>
   <div>
+    {{time}}
+  </div>
+  <div>
+    {{date}}
+  </div>
+  <br>
+  <div>
     {{locationName.toUpperCase()}}
   </div>
   <div>
     {{locationDescription}}
   </div>
+  <br>
   <div>
     @for (action of actions; track action.id) {
       <div
-        id="{{ action.id }}"
-        class="cusomLink"
-        (click)="onClick($event)"
+      id="{{ action.id }}"
+      class="cusomLink"
+      (click)="onClick($event)"
       >{{action.name}}</div>
     }
   </div>

@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { aborted } from 'util'
 
 export default class Game
 {

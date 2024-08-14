@@ -14,6 +14,8 @@ export class AppComponent {
   locationName = "";
   locationDescription = "";
   actions: any = [];
+  time: string = "";
+  date: string = "";
 
   constructor(private actionService: ActionService) {}
 
@@ -36,10 +38,16 @@ export class AppComponent {
   {
     console.log("AT: AppComponent::postActionToServer()");
 
+    // TODO: BUG FIX: This function fires everytime the page is refreshed. This means that a request is made to the backend and thus an action is taken each time the page is refreshed. Fix this.
+
     this.actionService.postAction(actionId).subscribe((responseData) => {
       this.locationName = responseData.currentLocation.name;
       this.locationDescription = responseData.currentLocation.description;
       this.actions = responseData.currentLocation.actions;
+      let dateTime = responseData.currentDateTime;
+      this.time = dateTime.time;
+      let seasonName: string = dateTime.season.charAt(0) + dateTime.season.toLowerCase().slice(1);
+      this.date = `day ${dateTime.day} of month ${dateTime.monthOfSeason} of ${seasonName}, year ${dateTime.year}`;
     });
   }
 }
