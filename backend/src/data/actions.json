@@ -27,8 +27,8 @@
                 {
                     "itemId": "MORELMUSHROOMS",
                     "minQuantity": 1,
-                    "maxQuantity": 3,
-                    "probability": 50
+                    "maxQuantity": 2,
+                    "probability": 25
                 },
                 {
                     "itemId": "STICKS",

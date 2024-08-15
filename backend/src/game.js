@@ -25,6 +25,9 @@ export default class Game
                 "BRONZEAXE": 1,
                 "LEATHERBOOTS": 1
             }
+        },
+        notifications: {
+
         }
     }
 
@@ -126,18 +129,9 @@ export default class Game
     handleSearchAction(action)
     {
         console.log("AT: game.handleSearchAction()")
-        console.log(action)
-
-        // Generate a random number from the maxItems number - this is the number of items found.
-        // Shuffle the items list
-        // Generate a random number and compare it to each item's probability.
-        // > If the generated value is less than the item's probability, that item is found.
-        // >> Generate the number of that item found from the item's max and min quantity fields.
-        // > Continue comparisons until a number of items equal to foundCount has been generated.
 
         const search = action.search
 
-        // const numFound = utils.getRandomInt(1, search.maxItems)
         const numFound = 3
         console.log("numFound: ", numFound)
 
@@ -148,25 +142,24 @@ export default class Game
         const searchValue = utils.getRandomInt(1, 100)
         console.log("searchValue: ", searchValue)
 
-        // TODO: I should be able to put items directly into the STATE object (the player's inventory) instead of into a separate list first.
-        let foundItems = {}
+        let inventory = this.STATE.player.inventory
         for (let i = 0; i < numFound; i++)
         {
             let currentItem = items[i]
 
             if (searchValue <= currentItem.probability)
             {
-                if (currentItem.itemId in foundItems)
+                if (currentItem.itemId in inventory)
                 {
-                    foundItems[currentItem.itemId] += utils.getRandomInt(currentItem.minQuantity, currentItem.maxQuantity)
+                    inventory[currentItem.itemId] += utils.getRandomInt(currentItem.minQuantity, currentItem.maxQuantity)
                 }
                 else
                 {
-                    foundItems[currentItem.itemId] = utils.getRandomInt(currentItem.minQuantity, currentItem.maxQuantity)
+                    inventory[currentItem.itemId] = utils.getRandomInt(currentItem.minQuantity, currentItem.maxQuantity)
                 }
             }            
         }
-        console.log("foundItems: ", foundItems)
+        console.log(this.STATE.player)
 
 
 
