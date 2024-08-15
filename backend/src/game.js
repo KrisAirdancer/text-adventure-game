@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import utils from './utils.js'
 
 export default class Game
 {
@@ -16,8 +17,15 @@ export default class Game
             monthOfSeason: 0, // The current month of the current season. 0-2
             season: "SPRING",
             year: 0 // The year number.
+        },
+        player: {
+            // TODO: Add currentHp, maxHp, inventory, etc.
+            inventory: {
+                "COPPERCOINS": 100,
+                "BRONZEAXE": 1,
+                "LEATHERBOOTS": 1
+            }
         }
-        // TODO: Add currentHp, maxHp, inventory, etc.
     }
 
     constructor()
@@ -57,7 +65,11 @@ export default class Game
 
         if (action.travelDestinationId)
         {
-            return this.handleTravelAction(action)
+            this.handleTravelAction(action)
+        }
+        if (action.search)
+        {
+            this.handleSearchAction(action)
         }
     }
 
@@ -109,6 +121,59 @@ export default class Game
     handleTravelAction(action)
     {
         this.STATE.currentLocationId = action.travelDestinationId
+    }
+
+    handleSearchAction(action)
+    {
+        console.log("AT: game.handleSearchAction()")
+        console.log(action)
+
+        // Generate a random number from the maxItems number - this is the number of items found.
+        // Shuffle the items list
+        // Generate a random number and compare it to each item's probability.
+        // > If the generated value is less than the item's probability, that item is found.
+        // >> Generate the number of that item found from the item's max and min quantity fields.
+        // > Continue comparisons until a number of items equal to foundCount has been generated.
+
+        const search = action.search
+
+        // const numFound = utils.getRandomInt(1, search.maxItems)
+        const numFound = 3
+        console.log("numFound: ", numFound)
+
+        // The data in the JSON files is read-only (or should at least be treated as such). So we make a copy of the data to prevent modification of the reference.
+        let items = JSON.parse(JSON.stringify(search.items))
+        utils.shuffleArray(items)
+
+        const searchValue = utils.getRandomInt(1, 100)
+        console.log("searchValue: ", searchValue)
+
+        // TODO: I should be able to put items directly into the STATE object (the player's inventory) instead of into a separate list first.
+        let foundItems = {}
+        for (let i = 0; i < numFound; i++)
+        {
+            let currentItem = items[i]
+
+            if (searchValue <= currentItem.probability)
+            {
+                if (currentItem.itemId in foundItems)
+                {
+                    foundItems[currentItem.itemId] += utils.getRandomInt(currentItem.minQuantity, currentItem.maxQuantity)
+                }
+                else
+                {
+                    foundItems[currentItem.itemId] = utils.getRandomInt(currentItem.minQuantity, currentItem.maxQuantity)
+                }
+            }            
+        }
+        console.log("foundItems: ", foundItems)
+
+
+
+        // TODO: Include notifications.
+        // > Notifications should be stored in the STATE object.
+        // > Notifications should be erased at the beginning of each game cycle BEFORE any actions are processed.
+        // > TODO: Add logic to the frontend to display notifications (the results of actions taken).
     }
 
     getResponseState()

@@ -21,7 +21,8 @@
         "name": "Thistlewood Forest",
         "description": "A forest of mossy stones and thistles beneath towering pines.",
         "actions": [
-            "TRAVEL_THISTLEWOOD"
+            "TRAVEL_THISTLEWOOD",
+            "SEARCH_THISTLEWOODFOREST"
         ]
     }
 ]

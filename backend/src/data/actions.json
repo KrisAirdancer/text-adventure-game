@@ -16,5 +16,33 @@
         "name": "Travel to Thistlewood Forest",
         "description": "Travels the player to Thistlewood Forest.",
         "travelDestinationId": "THISTLEWOODFOREST"
+    },
+    {
+        "id": "SEARCH_THISTLEWOODFOREST",
+        "name": "Search Thistlewood Forest",
+        "description": "Searches Thistlewood Forest for items.",
+        "search": {
+            "maxItems": 3,
+            "items": [
+                {
+                    "itemId": "MORELMUSHROOMS",
+                    "minQuantity": 1,
+                    "maxQuantity": 3,
+                    "probability": 50
+                },
+                {
+                    "itemId": "STICKS",
+                    "minQuantity": 1,
+                    "maxQuantity": 3,
+                    "probability": 50
+                },
+                {
+                    "itemId": "COPPERCOINS",
+                    "minQuantity": 1,
+                    "maxQuantity": 5,
+                    "probability": 10
+                }
+            ]
+        }
     }
 ]
