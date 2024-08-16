@@ -63,16 +63,16 @@
         "maxNumPerSlot": 1
     },
     {
-        "id": "COPPERCHAINMAILSHIRT",
-        "nameSingular": "Chainmail Shirt (copper)",
-        "namePlural": "Chainmail Shirts (copper)",
+        "id": "BRONZECHAINMAILSHIRT",
+        "nameSingular": "Chainmail Shirt (bronze)",
+        "namePlural": "Chainmail Shirts (bronze)",
         "type": "BODY",
         "maxNumPerSlot": 1
     },
     {
-        "id": "COPPERCHAINMAILCOIF",
-        "nameSingular": "Chainmail Coif (copper)",
-        "namePlural": "Chainmail Coifs (copper)",
+        "id": "BRONZECHAINMAILCOIF",
+        "nameSingular": "Chainmail Coif (bronze)",
+        "namePlural": "Chainmail Coifs (bronze)",
         "type": "HEAD",
         "maxNumPerSlot": 1
     },
