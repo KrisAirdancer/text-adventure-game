@@ -14,6 +14,13 @@
   </div>
   <br>
   <div>
+    <!-- TODO: Use something else as the tracking id here. The entire notification text string is far too large to be used as an id. -->
+    @for (notification of notifications; track notification) {
+      <div>{{notification}}</div>
+    }
+  </div>
+  <br>
+  <div>
     @for (action of actions; track action.id) {
       <div
       id="{{ action.id }}"

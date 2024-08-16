@@ -14,6 +14,7 @@ export class AppComponent {
   locationName = "";
   locationDescription = "";
   actions: any = [];
+  notifications: any = [];
   time: string = "";
   date: string = "";
 
@@ -44,6 +45,7 @@ export class AppComponent {
       this.locationName = responseData.currentLocation.name;
       this.locationDescription = responseData.currentLocation.description;
       this.actions = responseData.currentLocation.actions;
+      this.notifications = responseData.notifications;
       let dateTime = responseData.currentDateTime;
       this.time = dateTime.time;
       let seasonName: string = dateTime.season.charAt(0) + dateTime.season.toLowerCase().slice(1);

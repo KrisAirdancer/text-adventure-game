@@ -23,7 +23,18 @@ function shuffleArray(array)
     }
 }
 
+function buildNotificationText(textTemplate, values)
+{
+    let notificationText = textTemplate
+    values.forEach(value => {
+        notificationText = notificationText.replace(/<[^>]+>/, value);
+    })
+
+    return notificationText
+}
+
 export default {
     getRandomInt,
-    shuffleArray
+    shuffleArray,
+    buildNotificationText
 }

@@ -7,6 +7,7 @@ export default class Game
 {
     LOCATIONS = {}
     ACTIONS = {}
+    ITEMS = {}
     STATE = {
         currentLocationId: "PLAYERCABIN",
         currentDateTime: {
@@ -26,9 +27,7 @@ export default class Game
                 "LEATHERBOOTS": 1
             }
         },
-        notifications: {
-
-        }
+        notifications: []
     }
 
     constructor()
@@ -58,11 +57,25 @@ export default class Game
         actionsJSON.forEach(action => {
             this.ACTIONS[action['id']] = action
         })
+
+        // Load items data
+        filePath = path.resolve(__dirname, './data/items.json')
+        fileData = fs.readFileSync(filePath, 'utf-8')
+        const itemsJSON = JSON.parse(fileData)
+
+        itemsJSON.forEach(item => {
+            this.ITEMS[item['id']] = item
+        })
     }
 
+    // TODO: handleAction() is currently being used as the primary entrypoint to the Game object.
+    // > However, it might make more sense to have a function, such as "processGameCycle()", that can take in an action object (and other objects/options) that runs the full game cycle.
     handleAction(actionId)
     {
         const action = this.ACTIONS[actionId]
+
+        // Clear old notifications.
+        this.STATE.notifications = []
 
         this.updateTime(10)
 
@@ -128,20 +141,17 @@ export default class Game
 
     handleSearchAction(action)
     {
-        console.log("AT: game.handleSearchAction()")
-
-        const search = action.search
+        const searchAction = action.search
 
         const numFound = 3
-        console.log("numFound: ", numFound)
 
         // The data in the JSON files is read-only (or should at least be treated as such). So we make a copy of the data to prevent modification of the reference.
-        let items = JSON.parse(JSON.stringify(search.items))
+        let items = JSON.parse(JSON.stringify(searchAction.items))
         utils.shuffleArray(items)
 
         const searchValue = utils.getRandomInt(1, 100)
-        console.log("searchValue: ", searchValue)
 
+        let itemsFound = false
         let inventory = this.STATE.player.inventory
         for (let i = 0; i < numFound; i++)
         {
@@ -149,24 +159,26 @@ export default class Game
 
             if (searchValue <= currentItem.probability)
             {
+                itemsFound = true
                 if (currentItem.itemId in inventory)
                 {
-                    inventory[currentItem.itemId] += utils.getRandomInt(currentItem.minQuantity, currentItem.maxQuantity)
+                    let quantity = utils.getRandomInt(currentItem.minQuantity, currentItem.maxQuantity)
+                    inventory[currentItem.itemId] += quantity
+                    this.STATE.notifications.push(utils.buildNotificationText(searchAction.notificationTextTemplate, [quantity, quantity > 1 ? this.ITEMS[currentItem.itemId].namePlural : this.ITEMS[currentItem.itemId].nameSingular]))
                 }
                 else
                 {
-                    inventory[currentItem.itemId] = utils.getRandomInt(currentItem.minQuantity, currentItem.maxQuantity)
+                    let quantity = utils.getRandomInt(currentItem.minQuantity, currentItem.maxQuantity)
+                    inventory[currentItem.itemId] = quantity
+                    this.STATE.notifications.push(utils.buildNotificationText(searchAction.notificationTextTemplate, [quantity, quantity > 1 ? this.ITEMS[currentItem.itemId].namePlural : this.ITEMS[currentItem.itemId].nameSingular]))
                 }
             }            
         }
-        console.log(this.STATE.player)
-
-
-
-        // TODO: Include notifications.
-        // > Notifications should be stored in the STATE object.
-        // > Notifications should be erased at the beginning of each game cycle BEFORE any actions are processed.
-        // > TODO: Add logic to the frontend to display notifications (the results of actions taken).
+        
+        if (!itemsFound)
+        {
+            this.STATE.notifications.push(searchAction.noItemsFoundText)
+        }
     }
 
     getResponseState()

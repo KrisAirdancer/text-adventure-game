@@ -23,6 +23,8 @@
         "description": "Searches Thistlewood Forest for items.",
         "search": {
             "maxItems": 3,
+            "notificationTextTemplate": "You find <numFound> <itemName>.",
+            "noItemsFoundText": "You find nothing of interest.",
             "items": [
                 {
                     "itemId": "MORELMUSHROOMS",
