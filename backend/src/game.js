@@ -215,4 +215,24 @@ export default class Game
 
         return state
     }
+
+    addItemsToInventory(itemId, quantity)
+    {
+        let inventory = this.STATE.player.inventory
+        if (itemId in inventory)
+        {
+            inventory[itemId] += parseInt(quantity)
+        }
+        else
+        {
+            inventory[itemId] = parseInt(quantity)
+        }
+
+        console.log(this.STATE)
+    }
+
+    removeItemsFromInventory()
+    {
+        // TODO: Implement this function.
+    }
 }

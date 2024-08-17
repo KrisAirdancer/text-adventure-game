@@ -32,6 +32,22 @@ app.get('/action', (req, res) => {
   }
 })
 
+app.put('/inventory', (req, res) => {
+  const itemId = req.query.itemId
+  const quantity = req.query.quantity
+  console.log(`itemId: ${itemId}, quantity: ${quantity}`)
+
+  if (parseInt(quantity) >= 0)
+  {
+    GAME.addItemsToInventory(itemId, quantity)
+  }
+  else{
+    GAME.removeItemsFromInventory(itemId, quantity)
+  }
+
+  res.send(GAME.getResponseState())
+})
+
 app.listen(
     PORT,
     () => {console.log(`Listening at http://localhost:${PORT}`)}
