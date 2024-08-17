@@ -216,8 +216,24 @@ export default class Game
         return state
     }
 
+    // Adds or removes items to/from the player's inventory.
+    updateInventory(itemId, quantity)
+    {
+        quantity = parseInt(quantity)
+        if (quantity < 0)
+        {
+            this.removeItemsFromInventory(itemId, quantity)
+        }
+        else
+        {
+            this.addItemsToInventory(itemId, quantity)
+        }
+    }
+
     addItemsToInventory(itemId, quantity)
     {
+        if (quantity < 0) { throw Error(`Quantity ${quantity} must be positive`) }
+
         let inventory = this.STATE.player.inventory
         if (itemId in inventory)
         {
@@ -227,12 +243,18 @@ export default class Game
         {
             inventory[itemId] = parseInt(quantity)
         }
-
-        console.log(this.STATE)
     }
 
-    removeItemsFromInventory()
+    removeItemsFromInventory(itemId, quantity)
     {
-        // TODO: Implement this function.
+        if (quantity >= 0) { throw Error(`Quantity ${quantity} must be negative`) }
+        
+        let inventory = this.STATE.player.inventory
+
+        if (!(itemId in inventory)) { return }
+
+        inventory[itemId] += quantity
+
+        if (inventory[itemId] <= 0) { delete inventory[itemId] }
     }
 }

@@ -32,18 +32,12 @@ app.get('/action', (req, res) => {
   }
 })
 
+// TODO: This endpoint should be removed. It is being replaced with /inventory/drop
 app.put('/inventory', (req, res) => {
   const itemId = req.query.itemId
   const quantity = req.query.quantity
-  console.log(`itemId: ${itemId}, quantity: ${quantity}`)
 
-  if (parseInt(quantity) >= 0)
-  {
-    GAME.addItemsToInventory(itemId, quantity)
-  }
-  else{
-    GAME.removeItemsFromInventory(itemId, quantity)
-  }
+  GAME.updateInventory(itemId, quantity)
 
   res.send(GAME.getResponseState())
 })
