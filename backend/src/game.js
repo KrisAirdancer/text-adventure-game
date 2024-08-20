@@ -205,7 +205,6 @@ export default class Game
         let itemObjects = []
         for (const [key, value] of Object.entries(state.player.inventory))
         {
-            console.log(`[k, v]: [${key}, ${value}]`)
             itemObjects.push({ ...this.ITEMS[key], count: value })
         }
         state.player.inventory = itemObjects

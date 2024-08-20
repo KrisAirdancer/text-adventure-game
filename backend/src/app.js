@@ -19,7 +19,7 @@ let GAME = new Game()
 // TODO: This, and most of the requests, should be POST requests b/c they are updating the state of the backend.
 app.get('/action', (req, res) => {
   const actionId = req.query.actionId
-  console.log(actionId)
+  console.log("actionId: ", actionId)
 
   if (actionId in GAME.ACTIONS)
   {
