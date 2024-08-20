@@ -34,7 +34,8 @@ app.post('/action', (req, res) => {
 
 app.get('/inventory', (req, res) => {
   console.log('AT: /inventory')
-  res.send(GAME.getResponseState())
+  
+  res.send(GAME.getInventory())
 })
 
 app.listen(
