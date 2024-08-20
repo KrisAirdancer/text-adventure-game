@@ -1,3 +1,10 @@
 <div>
-    INVENTORY
+    @for (item of inventory; track item.id)
+    {
+        <li>{{item.id}}</li>
+    }
+    @empty
+    {
+        <div>NO ITEMS FOUND</div>
+    }
 </div>

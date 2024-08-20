@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ActionService } from '../../services/action.service';
 
 @Component({
   selector: 'app-inventory-panel',
@@ -9,5 +10,15 @@ import { Component } from '@angular/core';
 })
 export class InventoryPanelComponent
 {
-  
+  inventory = [];
+
+  constructor(private actionService: ActionService) {}
+
+  ngOnInit(): void
+  {
+    this.actionService.getInventory().subscribe((responseData) => {
+      this.inventory = responseData;
+      console.log(this.inventory);
+    });
+  }
 }
