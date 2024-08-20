@@ -1,7 +1,12 @@
-<nav>
+<nav class="navbar">
+    <div
+    id="homeLink"
+    class="cusomLink"
+    (click)="handleHomeClick($event)"
+    >Home</div>
     <div
     id="inventoryLink"
     class="cusomLink"
-    (click)="onClick($event)"
+    (click)="handleInventoryClick($event)"
     >Inventory</div>
 </nav>

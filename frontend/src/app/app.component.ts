@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { GamePanelComponent } from './components/game-panel/game-panel.component';
+import { InventoryPanelComponent } from './components/inventory-panel/inventory-panel.component';
 
 @Component({
   selector: 'app-root',
@@ -9,9 +10,20 @@ import { GamePanelComponent } from './components/game-panel/game-panel.component
   imports: [
     RouterOutlet,
     NavBarComponent,
-    GamePanelComponent
+    GamePanelComponent,
+    InventoryPanelComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {}
+export class AppComponent
+{
+  display = 'HOME';
+
+  receiveDisplayChangeEvent($event: any)
+  {
+    console.log('AT: AppComponent::setDisplayInventory()');
+    
+    this.display = $event;
+  }
+}

@@ -1,5 +1,12 @@
 <div>
-  <app-nav-bar></app-nav-bar>
+  <app-nav-bar (displayChangeEvent)="receiveDisplayChangeEvent($event)"></app-nav-bar>
   <br>
-  <app-game-panel></app-game-panel>
+  @if (display === 'HOME')
+  {
+    <app-game-panel></app-game-panel>
+  }
+  @else if (display === 'INVENTORY')
+  {
+    <app-inventory-panel></app-inventory-panel>
+  }
 </div>
