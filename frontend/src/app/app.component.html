@@ -1,5 +1,52 @@
 <div>
-  <app-nav-bar></app-nav-bar>
+  <nav>
+    <div
+    id="inventoryLink"
+    class="cusomLink"
+    (click)="handleInventoryClick($event)"
+    >Inventory</div>
+  </nav>
+  
   <br>
-  <app-game-panel></app-game-panel>
+
+  <div>
+    <div>
+      {{time}}
+    </div>
+
+    <div>
+      {{date}}
+    </div>
+
+    <br>
+
+    <div>
+      {{locationName.toUpperCase()}}
+    </div>
+
+    <div>
+      {{locationDescription}}
+    </div>
+
+    <br>
+
+    <div>
+      <!-- TODO: Use something else as the tracking id here. The entire notification text string is far too large to be used as an id. -->
+      @for (notification of notifications; track notification) {
+          <div>{{notification}}</div>
+      }
+    </div>
+
+    <br>
+
+    <div>
+      @for (action of actions; track action.id) {
+          <div
+          id="{{ action.id }}"
+          class="cusomLink"
+          (click)="onClick($event)"
+          >{{action.name}}</div>
+      }
+    </div>
+  </div>
 </div>

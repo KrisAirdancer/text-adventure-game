@@ -17,7 +17,7 @@ let GAME = new Game()
 /***** ROUTES *****/
 
 // TODO: This, and most of the requests, should be POST requests b/c they are updating the state of the backend.
-app.get('/action', (req, res) => {
+app.post('/action', (req, res) => {
   const actionId = req.query.actionId
   console.log("actionId: ", actionId)
 
@@ -32,13 +32,8 @@ app.get('/action', (req, res) => {
   }
 })
 
-// TODO: This endpoint should be removed. It is being replaced with /inventory/drop
-app.put('/inventory', (req, res) => {
-  const itemId = req.query.itemId
-  const quantity = req.query.quantity
-
-  GAME.updateInventory(itemId, quantity)
-
+app.get('/inventory', (req, res) => {
+  console.log('AT: /inventory')
   res.send(GAME.getResponseState())
 })
 
