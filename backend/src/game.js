@@ -215,6 +215,11 @@ export default class Game
         return state
     }
 
+    getGameState()
+    {
+        return this.getResponseState()
+    }
+
     getInventory()
     {
         // Populate the inventory items' data.

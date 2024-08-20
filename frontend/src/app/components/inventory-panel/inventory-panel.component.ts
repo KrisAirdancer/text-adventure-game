@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
   templateUrl: './inventory-panel.component.html',
   styleUrl: './inventory-panel.component.css'
 })
-export class InventoryPanelComponent {
-
+export class InventoryPanelComponent
+{
+  
 }

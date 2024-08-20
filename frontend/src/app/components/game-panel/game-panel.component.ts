@@ -25,7 +25,10 @@ export class GamePanelComponent
     console.log("AT: AppComponent::ngOnInit()");
 
     // TODO: First get the state from the server, then get the currentLocationId from the state data, then request the current location data with the below function.
-    this.postActionToServer("TRAVEL_PLAYERCABIN")
+    // this.postActionToServer("TRAVEL_PLAYERCABIN")
+    this.actionService.getGameState().subscribe((responseData) => {
+      this.setState(responseData);
+    });
   }
 
   // TODO: Give "event" (the parameter) a proper type.
@@ -35,22 +38,25 @@ export class GamePanelComponent
     
     this.postActionToServer(event.target.id);
   }
-  
+
   postActionToServer(actionId: any)
   {
     console.log("AT: AppComponent::postActionToServer()");
 
-    // TODO: BUG FIX: This function fires everytime the page is refreshed. This means that a request is made to the backend and thus an action is taken each time the page is refreshed. Fix this.
-
     this.actionService.postAction(actionId).subscribe((responseData) => {
-      this.locationName = responseData.currentLocation.name;
-      this.locationDescription = responseData.currentLocation.description;
-      this.actions = responseData.currentLocation.actions;
-      this.notifications = responseData.notifications;
-      let dateTime = responseData.currentDateTime;
-      this.time = dateTime.time;
-      let seasonName: string = dateTime.season.charAt(0) + dateTime.season.toLowerCase().slice(1);
-      this.date = `day ${dateTime.day} of month ${dateTime.monthOfSeason} of ${seasonName}, year ${dateTime.year}`;
+      this.setState(responseData);
     });
+  }
+
+  setState(gameStateData: any)
+  {
+    this.locationName = gameStateData.currentLocation.name;
+    this.locationDescription = gameStateData.currentLocation.description;
+    this.actions = gameStateData.currentLocation.actions;
+    this.notifications = gameStateData.notifications;
+    let dateTime = gameStateData.currentDateTime;
+    this.time = dateTime.time;
+    let seasonName: string = dateTime.season.charAt(0) + dateTime.season.toLowerCase().slice(1);
+    this.date = `day ${dateTime.day} of month ${dateTime.monthOfSeason} of ${seasonName}, year ${dateTime.year}`;
   }
 }

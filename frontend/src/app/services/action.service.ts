@@ -7,12 +7,28 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ActionService
 {
+  private BASE_URL = 'http://localhost:3000';
+
   constructor(private http:HttpClient) {}
   
   postAction(actionId: any): Observable<any>
   {
-    console.log("AT: postAction()")
+    console.log("AT: ActionService::postAction()")
 
-    return this.http.post(`http://localhost:3000/action?actionId=${actionId}`, '');
+    return this.http.post(`${this.BASE_URL}/action?actionId=${actionId}`, '');
+  }
+
+  getGameState()
+  {
+    console.log('AT: ActionService::getGameState()')
+
+    return this.http.get(`${this.BASE_URL}/game-state`);
+  }
+
+  getInventory(): Observable<any>
+  {
+    console.log('AT: ActionService::getInventory()');
+
+    return this.http.get(`${this.BASE_URL}/inventory`)
   }
 }

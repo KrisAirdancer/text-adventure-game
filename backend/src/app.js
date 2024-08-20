@@ -38,6 +38,12 @@ app.get('/inventory', (req, res) => {
   res.send(GAME.getInventory())
 })
 
+app.get('/game-state', (req, res) => {
+  console.log('AT: /game-state')
+
+  res.send(GAME.getGameState())
+})
+
 app.listen(
     PORT,
     () => {console.log(`Listening at http://localhost:${PORT}`)}
