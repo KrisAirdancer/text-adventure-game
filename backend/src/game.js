@@ -215,6 +215,18 @@ export default class Game
         return state
     }
 
+    getInventory()
+    {
+        // Populate the inventory items' data.
+        let itemObjects = []
+        for (const [key, value] of Object.entries(this.STATE.player.inventory))
+        {
+            itemObjects.push({ ...this.ITEMS[key], count: value })
+        }
+
+        return { inventory: itemObjects }
+    }
+
     // Adds or removes items to/from the player's inventory.
     updateInventory(itemId, quantity)
     {

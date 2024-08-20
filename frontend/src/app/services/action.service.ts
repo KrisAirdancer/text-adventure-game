@@ -13,6 +13,6 @@ export class ActionService
   {
     console.log("AT: postAction()")
 
-    return this.http.get(`http://localhost:3000/action?actionId=${actionId}`);
+    return this.http.post(`http://localhost:3000/action?actionId=${actionId}`, '');
   }
 }
