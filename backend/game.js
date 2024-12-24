@@ -225,7 +225,6 @@ let GAME = {
     },
 
 	// Returns an object that represents the game state.
-	// This data format should NOT be returned to the frontend.
     _getGameState()
     {
         return this._getResponseState();
