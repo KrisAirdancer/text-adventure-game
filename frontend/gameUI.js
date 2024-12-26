@@ -3,6 +3,7 @@ const GAMEUI = {
     locationHeader: document.getElementById("location-header"),
     contentArea: document.getElementById("content-area"),
     controlsBar: document.getElementById("controls-bar"),
+    notificationsBar: document.getElementById("notifications-bar"),
 
     initialize: function()
     {
@@ -32,12 +33,14 @@ const GAMEUI = {
     updateUi: function(stateData)
     {
 		console.log("AT: GAMEUI.updateUi()");
+		// console.log("stateData: ", stateData);
 		
 		this.setUiHtml({
 			navigationBarHtml: this.buildNavigationBarHtml(),
 			locationHeaderHtml: stateData.currentLocation.name.toUpperCase(),
 			contentAreaHtml: stateData.currentLocation.description,
-			controlsBarHtml: this.buildControlsBarHtml(stateData.currentLocation.actions)
+			controlsBarHtml: this.buildControlsBarHtml(stateData.currentLocation.actions),
+			notificationsBarHtml: this.buildNotificationsBarHtml(stateData.notifications)
 		});
     },
 	
@@ -53,10 +56,12 @@ const GAMEUI = {
 	{
 		console.log("AT: GAMEUI.setUiHtml()");
 
-		if (html.navigationBarHtml) { this.navigationBar.innerHTML = html.navigationBarHtml }
-		if (html.locationHeaderHtml) { this.locationHeader.innerHTML = html.locationHeaderHtml }
-		if (html.contentAreaHtml) { this.contentArea.innerHTML = html.contentAreaHtml }
-		if (html.controlsBarHtml) { this.controlsBar.innerHTML = html.controlsBarHtml }
+		if (html.navigationBarHtml) { this.navigationBar.innerHTML = html.navigationBarHtml; }
+		if (html.locationHeaderHtml) { this.locationHeader.innerHTML = html.locationHeaderHtml; }
+		if (html.contentAreaHtml) { this.contentArea.innerHTML = html.contentAreaHtml; }
+		if (html.controlsBarHtml) { this.controlsBar.innerHTML = html.controlsBarHtml; }
+		if (html.notificationsBarHtml) { this.notificationsBar.innerHTML = html.notificationsBarHtml; }
+		else { this.notificationsBar.innerHTML = ""; }
 	},
 
     buildContentHtml: function(content)
@@ -98,5 +103,15 @@ const GAMEUI = {
 	buildNavigationBarLinkHtml: function(route, linkText)
 	{
 		return `<a href="javascript:GAMEUI.reportAction('${route}')">${linkText}</a>`;
+	},
+
+	buildNotificationsBarHtml(notificationsText)
+	{
+		let notificationsHtml = "";
+		notificationsText.forEach(notification => {
+            notificationsHtml += `<p>${notification}</p>`;
+        })
+
+		return notificationsHtml;
 	}
 }

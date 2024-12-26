@@ -23,15 +23,5 @@ const UTILS = {
 			// And swap it with the current element.
 			[array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
 		}
-	},
-	
-	_buildNotificationText(textTemplate, values)
-	{
-		let notificationText = textTemplate
-		values.forEach(value => {
-			notificationText = notificationText.replace(/<[^>]+>/, value);
-		})
-		
-		return notificationText
 	}
 }

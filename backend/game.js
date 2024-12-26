@@ -173,13 +173,13 @@ let GAME = {
                 {
                     let quantity = UTILS._getRandomInt(currentItem.minQuantity, currentItem.maxQuantity)
                     inventory[currentItem.itemId] += quantity
-                    this.STATE.notifications.push(UTILS._buildNotificationText(searchAction.notificationTextTemplate, [quantity, quantity > 1 ? this.ITEMS[currentItem.itemId].namePlural : this.ITEMS[currentItem.itemId].nameSingular]))
+                    this.STATE.notifications.push(this._buildNotificationTextTemplate(searchAction.notificationTextTemplate, [quantity, quantity > 1 ? this.ITEMS[currentItem.itemId].namePlural : this.ITEMS[currentItem.itemId].nameSingular]))
                 }
                 else
                 {
                     let quantity = UTILS._getRandomInt(currentItem.minQuantity, currentItem.maxQuantity)
                     inventory[currentItem.itemId] = quantity
-                    this.STATE.notifications.push(UTILS._buildNotificationText(searchAction.notificationTextTemplate, [quantity, quantity > 1 ? this.ITEMS[currentItem.itemId].namePlural : this.ITEMS[currentItem.itemId].nameSingular]))
+                    this.STATE.notifications.push(this._buildNotificationTextTemplate(searchAction.notificationTextTemplate, [quantity, quantity > 1 ? this.ITEMS[currentItem.itemId].namePlural : this.ITEMS[currentItem.itemId].nameSingular]))
                 }
             }            
         }
@@ -284,5 +284,15 @@ let GAME = {
         inventory[itemId] += quantity
 
         if (inventory[itemId] <= 0) { delete inventory[itemId] }
-    }
+    },
+
+	_buildNotificationTextTemplate(textTemplate, values)
+	{
+		let notificationText = textTemplate
+		values.forEach(value => {
+			notificationText = notificationText.replace(/<[^>]+>/, value);
+		})
+		
+		return notificationText
+	}
 }
