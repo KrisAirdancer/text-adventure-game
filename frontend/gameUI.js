@@ -1,4 +1,4 @@
-let GameUI = {
+const GAMEUI = {
     navigationBar: document.getElementById("navigation-bar"),
     locationHeader: document.getElementById("location-header"),
     contentArea: document.getElementById("content-area"),
@@ -12,101 +12,109 @@ let GameUI = {
         this.initializeNavigationBar();
 
         // Get the current game state.
-        let stateData = Game.sendRequest({
-            route: "data/game-state"
-        });
+        let stateData = JSON.parse(GAME.routeRequest({
+            route: "/game-state"
+        }));
+		console.log("stateData: ", stateData);
 
-        // Update the UI.
-        let locationData = Game.sendRequest({
-            route: `location/${stateData.currentLocation}`
-        });
-        this.updateUIWithLocationData(locationData);
+        this.updateUiWithLocationData(stateData.currentLocation);
 
-        console.log("UI successfully initialized.");
+        console.log("===========================\nUI Successfully Initialized\n===========================");
     },
+
     reportAction: function(route)
     {
-        console.log("AT: GameUI.reportAction()");
+        console.log("AT: GAMEUI.reportAction()");
+        console.log("request:", route);
 
-        let response = Game.sendRequest({
+        let response = JSON.parse(GAME.routeRequest({
             route: route
-        });
+        }));
+        console.log("response:", response);
 
-        let routeTokens = route.split("/");
+        let routeTokens = route.substring(1).split("/");
+		console.log("rotueTokens: ", routeTokens);
 
-        switch (routeTokens[0])
-        {
-            case "location":
-                // TODO: Need to differentiate between taking an action and visiting a location.
-                this.updateUIWithLocationData(response);
-                break;
-            case "menu":
-                throw new Error("NotImplementedException");
-            default:
-                throw new Error(`Invalid route: ${request.route}`);
-        }
+		// TODO: The below logic should be replaced wiht a single call to updateUi().
+		// > updateUi() should have the logic to determine what type of UI update to make, what HTML needs to be generated, etc.
+		// > This will require significat refactoring, but it will make the entire system more efficient and easier to use - one function call here, and the whole of the UI is updated.
+		// > Actually, the updateUi() logic could just update _all_ UI components each time it's called. Then I don't have to handle all of the strange routing logic.
+		this.updateUiWithLocationData(response.currentLocation);
     },
-    updateUI: function(contentHTML, controlsBarHTML, currentLocationName)
+
+	// Updates the HTML on the UI with the given HTML strings.
+	/* HTML: {
+			navigationBarHtml: <>,
+			locationHeaderHtml: <>,
+			contentAreaHtml: <>,
+			controlsBarHtml: <>
+		}
+	*/
+    updateUi: function(html)
     {
-        this.locationHeader.innerHTML = currentLocationName;
-        this.contentArea.innerHTML = contentHTML;
-        this.controlsBar.innerHTML = controlsBarHTML;
+		console.log("AT: GAMEUI.updateUi()");
+
+		if (html.navigationBarHtml) { this.navigationBar.innerHTML = html.navigationBarHtml }
+        if (html.locationHeaderHtml) { this.locationHeader.innerHTML = html.locationHeaderHtml }
+		if (html.contentAreaHtml) { this.contentArea.innerHTML = html.contentAreaHtml }
+        if (html.controlsBarHtml) { this.controlsBar.innerHTML = html.controlsBarHtml }
     },
-    updateUIWithLocationData: function(locationData)
+
+    updateUiWithLocationData: function(locationData)
     {
-        this.updateUI(
-            locationData.description,
-            this.buildControlsBarHTML(locationData),
-            locationData.locationName.toUpperCase()
-        );
+		console.log("AT: GAMEUI.updateUIWithLocationData()");
+		console.log(locationData)
+
+        this.updateUi({
+            contentAreaHtml: locationData.description,
+            controlsBarHtml: this.buildControlsBarHtml(locationData.actions),
+            locationHeaderHtml: locationData.name.toUpperCase()
+		});
     },
-    buildContentHTML: function(content)
+
+    buildContentHtml: function(content)
     {
         return `<p>${content}</p>`;
     },
-    buildControlsBarHTML: function(locationData)
+
+    buildControlsBarHtml: function(actions)
     {
-        return this.buildActionsHTML(locationData.locationID, locationData.actions) + this.buildLocationsNavLinksHTML(locationData.connectedLocations);
+		console.log("AT: GAMEUI.buildControlsBarHTML()");
+
+        return this.buildActionsHtml(actions);
     },
-    buildActionsHTML: function(locationID, actions)
+
+    buildActionsHtml: function(actions)
     {
-        let actionLinksHTML = "";
-        Object.values(actions).forEach(action => {
-            actionLinksHTML += "<p>" + this.buildLinkHTML("GameUI.reportAction", `location/${locationID}?action_id=${action.id}`, action.name) + "</p>";
+        let actionLinksHtml = "";
+        actions.forEach(action => {
+            actionLinksHtml += "<p>" + this.buildLinkHtml("GAMEUI.reportAction", `/action/${action.id}`, action.name) + "</p>";
         })
-        return actionLinksHTML;
+
+		return actionLinksHtml;
     },
-    buildLocationsNavLinksHTML: function(locations)
-    {
-        let locationLinksHTML = "";
-        locations.forEach(locationID => {
-            let locationData = Game.sendRequest({
-                route: `data/location/${locationID}`
-            });
-            locationLinksHTML += "<p>" + this.buildLinkHTML("GameUI.reportAction", `location/${locationData.id}`, `Go to ${locationData.name}`) + "</p>";
-        })
-        return locationLinksHTML;
-    },
-    buildLinkHTML: function(nameOfFunctionToCall, route, text)
+
+    buildLinkHtml: function(nameOfFunctionToCall, route, text)
     {
         return `<a href="javascript:${nameOfFunctionToCall}('${route}')">${text}</a>`;
     },
+
     initializeNavigationBar: function()
     {
         let navBarHTML = ""
 
-        navBarHTML += UiUtils.generateNavigationBarLinkHTML("menu/inventory", "Inventory");
-        navBarHTML += UiUtils.generateNavigationBarLinkHTML("menu/equipment", "Equipment");
-        navBarHTML += UiUtils.generateNavigationBarLinkHTML("menu/map", "Map");
+		// TODO: Update these links.
+        navBarHTML += this.generateNavigationBarLinkHtml("/navigation/inventory", "Inventory");
+        navBarHTML += this.generateNavigationBarLinkHtml("/navigation/equipment", "Equipment");
+        navBarHTML += this.generateNavigationBarLinkHtml("/navigation/map", "Map");
 
-        this.navigationBar.innerHTML = navBarHTML;
+		this.updateUi({
+			navigationBarHtml: navBarHTML
+		})
     },
-}
 
-let UiUtils = {
-    // TODO: This should be replaced with the buildLinkHTML() function.
-    generateNavigationBarLinkHTML: function(route, linkText)
-    {
-        return `<a href="javascript:GameUI.reportAction('${route}')">${linkText}</a>`;
-    }
+	generateNavigationBarLinkHtml: function(route, linkText)
+	{
+		return `<a href="javascript:GAMEUI.reportAction('${route}')">${linkText}</a>`;
+	}
 }
