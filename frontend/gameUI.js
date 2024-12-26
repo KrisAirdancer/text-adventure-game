@@ -1,47 +1,65 @@
 const GAMEUI = {
-    navigationBar: document.getElementById("navigation-bar"),
-    locationHeader: document.getElementById("location-header"),
-    contentArea: document.getElementById("content-area"),
-    controlsBar: document.getElementById("controls-bar"),
-    notificationsBar: document.getElementById("notifications-bar"),
+	htmlElements: {
+		navigationBar: document.getElementById("navigation-bar"),
+		locationHeader: document.getElementById("location-header"),
+		contentArea: document.getElementById("content-area"),
+		controlsBar: document.getElementById("controls-bar"),
+		notificationsBar: document.getElementById("notifications-bar"),
+	},
+	currentDisplay: "",
+	currentStateData: null,
 
-    initialize: function()
+    initialize()
     {
-        let stateData = JSON.parse(GAME.routeRequest({
+		this.currentDisplay = "MAIN_GAME_SCREEN";
+
+        this.currentStateData = JSON.parse(GAME.routeRequest({
             route: "/game-state"
         }));
-		console.log("stateData: ", stateData);
+		console.log("currentStateData: ", this.currentStateData);
 
-		this.updateUi(stateData);
+		this.updateUi();
 
         console.log("===========================\nUI Successfully Initialized\n===========================");
     },
 
-    reportAction: function(route)
+    reportAction(route)
     {
         console.log("AT: GAMEUI.reportAction()");
         console.log("route:", route);
 
-        let response = JSON.parse(GAME.routeRequest({
-            route: route
-        }));
-        console.log("response:", response);
+		let routeTokens = route.substring(1).split("/");
+		console.log("routeTokens: ", routeTokens);
 
-		this.updateUi(response);
+		if (routeTokens[0] === "navigation")
+		{
+			this.handleNavigationRequest(route);
+		}
+		else
+		{
+			this.currentDisplay = "MAIN_GAME_SCREEN";
+
+			this.currentStateData = JSON.parse(GAME.routeRequest({
+				route: route
+			}));
+			console.log("currentStateData: ", this.currentStateData);
+	
+			this.updateUi();
+		}
     },
 
-    updateUi: function(stateData)
+    updateUi()
     {
 		console.log("AT: GAMEUI.updateUi()");
-		// console.log("stateData: ", stateData);
-		
-		this.setUiHtml({
-			navigationBarHtml: this.buildNavigationBarHtml(),
-			locationHeaderHtml: stateData.currentLocation.name.toUpperCase(),
-			contentAreaHtml: stateData.currentLocation.description,
-			controlsBarHtml: this.buildControlsBarHtml(stateData.currentLocation.actions),
-			notificationsBarHtml: this.buildNotificationsBarHtml(stateData.notifications)
-		});
+
+		if (this.currentDisplay === "INVENTORY")
+		{
+			this.displayInventory();
+		}
+		else
+		{
+			this.displayMainGameScreen();
+		}
     },
 	
 	/*
@@ -56,25 +74,92 @@ const GAMEUI = {
 	{
 		console.log("AT: GAMEUI.setUiHtml()");
 
-		if (html.navigationBarHtml) { this.navigationBar.innerHTML = html.navigationBarHtml; }
-		if (html.locationHeaderHtml) { this.locationHeader.innerHTML = html.locationHeaderHtml; }
-		if (html.contentAreaHtml) { this.contentArea.innerHTML = html.contentAreaHtml; }
-		if (html.controlsBarHtml) { this.controlsBar.innerHTML = html.controlsBarHtml; }
-		if (html.notificationsBarHtml) { this.notificationsBar.innerHTML = html.notificationsBarHtml; }
-		else { this.notificationsBar.innerHTML = ""; }
+		// null or undefined is used to indicate that the UI element should NOT be updated/changed.
+		if (html.navigationBarHtml) { this.htmlElements.navigationBar.innerHTML = html.navigationBarHtml; }
+		if (html.locationHeaderHtml) { this.htmlElements.locationHeader.innerHTML = html.locationHeaderHtml; }
+		if (html.contentAreaHtml) { this.htmlElements.contentArea.innerHTML = html.contentAreaHtml; }
+		if (html.controlsBarHtml) { this.htmlElements.controlsBar.innerHTML = html.controlsBarHtml; }
+		if (html.notificationsBarHtml) { this.htmlElements.notificationsBar.innerHTML = html.notificationsBarHtml; }
+		else { this.htmlElements.notificationsBar.innerHTML = ""; }
 	},
 
-    buildContentHtml: function(content)
+	handleNavigationRequest(route)
+	{
+		console.log("AT: GAMEUI.handleNavigationRequest()");
+
+		let routeTokens = route.substring(1).split("/");
+		console.log("routeTokens: ", routeTokens);
+
+		if (routeTokens[1] === "inventory")
+		{
+			this.currentDisplay = "INVENTORY";
+			this.updateUi();
+		}
+	},
+
+	displayMainGameScreen()
+	{
+		this.setUiHtml({
+			navigationBarHtml: this.buildNavigationBarHtml(),
+			locationHeaderHtml: this.currentStateData.currentLocation.name.toUpperCase(),
+			contentAreaHtml: this.currentStateData.currentLocation.description,
+			controlsBarHtml: this.buildControlsBarHtml(this.currentStateData.currentLocation.actions),
+			notificationsBarHtml: this.buildNotificationsBarHtml(this.currentStateData.notifications)
+		});
+	},
+
+	displayInventory()
+	{
+		this.setUiHtml({
+			navigationBarHtml: this.buildNavigationBarHtml(),
+			locationHeaderHtml: "INVENTORY",
+			contentAreaHtml: this.buildInventoryHtml(),
+			controlsBarHtml: this.buildBackButtonHtml(), // TODO: Populate this with a "back" button - will need logic to handle the back button press.
+			notificationsBarHtml: ""
+		});
+	},
+
+	buildInventoryHtml()
+	{
+		// return "INVENTORY CONTENTS";
+
+		// NEXT: Finish implementing the logic to support dropping items.
+
+		let inventory = this.currentStateData.player.inventory;
+		console.log("inventory: ", inventory);
+
+		let inventoryHtml = "";
+		inventory.forEach(item => {
+			console.log("item: ", item);
+
+			let itemName = UTILS.getPluralSingularItemName(item.nameSingular, item.namePlural, item.count);
+			let dropLinkHtml = this.buildActionLinkHtml("/drop", "drop");
+
+			inventoryHtml += `<div>${itemName} (${item.count}) [${dropLinkHtml}]</div>`;
+			// Sticks (3) [drop]
+		});
+
+
+		return inventoryHtml;
+	},
+	
+	buildBackButtonHtml()
+	{
+		return "BACK BUTTON";
+		throw new Error("NotImplementedException");
+	},
+
+    buildContentHtml(content)
     {
         return `<p>${content}</p>`;
     },
 
-    buildControlsBarHtml: function(actions)
+    buildControlsBarHtml(actions)
     {
         return this.buildActionsHtml(actions);
     },
 
-    buildActionsHtml: function(actions)
+    buildActionsHtml(actions)
     {
         let actionLinksHtml = "";
         actions.forEach(action => {
@@ -84,23 +169,23 @@ const GAMEUI = {
 		return actionLinksHtml;
     },
 
-    buildLinkHtml: function(nameOfFunctionToCall, route, text)
+    buildLinkHtml(nameOfFunctionToCall, route, text)
     {
         return `<a href="javascript:${nameOfFunctionToCall}('${route}')">${text}</a>`;
     },
 
-    buildNavigationBarHtml: function()
+    buildNavigationBarHtml()
     {
         let navBarHtml = ""
 
-        navBarHtml += this.buildNavigationBarLinkHtml("/navigation/inventory", "Inventory");
+        navBarHtml += this.buildActionLinkHtml("/navigation/inventory", "Inventory");
         // navBarHtml += this.buildNavigationBarLinkHtml("/navigation/equipment", "Equipment");
         // navBarHtml += this.buildNavigationBarLinkHtml("/navigation/map", "Map");
 
 		return navBarHtml;
     },
 
-	buildNavigationBarLinkHtml: function(route, linkText)
+	buildActionLinkHtml(route, linkText)
 	{
 		return `<a href="javascript:GAMEUI.reportAction('${route}')">${linkText}</a>`;
 	},
@@ -113,5 +198,5 @@ const GAMEUI = {
         })
 
 		return notificationsHtml;
-	}
+	},
 }

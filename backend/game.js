@@ -82,18 +82,21 @@ let GAME = {
             if (searchValue <= currentItem.probability)
             {
                 itemsFound = true
+				
+				let quantity = UTILS.getRandomInt(currentItem.minQuantity, currentItem.maxQuantity)
+				let itemData = DATA._getItem(currentItem.itemId);
+				let itemName = UTILS.getPluralSingularItemName(itemData.nameSingular, itemData.namePlural, quantity);
+
                 if (currentItem.itemId in inventoryUpdates)
                 {
-                    let quantity = UTILS.getRandomInt(currentItem.minQuantity, currentItem.maxQuantity)
 					inventoryUpdates[currentItem.itemId] += quantity;
-					STATE._addNotification(this._populateNotificationTextTemplate(searchAction.notificationTextTemplate, [quantity, quantity > 1 ? DATA._getItem([currentItem.itemId].namePlural) : DATA._getItem(currentItem.itemId).nameSingular]));
                 }
                 else
                 {
-                    let quantity = UTILS.getRandomInt(currentItem.minQuantity, currentItem.maxQuantity)
                     inventoryUpdates[currentItem.itemId] = quantity;
-					STATE._addNotification(this._populateNotificationTextTemplate(searchAction.notificationTextTemplate, [quantity, quantity > 1 ? DATA._getItem(currentItem.itemId).namePlural : DATA._getItem(currentItem.itemId).nameSingular]));
                 }
+				
+				STATE._addNotification(this._populateNotificationTextTemplate(searchAction.notificationTextTemplate, [quantity, itemName]));
             }            
         }
 
@@ -101,7 +104,6 @@ let GAME = {
         
         if (!itemsFound)
         {
-            // this.STATE.notifications.push(searchAction.noItemsFoundText)
 			STATE._addNotification(searchAction.noItemsFoundText);
         }
     },

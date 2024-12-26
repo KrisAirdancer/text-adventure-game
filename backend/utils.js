@@ -25,6 +25,14 @@ const UTILS = {
 		}
 	},
 
+	getPluralSingularItemName(itemNameSingular, itemNamePlural, quantity)
+	{
+		console.log("AT: UTILS.getPluralSingularItemName()");
+		console.log(`itemNameSingular: ${itemNameSingular}, itemNamePlural: ${itemNamePlural}, quantity: ${quantity}`);
+
+		return quantity > 1 ? itemNamePlural : itemNameSingular;
+	},
+
 	copyData(data)
 	{
 		return JSON.parse(JSON.stringify(data));
