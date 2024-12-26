@@ -93,7 +93,7 @@ const GAMEUI = {
     {
         let navBarHtml = ""
 
-        // navBarHtml += this.buildNavigationBarLinkHtml("/navigation/inventory", "Inventory");
+        navBarHtml += this.buildNavigationBarLinkHtml("/navigation/inventory", "Inventory");
         // navBarHtml += this.buildNavigationBarLinkHtml("/navigation/equipment", "Equipment");
         // navBarHtml += this.buildNavigationBarLinkHtml("/navigation/map", "Map");
 
