@@ -86,13 +86,13 @@ let GAME = {
                 {
                     let quantity = UTILS.getRandomInt(currentItem.minQuantity, currentItem.maxQuantity)
 					inventoryUpdates[currentItem.itemId] += quantity;
-					STATE._addNotification(this._buildNotificationTextTemplate(searchAction.notificationTextTemplate, [quantity, quantity > 1 ? DATA._getItem([currentItem.itemId].namePlural) : DATA._getItem(currentItem.itemId).nameSingular]));
+					STATE._addNotification(this._populateNotificationTextTemplate(searchAction.notificationTextTemplate, [quantity, quantity > 1 ? DATA._getItem([currentItem.itemId].namePlural) : DATA._getItem(currentItem.itemId).nameSingular]));
                 }
                 else
                 {
                     let quantity = UTILS.getRandomInt(currentItem.minQuantity, currentItem.maxQuantity)
                     inventoryUpdates[currentItem.itemId] = quantity;
-					STATE._addNotification(this._buildNotificationTextTemplate(searchAction.notificationTextTemplate, [quantity, quantity > 1 ? DATA._getItem(currentItem.itemId).namePlural : DATA._getItem(currentItem.itemId).nameSingular]));
+					STATE._addNotification(this._populateNotificationTextTemplate(searchAction.notificationTextTemplate, [quantity, quantity > 1 ? DATA._getItem(currentItem.itemId).namePlural : DATA._getItem(currentItem.itemId).nameSingular]));
                 }
             }            
         }
@@ -155,7 +155,7 @@ let GAME = {
         return { inventory: itemObjects };
     },
 
-	_buildNotificationTextTemplate(textTemplate, values)
+	_populateNotificationTextTemplate(textTemplate, values)
 	{
 		let notificationText = textTemplate
 		values.forEach(value => {
