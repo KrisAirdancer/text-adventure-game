@@ -42,33 +42,33 @@ let GAME = {
 	/*
 		request format:
 			{
-				METHOD: <method>,
-				PATH: <path>,
-				PARAMS: {
+				method: <method>,
+				route: <path>,
+				params: {
 					actionId: <id>
 				}
 			}
-			Ex. { METHOD: "POST", PATH: "/action" }
+			Ex. { method: "POST", route: "/action" }
 	*/
 	routeRequest(request)
 	{
 		console.log("AT: game.js/routeRequest()");
 		console.log("request: ", request);
 
-		/*
-			POST /action
-			GET /inventory
-			GET /game-state
-		*/
-		switch(request.PATH)
+		request.route = request.route.substring(1);
+
+		let routeTokens = request.route.split("/");
+		console.log("routeTokens: ", routeTokens);
+
+		switch(routeTokens[0])
 		{
 			// Everything that is returned to the frontend should be in string format to prevent manipulation of the data by the fronted from changing the underlying data on the backend.
-			case "/action":
-				this._handleAction(request.PARAMS.actionId);
+			case "action":
+				this._handleAction(routeTokens[1]);
 				return JSON.stringify(this._getResponseState());
-			case "/inventory":
+			case "inventory":
 				return JSON.stringify(this._getInventory());
-			case "/game-state":
+			case "game-state":
 				return JSON.stringify(this._getGameState());
 		};
 	},
@@ -77,6 +77,8 @@ let GAME = {
     // > However, it might make more sense to have a function, such as "processGameCycle()", that can take in an action object (and other objects/options) that runs the full game cycle.
     _handleAction(actionId)
     {
+		console.log("AT: game.js/_handleAction()");
+
 		// Stringify and parse to copy the object to prevent modification of the underlying object in state.
         const action = JSON.parse(JSON.stringify(this.ACTIONS[actionId]));
 
