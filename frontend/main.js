@@ -1,6 +1,6 @@
 window.onload = () => {
 	console.log("WINDOW LOADED");
 
-	GAME._initialze();
+	DATA._initialize();
 	GAMEUI.initialize();
 }

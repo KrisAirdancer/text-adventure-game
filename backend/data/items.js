@@ -1,4 +1,4 @@
-const ITEMS_DATA = [
+const ITEMS = [
     {
         "id": "COPPERCOINS",
         "nameSingular": "Copper Coin",

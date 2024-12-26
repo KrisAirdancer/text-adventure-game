@@ -1,7 +1,7 @@
 const UTILS = {
 	
 	// Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-	_getRandomInt(min, max)
+	getRandomInt(min, max)
 	{
 		const minCeiled = Math.ceil(min);
 		const maxFloored = Math.floor(max);
@@ -9,7 +9,7 @@ const UTILS = {
 	},
 	
 	// Sources: https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array AND https://bost.ocks.org/mike/shuffle/
-	_shuffleArray(array)
+	shuffleArray(array)
 	{
 		let currentIndex = array.length;
 		
@@ -23,5 +23,10 @@ const UTILS = {
 			// And swap it with the current element.
 			[array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
 		}
+	},
+
+	copyData(data)
+	{
+		return JSON.parse(JSON.stringify(data));
 	}
 }

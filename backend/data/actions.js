@@ -1,4 +1,4 @@
-const ACTIONS_DATA = [
+const ACTIONS = [
     {
         "id": "TRAVEL_THISTLEWOOD",
         "name": "Travel to Thistlewood",

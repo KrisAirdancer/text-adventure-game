@@ -3,7 +3,7 @@
 		TODO: Add some kind of logic to allow this data to specify the order of the locations.
 			> That or have the UI always group action types (search, travel, attack, etc.).
 */
-const LOCATIONS_DATA = [
+const LOCATIONS = [
     {
         "id": "PLAYERCABIN",
         "name": "Player Cabin",
