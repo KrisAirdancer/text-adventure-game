@@ -69,12 +69,12 @@ const GAMEUI = {
 	{
 		console.log("AT: GAMEUI.setUiHtml()");
 
-		// null or undefined is used to indicate that the UI element should NOT be updated/changed.
-		if (html.menuBarHtml) { this.htmlElements.menuBar.innerHTML = html.menuBarHtml; }
-		if (html.locationHeaderHtml) { this.htmlElements.locationHeader.innerHTML = html.locationHeaderHtml; }
-		if (html.contentAreaHtml) { this.htmlElements.contentArea.innerHTML = html.contentAreaHtml; }
-		if (html.controlsBarHtml) { this.htmlElements.controlsBar.innerHTML = html.controlsBarHtml; }
-		if (html.notificationsBarHtml) { this.htmlElements.notificationsBar.innerHTML = html.notificationsBarHtml; }
+		// null is used to indicate that the UI element should NOT be updated/changed.
+		if (html.menuBarHtml !== null) { this.htmlElements.menuBar.innerHTML = html.menuBarHtml; }
+		if (html.locationHeaderHtml !== null) { this.htmlElements.locationHeader.innerHTML = html.locationHeaderHtml; }
+		if (html.contentAreaHtml !== null) { this.htmlElements.contentArea.innerHTML = html.contentAreaHtml; }
+		if (html.controlsBarHtml !== null) { this.htmlElements.controlsBar.innerHTML = html.controlsBarHtml; }
+		if (html.notificationsBarHtml !== null) { this.htmlElements.notificationsBar.innerHTML = html.notificationsBarHtml; }
 		else { this.htmlElements.notificationsBar.innerHTML = ""; }
 	},
 
@@ -209,10 +209,10 @@ const GAMEUI = {
 	displayInventory()
 	{
 		this.setUiHtml({
-			menuBarHtml: this.buildMenuBarHtml(),
+			menuBarHtml: this.buildBackButtonHtml() + this.buildMenuBarHtml(),
 			locationHeaderHtml: "INVENTORY",
 			contentAreaHtml: this.buildInventoryHtml(),
-			controlsBarHtml: this.buildBackButtonHtml(), // TODO: Populate this with a "back" button - will need logic to handle the back button press.
+			controlsBarHtml: "",
 			notificationsBarHtml: ""
 		});
 	},
