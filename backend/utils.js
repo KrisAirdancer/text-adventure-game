@@ -36,6 +36,11 @@ const UTILS = {
 		return route.substring(1).split("/");
 	},
 
+	// Source: https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
+	capitalizeFirstLetter(val) {
+		return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+	},
+
 	copyData(data)
 	{
 		return JSON.parse(JSON.stringify(data));

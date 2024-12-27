@@ -5,8 +5,10 @@ const GAMEUI = {
 		contentArea: document.getElementById("content-area"),
 		controlsBar: document.getElementById("controls-bar"),
 		notificationsBar: document.getElementById("notifications-bar"),
+		dateTimeBar: document.getElementById("datetime-bar"),
 	},
 	currentDisplay: "",
+	displayBackButton: false,
 	currentStateData: null,
 
     initialize()
@@ -51,7 +53,7 @@ const GAMEUI = {
 		{
 			this.displayInventory();
 		}
-		else
+		else // MAIN_GAME_SCREEN
 		{
 			this.displayMainGameScreen();
 		}
@@ -68,6 +70,7 @@ const GAMEUI = {
 	setUiHtml(html)
 	{
 		console.log("AT: GAMEUI.setUiHtml()");
+		console.log("html: ", html);
 
 		// null is used to indicate that the UI element should NOT be updated/changed.
 		if (html.menuBarHtml !== null) { this.htmlElements.menuBar.innerHTML = html.menuBarHtml; }
@@ -76,6 +79,7 @@ const GAMEUI = {
 		if (html.controlsBarHtml !== null) { this.htmlElements.controlsBar.innerHTML = html.controlsBarHtml; }
 		if (html.notificationsBarHtml !== null) { this.htmlElements.notificationsBar.innerHTML = html.notificationsBarHtml; }
 		else { this.htmlElements.notificationsBar.innerHTML = ""; }
+		if (html.dateTimeBarHtml !== null) { this.htmlElements.dateTimeBar.innerHTML = html.dateTimeBarHtml; }
 	},
 
 	handleGameplayActionRequest(request)
@@ -95,10 +99,12 @@ const GAMEUI = {
 		{
 			case "inventory":
 				this.currentDisplay = "INVENTORY";
+				this.displayBackButton = true;
 				this.updateUi();
 				break;
 			case "display-gameplay-screen":
 				this.currentDisplay = "MAIN_GAME_SCREEN";
+				this.displayBackButton = false;
 				this.updateUi();
 				break;
 			case "drop":
@@ -201,19 +207,21 @@ const GAMEUI = {
 			menuBarHtml: this.buildMenuBarHtml(),
 			locationHeaderHtml: this.currentStateData.currentLocation.name.toUpperCase(),
 			contentAreaHtml: this.currentStateData.currentLocation.description,
-			controlsBarHtml: this.buildControlsBarHtml(this.currentStateData.currentLocation.actions),
-			notificationsBarHtml: this.buildNotificationsBarHtml(this.currentStateData.notifications)
+			controlsBarHtml: this.buildControlsBarHtml(),
+			notificationsBarHtml: this.buildNotificationsBarHtml(),
+			dateTimeBarHtml: this.buildDateTimeBarHtml(),
 		});
 	},
 
 	displayInventory()
 	{
 		this.setUiHtml({
-			menuBarHtml: this.buildBackButtonHtml() + this.buildMenuBarHtml(),
+			menuBarHtml: this.buildMenuBarHtml(),
 			locationHeaderHtml: "INVENTORY",
 			contentAreaHtml: this.buildInventoryHtml(),
 			controlsBarHtml: "",
-			notificationsBarHtml: ""
+			notificationsBarHtml: "",
+			dateTimeBarHtml: this.buildDateTimeBarHtml()
 		});
 	},
 
@@ -260,18 +268,19 @@ const GAMEUI = {
 		return this.buildReportPlayerInputLinkHtml(request, "back");
 	},
 
-    buildContentHtml(content)
+    buildContentAreaHtml(content)
     {
         return `<p>${content}</p>`;
     },
 
-    buildControlsBarHtml(actions)
+    buildControlsBarHtml()
     {
-        return this.buildActionsListHtml(actions);
+        return this.buildActionsListHtml();
     },
 
-    buildActionsListHtml(actions)
+    buildActionsListHtml()
     {
+		let actions = this.currentStateData.currentLocation.actions;
         let actionLinksHtml = "";
         actions.forEach(action => {
 			let request = {
@@ -294,6 +303,10 @@ const GAMEUI = {
 			route:"/menu/inventory",
 			queryParams: {}
 		};
+		if (this.displayBackButton)
+		{
+			navBarHtml += this.buildBackButtonHtml() + `<span style="margin-right: 10px;"></span>`;
+		}
         navBarHtml += this.buildReportPlayerInputLinkHtml(inventoryLinkRequest, "Inventory");
         // navBarHtml += this.buildNavigationBarLinkHtml("/menu/equipment", "Equipment");
         // navBarHtml += this.buildNavigationBarLinkHtml("/menu/map", "Map");
@@ -308,8 +321,10 @@ const GAMEUI = {
 		return `<a href='javascript:GAMEUI.reportPlayerInput(${JSON.stringify(request)})'>${linkText}</a>`;
 	},
 
-	buildNotificationsBarHtml(notificationsText)
+	buildNotificationsBarHtml()
 	{
+		let notificationsText = this.currentStateData.notifications;
+
 		let notificationsHtml = "";
 		notificationsText.forEach(notification => {
             notificationsHtml += `<p>${notification}</p>`;
@@ -317,4 +332,13 @@ const GAMEUI = {
 
 		return notificationsHtml;
 	},
+
+	buildDateTimeBarHtml()
+	{
+		console.log("AT: buildDateTimeBarHtml()");
+
+		let currentDateTime = this.currentStateData.currentDateTime;
+		let season = UTILS.capitalizeFirstLetter(currentDateTime.season.toLowerCase());
+		return `<div>${currentDateTime.time}, Day ${currentDateTime.day}, Month ${currentDateTime.month}, Year ${currentDateTime.year} - ${season}</div>`;
+	}
 }
