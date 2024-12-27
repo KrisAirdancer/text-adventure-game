@@ -28,9 +28,13 @@ const UTILS = {
 	getPluralSingularItemName(itemNameSingular, itemNamePlural, quantity)
 	{
 		console.log("AT: UTILS.getPluralSingularItemName()");
-		console.log(`itemNameSingular: ${itemNameSingular}, itemNamePlural: ${itemNamePlural}, quantity: ${quantity}`);
 
 		return quantity > 1 ? itemNamePlural : itemNameSingular;
+	},
+
+	getRouteTokens(route)
+	{
+		return route.substring(1).split("/");
 	},
 
 	copyData(data)

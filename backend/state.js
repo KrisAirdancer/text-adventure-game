@@ -28,7 +28,7 @@ let STATE = {
 
 	_getInventory()
 	{
-		return this.stateData.inventory;
+		return UTILS.copyData(this.stateData.player.inventory);
 	},
 
 	_addNotification(notificationText)

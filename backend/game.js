@@ -4,8 +4,8 @@ let GAME = {
 			{
 				method: <method>,
 				route: <path>,
-				params: {
-					actionId: <id>
+				queryParams: {
+					quantity: <id>
 				}
 			}
 			Ex. { method: "POST", route: "/action" }
@@ -15,27 +15,30 @@ let GAME = {
 		console.log("AT: game.js/routeRequest()");
 		console.log("request: ", request);
 
-		request.route = request.route.substring(1);
-
-		let routeTokens = request.route.split("/");
+		let routeTokens = UTILS.getRouteTokens(request.route);
 		console.log("routeTokens: ", routeTokens);
 
 		switch(routeTokens[0])
 		{
 			// Everything that is returned to the frontend should be in string format to prevent manipulation of the data by the fronted from changing the underlying data on the backend.
-			case "action":
-				this._handleAction(routeTokens[1]);
+			case "gameplay-action": // POST /gameplay-action
+				this._handleGameplayAction(request);
 				return JSON.stringify(this._getResponseState());
-			case "inventory":
+			case "inventory": // GET /inventory
 				return JSON.stringify(this._getResponseInventory());
-			case "game-state":
+			case "game-state": // GET /game-state
+				return JSON.stringify(this._getResponseState());
+			case "confirmed-drop": // POST /confirmed-drop
+				this._handleDropItem(request);
 				return JSON.stringify(this._getResponseState());
 		};
 	},
 
-    _handleAction(actionId)
+    _handleGameplayAction(request)
     {
 		console.log("AT: game.js/_handleAction()");
+
+		let actionId = UTILS.getRouteTokens(request.route)[1];
 
         const action = DATA._getAction(actionId);
 
@@ -57,6 +60,17 @@ let GAME = {
     {
 		STATE._setCurrentLocation(action.travelDestinationId);
     },
+
+	_handleDropItem(request)
+	{
+		console.log("AT: GAME._handleDropItem()");
+		console.log("request: ", request);
+
+		let routeTokens = UTILS.getRouteTokens(request.route);
+		let quantity = STATE._getInventory()[routeTokens[1]] * -1;
+
+		STATE._removeItemsFromInventory(routeTokens[1], quantity);
+	},
 
 	// handleSearchAction() should ONlY determine what was found.
 	// A different function should be called to update the inventory.
