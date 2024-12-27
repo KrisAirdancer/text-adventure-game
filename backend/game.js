@@ -12,11 +12,9 @@ let GAME = {
 	*/
 	routeRequest(request)
 	{
-		console.log("AT: game.js/routeRequest()");
-		console.log("request: ", request);
+		console.log("AT: GAME.routeRequest()");
 
 		let routeTokens = UTILS.getRouteTokens(request.route);
-		console.log("routeTokens: ", routeTokens);
 
 		switch(routeTokens[0])
 		{
@@ -36,7 +34,7 @@ let GAME = {
 
     _handleGameplayAction(request)
     {
-		console.log("AT: game.js/_handleAction()");
+		console.log("AT: GAME._handleAction()");
 
 		let actionId = UTILS.getRouteTokens(request.route)[1];
 
@@ -64,7 +62,6 @@ let GAME = {
 	_handleDropItem(request)
 	{
 		console.log("AT: GAME._handleDropItem()");
-		console.log("request: ", request);
 
 		let routeTokens = UTILS.getRouteTokens(request.route);
 		let quantity = STATE._getInventory()[routeTokens[1]] * -1;

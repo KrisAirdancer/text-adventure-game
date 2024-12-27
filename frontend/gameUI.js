@@ -18,7 +18,6 @@ const GAMEUI = {
         this.currentStateData = JSON.parse(GAME.routeRequest({
             route: "/game-state"
         }));
-		console.log("currentStateData: ", this.currentStateData);
 
 		this.updateUi();
 
@@ -28,10 +27,8 @@ const GAMEUI = {
     reportPlayerInput(request)
     {
         console.log("AT: GAMEUI.reportPlayerInput()");
-        console.log("request:", request);
 
 		let routeTokens = UTILS.getRouteTokens(request.route);
-		console.log("routeTokens: ", routeTokens);
 
 		switch (routeTokens[0])
 		{
@@ -47,7 +44,6 @@ const GAMEUI = {
     updateUi()
     {
 		console.log("AT: GAMEUI.updateUi()");
-		console.log("currentStateData: ", this.currentStateData);
 
 		if (this.currentDisplay === "INVENTORY")
 		{
@@ -70,7 +66,6 @@ const GAMEUI = {
 	setUiHtml(html)
 	{
 		console.log("AT: GAMEUI.setUiHtml()");
-		console.log("html: ", html);
 
 		// null is used to indicate that the UI element should NOT be updated/changed.
 		if (html.menuBarHtml !== null) { this.htmlElements.menuBar.innerHTML = html.menuBarHtml; }
@@ -258,7 +253,7 @@ const GAMEUI = {
 	
 	buildBackButtonHtml()
 	{
-		console.log("AT: buildBackButtonHtml()");
+		console.log("AT: GAMEUI.buildBackButtonHtml()");
 
 		let request = {
 			method: "GET",
@@ -335,7 +330,7 @@ const GAMEUI = {
 
 	buildDateTimeBarHtml()
 	{
-		console.log("AT: buildDateTimeBarHtml()");
+		console.log("AT: GAMEUI.buildDateTimeBarHtml()");
 
 		let currentDateTime = this.currentStateData.currentDateTime;
 		let season = UTILS.capitalizeFirstLetter(currentDateTime.season.toLowerCase());
