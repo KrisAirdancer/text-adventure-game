@@ -7,13 +7,22 @@ const GAMEUI = {
 		notificationsBar: document.getElementById("notifications-bar"),
 		dateTimeBar: document.getElementById("datetime-bar"),
 	},
+	displayEnums: {
+		MAIN_GAME_SCREEN: "MAIN_GAME_SCREEN",
+		INVENTORY_SCREEN: "INVENTORY_SCREEN",
+		EQUIPMENT_SCREEN: "EQUIPMENT_SCREEN"
+	},
+	gameplayEnums: {
+		MONEY: "COPPERCOINS"
+	},
 	currentDisplay: "",
 	displayBackButton: false,
 	currentStateData: null,
 
     initialize()
     {
-		this.currentDisplay = "MAIN_GAME_SCREEN";
+		// this.currentDisplay = "MAIN_GAME_SCREEN";
+		this.currentDisplay = this.displayEnums.MAIN_GAME_SCREEN;
 
         this.currentStateData = JSON.parse(GAME.routeRequest({
             route: "/game-state"
@@ -45,14 +54,28 @@ const GAMEUI = {
     {
 		console.log("AT: GAMEUI.updateUi()");
 
-		if (this.currentDisplay === "INVENTORY")
+		switch (this.currentDisplay)
 		{
-			this.displayInventory();
+			// case "INVENTORY":
+			case this.displayEnums.INVENTORY_SCREEN:
+				this.displayInventoryScreen();
+				break;
+			// case "EQUIPMENT":
+			case this.displayEnums.EQUIPMENT_SCREEN:
+				this.displayEquipmentScreen();
+				break;
+			default: // "MAIN_GAME_SCREEN"
+				this.displayMainGameScreen();
+				break;
 		}
-		else // MAIN_GAME_SCREEN
-		{
-			this.displayMainGameScreen();
-		}
+		// if (this.currentDisplay === "INVENTORY")
+		// {
+		// 	this.displayInventory();
+		// }
+		// else // MAIN_GAME_SCREEN
+		// {
+		// 	this.displayMainGameScreen();
+		// }
     },
 	
 	/*
@@ -79,26 +102,35 @@ const GAMEUI = {
 
 	handleGameplayActionRequest(request)
 	{
-		this.currentDisplay = "MAIN_GAME_SCREEN";
+		// this.currentDisplay = "MAIN_GAME_SCREEN";
+		this.currentDisplay = this.displayEnums.MAIN_GAME_SCREEN;
 		this.currentStateData = JSON.parse(GAME.routeRequest(request));
 		this.updateUi();
 	},
 
 	handleMenuRequest(request)
 	{
-		console.log("AT: GAMEUI.handleNavigationRequest()");
+		console.log("AT: GAMEUI.handleMenuRequest()");
 
 		let routeTokens = UTILS.getRouteTokens(request.route);
 
 		switch (routeTokens[1])
 		{
 			case "inventory":
-				this.currentDisplay = "INVENTORY";
+				// this.currentDisplay = "INVENTORY";
+				this.currentDisplay = this.displayEnums.INVENTORY_SCREEN;
+				this.displayBackButton = true;
+				this.updateUi();
+				break;
+			case "equipment":
+				// this.currentDisplay = "EQUIPMENT";
+				this.currentDisplay = this.displayEnums.EQUIPMENT_SCREEN;
 				this.displayBackButton = true;
 				this.updateUi();
 				break;
 			case "display-gameplay-screen":
-				this.currentDisplay = "MAIN_GAME_SCREEN";
+				// this.currentDisplay = "MAIN_GAME_SCREEN";
+				this.currentDisplay = this.displayEnums.MAIN_GAME_SCREEN;
 				this.displayBackButton = false;
 				this.updateUi();
 				break;
@@ -208,7 +240,7 @@ const GAMEUI = {
 		});
 	},
 
-	displayInventory()
+	displayInventoryScreen()
 	{
 		this.setUiHtml({
 			menuBarHtml: this.buildMenuBarHtml(),
@@ -220,11 +252,27 @@ const GAMEUI = {
 		});
 	},
 
+	displayEquipmentScreen()
+	{
+		console.log("AT: GAMEUI.displayEquipmentScreen()");
+
+		this.setUiHtml({
+			menuBarHtml: this.buildMenuBarHtml(), // This call is needed to ensure that the menuBar is updated. Building the HTML is what updates it.
+			locationHeaderHtml: "EQUIPMENT",
+			contentAreaHtml: this.buildEquipmentHtml(),
+			controlsBarHtml: "",
+			notificationsBarHtml: "",
+			dateTimeBarHtml: this.buildDateTimeBarHtml() // This call is needed to ensure that the dateTimeBar is updated. Building the HTML is what updates it.
+		});
+	},
+
 	buildInventoryHtml()
 	{
 		let inventory = this.currentStateData.player.inventory.toSorted((a, b) => {
-			if (a.id === "COPPERCOINS") { return -1; }
-			if (b.id === "COPPERCOINS") { return 1; }
+			// if (a.id === "COPPERCOINS") { return -1; }
+			// if (b.id === "COPPERCOINS") { return 1; }
+			if (a.id === this.gameplayEnums.MONEY) { return -1; }
+			if (b.id === this.gameplayEnums.MONEY) { return 1; }
 			else { return a.nameSingular.localeCompare(b.nameSingular); }
 		});
 
@@ -242,13 +290,23 @@ const GAMEUI = {
 
 			inventoryHtml += `<div id="inventory-${item.id}">${itemName} (${item.count}) [${dropLinkHtml}]</div>`;
 
-			if (item.id === "COPPERCOINS")
+			// if (item.id === "COPPERCOINS")
+			if (item.id === this.gameplayEnums.MONEY)
 			{
 				inventoryHtml += "<div>-</div>"
 			}
 		});
 
 		return inventoryHtml;
+	},
+
+	buildEquipmentHtml()
+	{
+		console.log("AT: GAMEUI.buildEquipmentHtml()");
+
+		let equipmentHtml = "equipment here...	";
+
+		return equipmentHtml;
 	},
 	
 	buildBackButtonHtml()
@@ -298,12 +356,18 @@ const GAMEUI = {
 			route:"/menu/inventory",
 			queryParams: {}
 		};
+		let equipmentLinkRequest = {
+			method: "GET",
+			route:"/menu/equipment",
+			queryParams: {}
+		};
 		if (this.displayBackButton)
 		{
 			navBarHtml += this.buildBackButtonHtml() + `<span style="margin-right: 10px;"></span>`;
 		}
         navBarHtml += this.buildReportPlayerInputLinkHtml(inventoryLinkRequest, "Inventory");
-        // navBarHtml += this.buildNavigationBarLinkHtml("/menu/equipment", "Equipment");
+		navBarHtml += `<span style="margin-right: 10px;"></span>`;
+        navBarHtml += this.buildReportPlayerInputLinkHtml(equipmentLinkRequest, "Equipment");
         // navBarHtml += this.buildNavigationBarLinkHtml("/menu/map", "Map");
 
 		return navBarHtml;
