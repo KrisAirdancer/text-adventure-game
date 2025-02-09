@@ -16,6 +16,17 @@ let STATE = {
 				"COPPERCOINS": 100,
 				"BRONZEAXE": 1,
 				"LEATHERBOOTS": 1
+			},
+			equipment: {
+				HEAD: null,
+				NECK: null,
+				BODY: null,
+				HANDS: null,
+				ON_HAND: null,
+				OFF_HAND: null,
+				RING: null,
+				LEGS: null,
+				FEET: null,
 			}
 		},
 		notifications: [],
