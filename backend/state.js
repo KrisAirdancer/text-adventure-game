@@ -15,7 +15,16 @@ let STATE = {
 			inventory: {
 				"COPPERCOINS": 100,
 				"BRONZEAXE": 1,
-				"LEATHERBOOTS": 1
+				"LEATHERBOOTS": 1,
+				"BRONZEBUCKLER": 1,
+				"LEATHERGLOVES": 1,
+				"GOLDNECKLACE": 1,
+				"BRONZECHAINMAILSHIRT": 1,
+				"BRONZECHAINMAILCOIF": 1,
+				"LEATHERLEGS": 1,
+				"LEATHERBOOTS": 1,
+				"GOLDRING": 1,
+				"STICKS": 3
 			},
 			equipment: {
 				HEAD: null,

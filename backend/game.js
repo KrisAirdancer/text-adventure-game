@@ -13,6 +13,7 @@ let GAME = {
 	routeRequest(request)
 	{
 		console.log("AT: GAME.routeRequest()");
+		console.log("request: ", request);
 
 		let routeTokens = UTILS.getRouteTokens(request.route);
 

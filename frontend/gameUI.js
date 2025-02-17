@@ -25,6 +25,7 @@ const GAMEUI = {
 		this.currentDisplay = this.displayEnums.MAIN_GAME_SCREEN;
 
         this.currentStateData = JSON.parse(GAME.routeRequest({
+			// TODO: This should have a method of GET.
             route: "/game-state"
         }));
 
@@ -102,7 +103,6 @@ const GAMEUI = {
 
 	handleGameplayActionRequest(request)
 	{
-		// this.currentDisplay = "MAIN_GAME_SCREEN";
 		this.currentDisplay = this.displayEnums.MAIN_GAME_SCREEN;
 		this.currentStateData = JSON.parse(GAME.routeRequest(request));
 		this.updateUi();
@@ -117,19 +117,16 @@ const GAMEUI = {
 		switch (routeTokens[1])
 		{
 			case "inventory":
-				// this.currentDisplay = "INVENTORY";
 				this.currentDisplay = this.displayEnums.INVENTORY_SCREEN;
 				this.displayBackButton = true;
 				this.updateUi();
 				break;
 			case "equipment":
-				// this.currentDisplay = "EQUIPMENT";
 				this.currentDisplay = this.displayEnums.EQUIPMENT_SCREEN;
 				this.displayBackButton = true;
 				this.updateUi();
 				break;
 			case "display-gameplay-screen":
-				// this.currentDisplay = "MAIN_GAME_SCREEN";
 				this.currentDisplay = this.displayEnums.MAIN_GAME_SCREEN;
 				this.displayBackButton = false;
 				this.updateUi();
@@ -142,6 +139,9 @@ const GAMEUI = {
 				break;
 			case "confirmed-drop":
 				this.handleConfirmedDrop(request);
+				break;
+			case "equip":
+				this.handleEquipRequest(request);
 				break;
 		}
 	},
@@ -191,6 +191,19 @@ const GAMEUI = {
 			route: newRoute
 		}));
 		this.updateUi();
+	},
+
+	handleEquipRequest(request)
+	{
+		console.log("AT: GAMEUI.handleEquipRequest()");
+		console.log("request: ", request);
+
+		// Equip item
+			// Make request to backend to equip an item.
+		// Hide "equip" button
+		// Display "unequip" button
+
+		GAME.routeRequest(request);
 	},
 
 	displayDropItemConfirmation(itemId)
@@ -269,8 +282,6 @@ const GAMEUI = {
 	buildInventoryHtml()
 	{
 		let inventory = this.currentStateData.player.inventory.toSorted((a, b) => {
-			// if (a.id === "COPPERCOINS") { return -1; }
-			// if (b.id === "COPPERCOINS") { return 1; }
 			if (a.id === this.gameplayEnums.MONEY) { return -1; }
 			if (b.id === this.gameplayEnums.MONEY) { return 1; }
 			else { return a.nameSingular.localeCompare(b.nameSingular); }
@@ -281,16 +292,29 @@ const GAMEUI = {
 		let inventoryHtml = "";
 		inventory.forEach(item => {
 			let itemName = UTILS.getPluralSingularItemName(item.nameSingular, item.namePlural, item.count);
-			let request = {
+			let dropRequest = {
 				method: "POST",
 				route: `/menu/drop/${item.id}`,
 				queryParams: {}
 			}
-			let dropLinkHtml = this.buildReportPlayerInputLinkHtml(request, "drop");
+			let dropLinkHtml = this.buildReportPlayerInputLinkHtml(dropRequest, "drop");
 
-			inventoryHtml += `<div id="inventory-${item.id}">${itemName} (${item.count}) [${dropLinkHtml}]</div>`;
+			let equipRequest = {
+				method: "POST",
+				route: `/menu/equip/${item.id}`,
+				queryParams: {}
+			}
+			let equipLinkHtml = this.buildReportPlayerInputLinkHtml(equipRequest, "equip");
 
-			// if (item.id === "COPPERCOINS")
+			if (item.isEquipable)
+			{
+				inventoryHtml += `<div id="inventory-${item.id}">${itemName} (${item.count}) [${dropLinkHtml}] [${equipLinkHtml}]</div>`;
+			}
+			else
+			{
+				inventoryHtml += `<div id="inventory-${item.id}">${itemName} (${item.count}) [${dropLinkHtml}]</div>`;
+			}
+
 			if (item.id === this.gameplayEnums.MONEY)
 			{
 				inventoryHtml += "<div>-</div>"
