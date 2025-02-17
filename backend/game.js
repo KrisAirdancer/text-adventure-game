@@ -16,6 +16,7 @@ let GAME = {
 		console.log("request: ", request);
 
 		let routeTokens = UTILS.getRouteTokens(request.route);
+		console.log(routeTokens[0]);
 
 		switch(routeTokens[0])
 		{
@@ -29,6 +30,9 @@ let GAME = {
 				return JSON.stringify(this._getResponseState());
 			case "confirmed-drop": // POST /confirmed-drop
 				this._handleDropItem(request);
+				return JSON.stringify(this._getResponseState());
+			case "equip":
+				this._handleEquipRequest(request);
 				return JSON.stringify(this._getResponseState());
 		};
 	},
@@ -119,6 +123,14 @@ let GAME = {
 			STATE._addNotification(searchAction.noItemsFoundText);
         }
     },
+
+	_handleEquipRequest(response)
+	{
+		console.log("AT: GAME._handleEquipRequest()");
+		console.log(response);
+
+		// TODO: Implement this method.
+	},
 
 	// Returns an object that represents the game state formatted for use on the frontend.
 	// This is the only data format that should be returned to the frontend.

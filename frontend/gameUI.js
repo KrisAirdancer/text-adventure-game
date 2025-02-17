@@ -203,7 +203,14 @@ const GAMEUI = {
 		// Hide "equip" button
 		// Display "unequip" button
 
-		GAME.routeRequest(request);
+		// Equip the item (update game state)
+		let routeTokens = UTILS.getRouteTokens(request.route);
+		routeTokens.shift();
+		let newRoute = "/" + routeTokens.join("/");
+		this.currentStateData = JSON.parse(GAME.routeRequest({
+			...request,
+			route: newRoute
+		}));
 	},
 
 	displayDropItemConfirmation(itemId)
@@ -301,8 +308,10 @@ const GAMEUI = {
 
 			let equipRequest = {
 				method: "POST",
-				route: `/menu/equip/${item.id}`,
-				queryParams: {}
+				route: `/menu/equip`,
+				queryParams: {
+					itemId: item.id
+				}
 			}
 			let equipLinkHtml = this.buildReportPlayerInputLinkHtml(equipRequest, "equip");
 
