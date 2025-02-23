@@ -19,6 +19,10 @@ const GAMEUI = {
 		MONEY: "COPPERCOINS"
 	},
 	currentDisplay: "",
+	dropItemConfirmation: {
+		showConfirmation: false,
+		itemId: null
+	},
 	displayBackButton: false,
 	currentStateData: null,
 
@@ -56,8 +60,6 @@ const GAMEUI = {
 
     updateUi()
     {
-		console.log("AT: GAMEUI.updateUi()");
-
 		switch (this.currentDisplay)
 		{
 			case this.displayEnums.INVENTORY_SCREEN:
@@ -144,40 +146,21 @@ const GAMEUI = {
 	
 	handleDropRequest(request)
 	{
-		console.log("AT: GAMEUI.handleDropRequest()");
-
-		// Collapse any other "drop pending" selectors.
-		let inventoryElements = document.getElementById("content-area").children;
-		for (let i = 0; i < inventoryElements.length; i++)
-		{
-			// Skip the spacer below the currency element.
-			if (i == 1) { continue; }
-
-			let child = inventoryElements[i];
-			let itemId = child.id.substring(child.id.indexOf("-") + 1);
-			this.hideDropItemConfirmation(itemId);
-		}
-
-		let routeTokens = UTILS.getRouteTokens(request.route);
-		let itemId = routeTokens[2];
-
-		this.displayDropItemConfirmation(itemId);
+		let rt = UTILS.getRouteTokens(request.route);
+		this.dropItemConfirmation.itemId = rt[2];
+		this.dropItemConfirmation.showConfirmation = true;
+		this.updateUi();
 	},
 
 	handleCancelDropRequest(request)
 	{
-		console.log("AT: GAMEUI.handleCancelDropRequest()");
-
-		let routeTokens = UTILS.getRouteTokens(request.route);
-		let itemId = routeTokens[2];
-
-		this.hideDropItemConfirmation(itemId);
+		this.dropItemConfirmation.showConfirmation = false;
+		this.dropItemConfirmation.itemId = null;
+		this.updateUi();
 	},
 
 	handleConfirmedDrop(request)
 	{
-		console.log("AT: GAMEUI.handleConfirmedDrop()");
-
 		let routeTokens = UTILS.getRouteTokens(request.route);
 		routeTokens.shift();
 		let newRoute = "/" + routeTokens.join("/");
@@ -191,12 +174,9 @@ const GAMEUI = {
 
 	handleEquipRequest(request)
 	{
-		console.log("AT: GAMEUI.handleEquipRequest()");
-
 		// Equip the item (update game state)
 		this.currentStateData = JSON.parse(GAME.routeRequest({
 			...request,
-			// route: newRoute
 			route: UTILS.getTruncatedRoute(request.route, 1)
 		}));
 
@@ -205,53 +185,13 @@ const GAMEUI = {
 
 	handleUnequipRequest(request)
 	{
-		console.log("AT: GAMEUI.handleUnequipRequest()");
-		console.log(request);
-
 		// Unequip the item (update the game state).
 		this.currentStateData = JSON.parse(GAME.routeRequest({
 			...request,
-			// route: newRoute
 			route: UTILS.getTruncatedRoute(request.route, 1)
 		}));
 
-		console.log(this.currentStateData);
 		this.updateUi();
-	},
-
-	displayDropItemConfirmation(itemId)
-	{
-		let itemHtml = document.getElementById(`inventory-${itemId}`);
-		let innerHtmlPrefix = itemHtml.innerHTML.substring(0, itemHtml.innerHTML.indexOf("[") + 1);
-		let yesRequest = {
-			method: "POST",
-			route: `/menu/confirmed-drop/${itemId}`,
-			queryParams: {}
-		};
-		let noRequest = {
-			method: "POST",
-			route: `/menu/cancel-drop/${itemId}`,
-			queryParams: {}
-		};
-		let newLinksHtml = `${this.buildReportPlayerInputLinkHtml(yesRequest, "yes")}/${this.buildReportPlayerInputLinkHtml(noRequest, "no")}`;
-		let newInnerHtml = innerHtmlPrefix + "drop? " + newLinksHtml + "]";
-
-		itemHtml.innerHTML = newInnerHtml;
-	},
-
-	hideDropItemConfirmation(itemId)
-	{
-		let itemHtml = document.getElementById(`inventory-${itemId}`);
-		let innerHtmlPrefix = itemHtml.innerHTML.substring(0, itemHtml.innerHTML.indexOf("[") + 1);
-		let dropRequest = {
-			method: "POST",
-			route: `/menu/drop/${itemId}`,
-			queryParams: {}
-		}
-		let dropLinkHtml = this.buildReportPlayerInputLinkHtml(dropRequest, "drop");
-		let newInnerHtml = innerHtmlPrefix + dropLinkHtml + "]";
-
-		itemHtml.innerHTML = newInnerHtml;
 	},
 
 	displayMainGameScreen()
@@ -280,8 +220,6 @@ const GAMEUI = {
 
 	displayEquipmentScreen()
 	{
-		console.log("AT: GAMEUI.displayEquipmentScreen()");
-
 		this.setUiHtml({
 			menuBarHtml: this.buildMenuBarHtml(), // This call is needed to ensure that the menuBar is updated. Building the HTML is what updates it.
 			locationHeaderHtml: "EQUIPMENT",
@@ -300,18 +238,21 @@ const GAMEUI = {
 			else { return a.nameSingular.localeCompare(b.nameSingular); }
 		});
 
-		// TODO: Update to still show the player's money.
+		// TODO: Update to still show the player's money even when their inventory is empty.
 		if (inventory.length === 0) { return "<div>You have no items</div>" };
 
 		let inventoryHtml = "";
 		inventory.forEach(item => {
 			let itemName = UTILS.getPluralSingularItemName(item.nameSingular, item.namePlural, item.count);
+			// TODO: See if there is a way to move all of the equip/unequip link HTML generation code into a helper function.
 			let dropRequest = {
 				method: "POST",
 				route: `/menu/drop/${item.id}`,
 				queryParams: {}
 			}
-			let dropLinkHtml = this.buildReportPlayerInputLinkHtml(dropRequest, "drop");
+			let dropLinkHtml = this.dropItemConfirmation.showConfirmation && item.id === this.dropItemConfirmation.itemId
+								? this.buildDropItemConfirmationHtml(item.id)
+								: this.buildReportPlayerInputLinkHtml(dropRequest, "drop");
 
 			let equipRequest = {
 				method: "POST",
@@ -344,19 +285,30 @@ const GAMEUI = {
 		return inventoryHtml;
 	},
 
+	buildDropItemConfirmationHtml(itemId)
+	{
+		let yesRequest = {
+			method: "POST",
+			route: `/menu/confirmed-drop/${itemId}`,
+			queryParams: {}
+		};
+		let noRequest = {
+			method: "POST",
+			route: `/menu/cancel-drop/${itemId}`,
+			queryParams: {}
+		};
+
+		let newLinksHtml = `${this.buildReportPlayerInputLinkHtml(yesRequest, "yes")}/${this.buildReportPlayerInputLinkHtml(noRequest, "no")}`;
+		return "drop? " + newLinksHtml;
+	},
+
 	buildEquipmentHtml()
 	{
-		console.log("AT: GAMEUI.buildEquipmentHtml()");
-
-		let equipmentHtml = "equipment here...	";
-
-		return equipmentHtml;
+		return "equipment here...	";
 	},
 	
 	buildBackButtonHtml()
 	{
-		console.log("AT: GAMEUI.buildBackButtonHtml()");
-
 		let request = {
 			method: "GET",
 			route: `/menu/display-gameplay-screen`,
@@ -419,8 +371,6 @@ const GAMEUI = {
 
 	buildReportPlayerInputLinkHtml(request, linkText)
 	{
-		console.log("AT: GAMEUI.buildReportPlayerInputLinkHtml()");
-
 		return `<a href='javascript:GAMEUI.reportPlayerInput(${JSON.stringify(request)})'>${linkText}</a>`;
 	},
 
@@ -438,8 +388,6 @@ const GAMEUI = {
 
 	buildDateTimeBarHtml()
 	{
-		console.log("AT: GAMEUI.buildDateTimeBarHtml()");
-
 		let currentDateTime = this.currentStateData.currentDateTime;
 		let season = UTILS.capitalizeFirstLetter(currentDateTime.season.toLowerCase());
 		return `<div>${currentDateTime.time}, Day ${currentDateTime.day}, Month ${currentDateTime.month}, Year ${currentDateTime.year} - ${season}</div>`;

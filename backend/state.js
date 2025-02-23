@@ -143,8 +143,6 @@ let STATE = {
 
 	_updateInventory(inventoryUpdates)
     {
-		console.log("AT: GAME._updateInventory()");
-
 		if (!inventoryUpdates) { return; }
 		for (const [itemId, delta] of Object.entries(inventoryUpdates))
 		{
@@ -180,7 +178,6 @@ let STATE = {
         
         let inventory = this.stateData.player.inventory;
 		const item = DATA._getItem(itemId);
-		console.log("item: ", item);
 
         if (!(itemId in inventory)) { return }
 

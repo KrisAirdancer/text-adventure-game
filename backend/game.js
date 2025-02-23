@@ -137,8 +137,6 @@ let GAME = {
 
 	_handleEquipRequest(request)
 	{
-		console.log("AT: GAME._handleEquipRequest()");
-
 		const itemId = request.queryParams.itemId;
 		if (STATE._isItemInInventory(itemId) === false) { return; }
 		
@@ -149,9 +147,6 @@ let GAME = {
 
 	_handleUnequipRequest(request)
 	{
-		console.log("AT: GAME.handleUnequipRequest()");
-		console.log(request);
-
 		const itemId = request.queryParams.itemId;
 		const item = DATA._getItem(itemId);
 		const equipmentSlot = item.type;
