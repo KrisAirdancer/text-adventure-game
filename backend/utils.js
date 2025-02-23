@@ -26,8 +26,6 @@ const UTILS = {
 
 	getPluralSingularItemName(itemNameSingular, itemNamePlural, quantity)
 	{
-		console.log("AT: UTILS.getPluralSingularItemName()");
-
 		return quantity > 1 ? itemNamePlural : itemNameSingular;
 	},
 

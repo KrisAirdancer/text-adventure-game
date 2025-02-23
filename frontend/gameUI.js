@@ -244,34 +244,8 @@ const GAMEUI = {
 		let inventoryHtml = "";
 		inventory.forEach(item => {
 			let itemName = UTILS.getPluralSingularItemName(item.nameSingular, item.namePlural, item.count);
-			// TODO: See if there is a way to move all of the equip/unequip link HTML generation code into a helper function.
-			let dropRequest = {
-				method: "POST",
-				route: `/menu/drop/${item.id}`,
-				queryParams: {}
-			}
-			let dropLinkHtml = this.dropItemConfirmation.showConfirmation && item.id === this.dropItemConfirmation.itemId
-								? this.buildDropItemConfirmationHtml(item.id)
-								: this.buildReportPlayerInputLinkHtml(dropRequest, "drop");
-
-			let equipRequest = {
-				method: "POST",
-				route: `/menu/equip`,
-				queryParams: {
-					itemId: item.id
-				}
-			}
-			let unequipRequest = {
-				method: "POST",
-				route: `/menu/unequip`,
-				queryParams: {
-					itemId: item.id
-				}
-			}
-			const equipment = this.currentStateData.player.equipment;
-			let equipLinkHtml = equipment[item.type] === item.id
-								? this.buildReportPlayerInputLinkHtml(unequipRequest, "unequip")
-								: this.buildReportPlayerInputLinkHtml(equipRequest, "equip");
+			let equipLinkHtml = this.buildEquipUnequipHtml(item);
+			let dropLinkHtml = this.buildDropLinkHtml(item);
 
 			if (item.isEquipable)
 			{
@@ -283,6 +257,40 @@ const GAMEUI = {
 		});
 
 		return inventoryHtml;
+	},
+
+	buildEquipUnequipHtml(item)
+	{
+		let equipRequest = {
+			method: "POST",
+			route: `/menu/equip`,
+			queryParams: {
+				itemId: item.id
+			}
+		}
+		let unequipRequest = {
+			method: "POST",
+			route: `/menu/unequip`,
+			queryParams: {
+				itemId: item.id
+			}
+		}
+		const equipment = this.currentStateData.player.equipment;
+		return equipment[item.type] === item.id
+				? this.buildReportPlayerInputLinkHtml(unequipRequest, "unequip")
+				: this.buildReportPlayerInputLinkHtml(equipRequest, "equip");
+	},
+
+	buildDropLinkHtml(item)
+	{
+		let dropRequest = {
+			method: "POST",
+			route: `/menu/drop/${item.id}`,
+			queryParams: {}
+		}
+		return this.dropItemConfirmation.showConfirmation && item.id === this.dropItemConfirmation.itemId
+				? this.buildDropItemConfirmationHtml(item.id)
+				: this.buildReportPlayerInputLinkHtml(dropRequest, "drop");
 	},
 
 	buildDropItemConfirmationHtml(itemId)
