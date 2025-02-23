@@ -1,5 +1,6 @@
 const GAMEUI = {
-	htmlElements: {
+	htmlElements:
+	{
 		menuBar: document.getElementById("menu-bar"),
 		locationHeader: document.getElementById("location-header"),
 		contentArea: document.getElementById("content-area"),
@@ -7,12 +8,14 @@ const GAMEUI = {
 		notificationsBar: document.getElementById("notifications-bar"),
 		dateTimeBar: document.getElementById("datetime-bar"),
 	},
-	displayEnums: {
+	displayEnums:
+	{
 		MAIN_GAME_SCREEN: "MAIN_GAME_SCREEN",
 		INVENTORY_SCREEN: "INVENTORY_SCREEN",
 		EQUIPMENT_SCREEN: "EQUIPMENT_SCREEN"
 	},
-	gameplayEnums: {
+	gameplayEnums:
+	{
 		MONEY: "COPPERCOINS"
 	},
 	currentDisplay: "",
@@ -57,26 +60,16 @@ const GAMEUI = {
 
 		switch (this.currentDisplay)
 		{
-			// case "INVENTORY":
 			case this.displayEnums.INVENTORY_SCREEN:
 				this.displayInventoryScreen();
 				break;
-			// case "EQUIPMENT":
 			case this.displayEnums.EQUIPMENT_SCREEN:
 				this.displayEquipmentScreen();
 				break;
-			default: // "MAIN_GAME_SCREEN"
+			default:
 				this.displayMainGameScreen();
 				break;
 		}
-		// if (this.currentDisplay === "INVENTORY")
-		// {
-		// 	this.displayInventory();
-		// }
-		// else // MAIN_GAME_SCREEN
-		// {
-		// 	this.displayMainGameScreen();
-		// }
     },
 	
 	/*
@@ -143,6 +136,9 @@ const GAMEUI = {
 			case "equip":
 				this.handleEquipRequest(request);
 				break;
+			case "unequip":
+				this.handleUnequipRequest(request);
+				break;
 		}
 	},
 	
@@ -196,21 +192,31 @@ const GAMEUI = {
 	handleEquipRequest(request)
 	{
 		console.log("AT: GAMEUI.handleEquipRequest()");
-		console.log("request: ", request);
-
-		// Equip item
-			// Make request to backend to equip an item.
-		// Hide "equip" button
-		// Display "unequip" button
 
 		// Equip the item (update game state)
-		let routeTokens = UTILS.getRouteTokens(request.route);
-		routeTokens.shift();
-		let newRoute = "/" + routeTokens.join("/");
 		this.currentStateData = JSON.parse(GAME.routeRequest({
 			...request,
-			route: newRoute
+			// route: newRoute
+			route: UTILS.getTruncatedRoute(request.route, 1)
 		}));
+
+		this.updateUi();
+	},
+
+	handleUnequipRequest(request)
+	{
+		console.log("AT: GAMEUI.handleUnequipRequest()");
+		console.log(request);
+
+		// Unequip the item (update the game state).
+		this.currentStateData = JSON.parse(GAME.routeRequest({
+			...request,
+			// route: newRoute
+			route: UTILS.getTruncatedRoute(request.route, 1)
+		}));
+
+		console.log(this.currentStateData);
+		this.updateUi();
 	},
 
 	displayDropItemConfirmation(itemId)
@@ -294,6 +300,7 @@ const GAMEUI = {
 			else { return a.nameSingular.localeCompare(b.nameSingular); }
 		});
 
+		// TODO: Update to still show the player's money.
 		if (inventory.length === 0) { return "<div>You have no items</div>" };
 
 		let inventoryHtml = "";
@@ -313,21 +320,25 @@ const GAMEUI = {
 					itemId: item.id
 				}
 			}
-			let equipLinkHtml = this.buildReportPlayerInputLinkHtml(equipRequest, "equip");
+			let unequipRequest = {
+				method: "POST",
+				route: `/menu/unequip`,
+				queryParams: {
+					itemId: item.id
+				}
+			}
+			const equipment = this.currentStateData.player.equipment;
+			let equipLinkHtml = equipment[item.type] === item.id
+								? this.buildReportPlayerInputLinkHtml(unequipRequest, "unequip")
+								: this.buildReportPlayerInputLinkHtml(equipRequest, "equip");
 
 			if (item.isEquipable)
 			{
 				inventoryHtml += `<div id="inventory-${item.id}">${itemName} (${item.count}) [${dropLinkHtml}] [${equipLinkHtml}]</div>`;
 			}
-			else
-			{
-				inventoryHtml += `<div id="inventory-${item.id}">${itemName} (${item.count}) [${dropLinkHtml}]</div>`;
-			}
+			else { inventoryHtml += `<div id="inventory-${item.id}">${itemName} (${item.count}) [${dropLinkHtml}]</div>`; }
 
-			if (item.id === this.gameplayEnums.MONEY)
-			{
-				inventoryHtml += "<div>-</div>"
-			}
+			if (item.id === this.gameplayEnums.MONEY) { inventoryHtml += "<div>-</div>"; }
 		});
 
 		return inventoryHtml;

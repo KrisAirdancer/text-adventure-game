@@ -3,4 +3,5 @@ window.onload = () => {
 
 	DATA._initialize();
 	GAMEUI.initialize();
+	GAME.initialize();
 }

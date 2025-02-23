@@ -1,4 +1,11 @@
 let GAME = {
+	STATE_ENUMS: null,
+
+	initialize()
+	{
+		this.STATE_ENUMS = STATE._getEnums();
+	},
+
 	/*
 		request format:
 			{
@@ -33,6 +40,10 @@ let GAME = {
 				return JSON.stringify(this._getResponseState());
 			case "equip":
 				this._handleEquipRequest(request);
+				return JSON.stringify(this._getResponseState());
+			case "unequip":
+				this._handleUnequipRequest(request);
+				console.log(this._getResponseState());
 				return JSON.stringify(this._getResponseState());
 		};
 	},
@@ -124,12 +135,29 @@ let GAME = {
         }
     },
 
-	_handleEquipRequest(response)
+	_handleEquipRequest(request)
 	{
 		console.log("AT: GAME._handleEquipRequest()");
-		console.log(response);
 
-		// TODO: Implement this method.
+		const itemId = request.queryParams.itemId;
+		if (STATE._isItemInInventory(itemId) === false) { return; }
+		
+		const item = DATA._getItem(itemId);
+		const equipmentSlot = item.type;
+		STATE._setEquipment(equipmentSlot, itemId);
+	},
+
+	_handleUnequipRequest(request)
+	{
+		console.log("AT: GAME.handleUnequipRequest()");
+		console.log(request);
+
+		const itemId = request.queryParams.itemId;
+		const item = DATA._getItem(itemId);
+		const equipmentSlot = item.type;
+		if (STATE._isItemEquipped(equipmentSlot, itemId) === false) { return; }
+		
+		STATE._setEquipment(equipmentSlot, null);
 	},
 
 	// Returns an object that represents the game state formatted for use on the frontend.

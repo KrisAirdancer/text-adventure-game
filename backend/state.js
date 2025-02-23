@@ -1,7 +1,9 @@
 let STATE = {
-	stateData: {
+	stateData:
+	{
 		currentLocationId: "PLAYERCABIN",
-		currentDateTime: {
+		currentDateTime:
+		{
 			minutes: 450, // Minutes since midnight. When 1440 is reached, rollover to 0. That is, go from 1439 to 0 (of the next day).
 			time: "7:30 AM",
 			day: 0, // The day number of the current month. 0-29
@@ -10,9 +12,11 @@ let STATE = {
 			season: "SPRING",
 			year: 0 // The year number.
 		},
-		player: {
+		player:
+		{
 			// TODO: Add currentHp, maxHp, inventory, etc.
-			inventory: {
+			inventory:
+			{
 				"COPPERCOINS": 100,
 				"BRONZEAXE": 1,
 				"LEATHERBOOTS": 1,
@@ -26,7 +30,8 @@ let STATE = {
 				"GOLDRING": 1,
 				"STICKS": 3
 			},
-			equipment: {
+			equipment:
+			{
 				HEAD: null,
 				NECK: null,
 				BODY: null,
@@ -40,7 +45,22 @@ let STATE = {
 		},
 		notifications: [],
 	},
-
+	enums:
+	{
+		equipment:
+		{
+			HEAD: "HEAD",
+			NECK: "NECK",
+			BODY: "BODY",
+			HANDS: "HANDS",
+			ON_HAND: "ON_HAND",
+			OFF_HAND: "OFF_HAND",
+			RING: "RING",
+			LEGS: "LEGS",
+			FEET: "FEET",
+		}
+	},
+	
 	_getStateData()
 	{
 		return UTILS.copyData(this.stateData);
@@ -156,14 +176,42 @@ let STATE = {
 
     _removeItemsFromInventory(itemId, quantity)
     {
-        if (quantity >= 0) { throw Error(`Quantity ${quantity} must be negative`) }
+        if (quantity >= 0) { throw Error(`Quantity ${quantity} must be negative`); }
         
-        let inventory = this.stateData.player.inventory
+        let inventory = this.stateData.player.inventory;
+		const item = DATA._getItem(itemId);
+		console.log("item: ", item);
 
         if (!(itemId in inventory)) { return }
 
-        inventory[itemId] += quantity
+        inventory[itemId] += quantity;
 
-        if (inventory[itemId] <= 0) { delete inventory[itemId] }
+        if (inventory[itemId] <= 0)
+		{
+			// Remove the inventory entry.
+			delete inventory[itemId];
+			// Remove the item from player's equipment.
+			STATE._setEquipment(item.type, null);
+		}
     },
+
+	_isItemInInventory(itemId)
+	{
+		return itemId in this.stateData.player.inventory;
+	},
+
+	_isItemEquipped(equipmentSlot, itemId)
+	{
+		return this.stateData.player.equipment[equipmentSlot] === itemId;
+	},
+
+	_setEquipment(equipmentSlot, itemId)
+	{
+		this.stateData.player.equipment[equipmentSlot] = itemId;
+	},
+
+	_getEnums()
+	{
+		return UTILS.copyData(this.enums);
+	},
 }
