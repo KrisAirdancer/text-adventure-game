@@ -162,32 +162,49 @@ let GAME = {
         let state = STATE._getStateData();
 
         // Shift datetime to 1-indexed format.
-        state.currentDateTime.day += 1
-        state.currentDateTime.month += 1
-        state.currentDateTime.monthOfSeason += 1
-        state.currentDateTime.year += 1
+        state.currentDateTime.day += 1;
+        state.currentDateTime.month += 1;
+        state.currentDateTime.monthOfSeason += 1;
+        state.currentDateTime.year += 1;
 
         // Add the current location's data.
         state.currentLocation = STATE._getCurrentLocation();
 
         // Populate the actions data for the current location.
-        let actionObjects = []
+        let actionObjects = [];
         state.currentLocation.actions.forEach(actionId => {
-            actionObjects.push(DATA._getAction(actionId))
-        })
-        state.currentLocation.actions = actionObjects
+            actionObjects.push(DATA._getAction(actionId));
+        });
+        state.currentLocation.actions = actionObjects;
 
         // Populate the inventory items' data.
-        let itemObjects = []
+        let itemObjects = [];
         for (const [itemId, quantity] of Object.entries(state.player.inventory))
         {
-            // itemObjects.push({ ...this.ITEMS[key], count: value })
-            itemObjects.push({ ...DATA._getItem(itemId), count: quantity })
+            itemObjects.push({...DATA._getItem(itemId), count: quantity});
         }
-        state.player.inventory = itemObjects
+        state.player.inventory = itemObjects;
+		
+		console.log(state);
+		// Populate the equipment items' data.
+		let equipmentObjects = {};
+		for (const [equipmentSlot, itemId] of Object.entries(state.player.equipment))
+		{
+			// console.log(`${equipmentSlot}: ${itemId}`);
 
+			if (!itemId) { equipmentObjects[equipmentSlot] = null; }
+			// else { equipmentObjects.push(DATA._getItem(itemId)); }
+			else
+			{
+				const item = DATA._getItem(itemId);
+				equipmentObjects[equipmentSlot] = item;
+			}
+		}
+		state.player.equipment = equipmentObjects;
+	
+		console.log(state);
         // Remove duplicate/unnecessary fields.
-        delete state.currentLocationId
+        delete state.currentLocationId;
 
         return state;
     },

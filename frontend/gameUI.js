@@ -261,6 +261,8 @@ const GAMEUI = {
 
 	buildEquipUnequipHtml(item)
 	{
+		console.log("AT: GAMEUI.buildInventoryHtml()");
+
 		let equipRequest = {
 			method: "POST",
 			route: `/menu/equip`,
@@ -276,9 +278,24 @@ const GAMEUI = {
 			}
 		}
 		const equipment = this.currentStateData.player.equipment;
-		return equipment[item.type] === item.id
-				? this.buildReportPlayerInputLinkHtml(unequipRequest, "unequip")
-				: this.buildReportPlayerInputLinkHtml(equipRequest, "equip");
+		// return equipment.some(e => { if (!e) { return false; } else { return e.id === item.id}})
+
+		const equipmentItem = this.currentStateData.player.equipment[item.type];
+		if (equipmentItem)
+		{
+			if (item.id == equipmentItem.id)
+			{
+				return this.buildReportPlayerInputLinkHtml(unequipRequest, "unequip");
+			}
+		}
+		else
+		{
+			return this.buildReportPlayerInputLinkHtml(equipRequest, "equip");
+		}
+
+		// return equipment[item.type] && item.id == equipment[item.type]
+		// 		? this.buildReportPlayerInputLinkHtml(unequipRequest, "unequip")
+		// 		: this.buildReportPlayerInputLinkHtml(equipRequest, "equip");
 	},
 
 	buildDropLinkHtml(item)
@@ -312,9 +329,19 @@ const GAMEUI = {
 
 	buildEquipmentHtml()
 	{
-		return "equipment here...	";
+		console.log("AT: GAMEUI.buildEquipmentHtml()");
+
+		// TODO: Add logic to the backend to populate the state data with the equipment item data.
+
+		let equipmentHtml = "";
+		let equipment = this.currentStateData.player.equipment;
+		console.log("equipment: ", equipment);
+		// TODO: Use enum objects for the equipment key names.
+		equipmentHtml += `<div>HEAD: ${equipment["HEAD"] ? equipment["HEAD"].nameSingular : "empty"}</div>`;
+
+		return equipmentHtml;
 	},
-	
+
 	buildBackButtonHtml()
 	{
 		let request = {
