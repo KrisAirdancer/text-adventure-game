@@ -28,7 +28,6 @@ const GAMEUI = {
 
     initialize()
     {
-		// this.currentDisplay = "MAIN_GAME_SCREEN";
 		this.currentDisplay = this.displayEnums.MAIN_GAME_SCREEN;
 
         this.currentStateData = JSON.parse(GAME.routeRequest({
@@ -105,8 +104,6 @@ const GAMEUI = {
 
 	handleMenuRequest(request)
 	{
-		console.log("AT: GAMEUI.handleMenuRequest()");
-
 		let routeTokens = UTILS.getRouteTokens(request.route);
 
 		switch (routeTokens[1])
@@ -261,8 +258,6 @@ const GAMEUI = {
 
 	buildEquipUnequipHtml(item)
 	{
-		console.log("AT: GAMEUI.buildInventoryHtml()");
-
 		let equipRequest = {
 			method: "POST",
 			route: `/menu/equip`,
@@ -277,8 +272,6 @@ const GAMEUI = {
 				itemId: item.id
 			}
 		}
-		const equipment = this.currentStateData.player.equipment;
-		// return equipment.some(e => { if (!e) { return false; } else { return e.id === item.id}})
 
 		const equipmentItem = this.currentStateData.player.equipment[item.type];
 		if (equipmentItem)
@@ -292,10 +285,6 @@ const GAMEUI = {
 		{
 			return this.buildReportPlayerInputLinkHtml(equipRequest, "equip");
 		}
-
-		// return equipment[item.type] && item.id == equipment[item.type]
-		// 		? this.buildReportPlayerInputLinkHtml(unequipRequest, "unequip")
-		// 		: this.buildReportPlayerInputLinkHtml(equipRequest, "equip");
 	},
 
 	buildDropLinkHtml(item)
@@ -329,15 +318,39 @@ const GAMEUI = {
 
 	buildEquipmentHtml()
 	{
-		console.log("AT: GAMEUI.buildEquipmentHtml()");
-
-		// TODO: Add logic to the backend to populate the state data with the equipment item data.
-
 		let equipmentHtml = "";
 		let equipment = this.currentStateData.player.equipment;
-		console.log("equipment: ", equipment);
-		// TODO: Use enum objects for the equipment key names.
-		equipmentHtml += `<div>HEAD: ${equipment["HEAD"] ? equipment["HEAD"].nameSingular : "empty"}</div>`;
+		const equipmentSlotNames = {
+			HEAD: { name: "Head", obj: UTILS.copyData(equipment["HEAD"]) },
+			NECK: { name: "Neck", obj: UTILS.copyData(equipment["NECK"]) },
+			BODY: { name: "Body", obj: UTILS.copyData(equipment["BODY"]) },
+			HANDS: { name: "Hands", obj: UTILS.copyData(equipment["HANDS"]) },
+			ON_HAND: { name: "On Hand", obj: UTILS.copyData(equipment["ON_HAND"]) },
+			OFF_HAND: { name: "Off Hand", obj: UTILS.copyData(equipment["OFF_HAND"]) },
+			RING: { name: "Ring", obj: UTILS.copyData(equipment["RING"]) },
+			LEGS: { name: "Legs", obj: UTILS.copyData(equipment["LEGS"]) },
+			FEET: { name: "Feet", obj: UTILS.copyData(equipment["FEET"]) }
+		};
+
+		for (const [key, slotData] of Object.entries(equipmentSlotNames))
+		{
+			let unequipRequest = null;
+			if (slotData.obj)
+			{ // If slot has an item equipped.
+				unequipRequest = {
+					method: "POST",
+					route: `/menu/unequip`,
+					queryParams: {
+						itemId: slotData.obj.id
+					}
+				}
+			}
+
+			const slotContents = equipment[key]
+									? equipment[key].nameSingular + ` [${this.buildReportPlayerInputLinkHtml(unequipRequest, "unequip")}]`
+									: "empty"
+			equipmentHtml += `<div>${slotData.name.toUpperCase()}<div></div>${slotContents}</div>${key != "FEET" ? "<div>~</div>" : ""}`;
+		}
 
 		return equipmentHtml;
 	},

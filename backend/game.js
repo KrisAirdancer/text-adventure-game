@@ -43,15 +43,12 @@ let GAME = {
 				return JSON.stringify(this._getResponseState());
 			case "unequip":
 				this._handleUnequipRequest(request);
-				console.log(this._getResponseState());
 				return JSON.stringify(this._getResponseState());
 		};
 	},
 
     _handleGameplayAction(request)
     {
-		console.log("AT: GAME._handleAction()");
-
 		let actionId = UTILS.getRouteTokens(request.route)[1];
 
         const action = DATA._getAction(actionId);
@@ -77,8 +74,6 @@ let GAME = {
 
 	_handleDropItem(request)
 	{
-		console.log("AT: GAME._handleDropItem()");
-
 		let routeTokens = UTILS.getRouteTokens(request.route);
 		let quantity = STATE._getInventory()[routeTokens[1]] * -1;
 
@@ -185,15 +180,14 @@ let GAME = {
         }
         state.player.inventory = itemObjects;
 		
-		console.log(state);
 		// Populate the equipment items' data.
 		let equipmentObjects = {};
 		for (const [equipmentSlot, itemId] of Object.entries(state.player.equipment))
 		{
-			// console.log(`${equipmentSlot}: ${itemId}`);
-
-			if (!itemId) { equipmentObjects[equipmentSlot] = null; }
-			// else { equipmentObjects.push(DATA._getItem(itemId)); }
+			if (!itemId)
+			{
+				equipmentObjects[equipmentSlot] = null;
+			}
 			else
 			{
 				const item = DATA._getItem(itemId);
@@ -202,7 +196,6 @@ let GAME = {
 		}
 		state.player.equipment = equipmentObjects;
 	
-		console.log(state);
         // Remove duplicate/unnecessary fields.
         delete state.currentLocationId;
 
