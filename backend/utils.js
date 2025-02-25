@@ -43,10 +43,4 @@ const UTILS = {
 	{
 		return JSON.parse(JSON.stringify(data));
 	},
-
-	getTruncatedRoute(route, deleteCount)
-	{
-		let routeTokens = UTILS.getRouteTokens(route);
-		return "/" + routeTokens.toSpliced(0, deleteCount).join("/");
-	},
 }

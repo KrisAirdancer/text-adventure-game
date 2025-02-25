@@ -174,7 +174,7 @@ const GAMEUI = {
 		// Equip the item (update game state)
 		this.currentStateData = JSON.parse(GAME.routeRequest({
 			...request,
-			route: UTILS.getTruncatedRoute(request.route, 1)
+			route: this.getTruncatedRoute(request.route, 1)
 		}));
 
 		this.updateUi();
@@ -185,7 +185,7 @@ const GAMEUI = {
 		// Unequip the item (update the game state).
 		this.currentStateData = JSON.parse(GAME.routeRequest({
 			...request,
-			route: UTILS.getTruncatedRoute(request.route, 1)
+			route: this.getTruncatedRoute(request.route, 1)
 		}));
 
 		this.updateUi();
@@ -439,5 +439,13 @@ const GAMEUI = {
 		let currentDateTime = this.currentStateData.currentDateTime;
 		let season = UTILS.capitalizeFirstLetter(currentDateTime.season.toLowerCase());
 		return `<div>${currentDateTime.time}, Day ${currentDateTime.day}, Month ${currentDateTime.month}, Year ${currentDateTime.year} - ${season}</div>`;
-	}
+	},
+
+	getTruncatedRoute(route, deleteCount)
+	{
+		let routeTokens = UTILS.getRouteTokens(route);
+		return "/" + routeTokens.toSpliced(0, deleteCount).join("/");
+	},
+
+
 }
