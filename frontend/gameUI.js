@@ -29,12 +29,7 @@ const GAMEUI = {
     initialize()
     {
 		this.currentDisplay = this.displayEnums.MAIN_GAME_SCREEN;
-
-        this.currentStateData = JSON.parse(GAME.routeRequest({
-			// TODO: This should have a method of GET.
-            route: "/game-state"
-        }));
-
+        this.currentStateData = JSON.parse(GAME.routeRequest(this.generateRouteObject("GET", "/game-state", {})));
 		this.updateUi();
 
         console.log("===========================\nUI Successfully Initialized\n===========================");
@@ -162,20 +157,18 @@ const GAMEUI = {
 		routeTokens.shift();
 		let newRoute = "/" + routeTokens.join("/");
 		
-		this.currentStateData = JSON.parse(GAME.routeRequest({
-			...request,
-			route: newRoute
-		}));
+		this.currentStateData = JSON.parse(GAME.routeRequest(
+			this.generateRouteObject(request.method, newRoute, request.queryParams)
+		));
 		this.updateUi();
 	},
 
 	handleEquipRequest(request)
 	{
 		// Equip the item (update game state)
-		this.currentStateData = JSON.parse(GAME.routeRequest({
-			...request,
-			route: this.getTruncatedRoute(request.route, 1)
-		}));
+		this.currentStateData = JSON.parse(GAME.routeRequest(
+			this.generateRouteObject(request.method, this.getTruncatedRoute(request.route, 1), request.queryParams)
+		));
 
 		this.updateUi();
 	},
@@ -183,10 +176,9 @@ const GAMEUI = {
 	handleUnequipRequest(request)
 	{
 		// Unequip the item (update the game state).
-		this.currentStateData = JSON.parse(GAME.routeRequest({
-			...request,
-			route: this.getTruncatedRoute(request.route, 1)
-		}));
+		this.currentStateData = JSON.parse(GAME.routeRequest(
+			this.generateRouteObject(request.method, this.getTruncatedRoute(request.route, 1), request.queryParams)
+		));
 
 		this.updateUi();
 	},
@@ -258,20 +250,8 @@ const GAMEUI = {
 
 	buildEquipUnequipHtml(item)
 	{
-		let equipRequest = {
-			method: "POST",
-			route: `/menu/equip`,
-			queryParams: {
-				itemId: item.id
-			}
-		}
-		let unequipRequest = {
-			method: "POST",
-			route: `/menu/unequip`,
-			queryParams: {
-				itemId: item.id
-			}
-		}
+		const equipRequest = this.generateRouteObject("POST", "/menu/equip", {itemId: item.id});
+		const unequipRequest = this.generateRouteObject("POST", "/menu/unequip", {itemId: item.id});
 
 		const equipmentItem = this.currentStateData.player.equipment[item.type];
 		if (equipmentItem)
@@ -289,11 +269,7 @@ const GAMEUI = {
 
 	buildDropLinkHtml(item)
 	{
-		let dropRequest = {
-			method: "POST",
-			route: `/menu/drop/${item.id}`,
-			queryParams: {}
-		}
+		const dropRequest = this.generateRouteObject("POST", `/menu/drop/${item.id}`, {});
 		return this.dropItemConfirmation.showConfirmation && item.id === this.dropItemConfirmation.itemId
 				? this.buildDropItemConfirmationHtml(item.id)
 				: this.buildReportPlayerInputLinkHtml(dropRequest, "drop");
@@ -301,16 +277,8 @@ const GAMEUI = {
 
 	buildDropItemConfirmationHtml(itemId)
 	{
-		let yesRequest = {
-			method: "POST",
-			route: `/menu/confirmed-drop/${itemId}`,
-			queryParams: {}
-		};
-		let noRequest = {
-			method: "POST",
-			route: `/menu/cancel-drop/${itemId}`,
-			queryParams: {}
-		};
+		const yesRequest = this.generateRouteObject("POST", `/menu/confirmed-drop/${itemId}`, {});
+		const noRequest = this.generateRouteObject("POST", `/menu/cancel-drop/${itemId}`, {});
 
 		let newLinksHtml = `${this.buildReportPlayerInputLinkHtml(yesRequest, "yes")}/${this.buildReportPlayerInputLinkHtml(noRequest, "no")}`;
 		return "drop? " + newLinksHtml;
@@ -334,21 +302,14 @@ const GAMEUI = {
 
 		for (const [key, slotData] of Object.entries(equipmentSlotNames))
 		{
-			let unequipRequest = null;
-			if (slotData.obj)
-			{ // If slot has an item equipped.
-				unequipRequest = {
-					method: "POST",
-					route: `/menu/unequip`,
-					queryParams: {
-						itemId: slotData.obj.id
-					}
-				}
-			}
+			let unequipRequest = slotData.obj
+									? this.generateRouteObject("POST", "/menu/unequip", {itemId: slotData.obj.id})
+									: null;
 
 			const slotContents = equipment[key]
 									? equipment[key].nameSingular + ` [${this.buildReportPlayerInputLinkHtml(unequipRequest, "unequip")}]`
 									: "empty"
+
 			equipmentHtml += `<div>${slotData.name.toUpperCase()}<div></div>${slotContents}</div>${key != "FEET" ? "<div>~</div>" : ""}`;
 		}
 
@@ -357,11 +318,7 @@ const GAMEUI = {
 
 	buildBackButtonHtml()
 	{
-		let request = {
-			method: "GET",
-			route: `/menu/display-gameplay-screen`,
-			queryParams: {}
-		};
+		const request = this.generateRouteObject("GET", "/menu/display-gameplay-screen", {});
 		return this.buildReportPlayerInputLinkHtml(request, "back");
 	},
 
@@ -380,11 +337,7 @@ const GAMEUI = {
 		let actions = this.currentStateData.currentLocation.actions;
         let actionLinksHtml = "";
         actions.forEach(action => {
-			let request = {
-				method: "POST",
-				route: `/gameplay-action/${action.id}`,
-				queryParams: {}
-			};
+			const request = this.generateRouteObject("POST", `/gameplay-action/${action.id}`, {});
             actionLinksHtml += "<p>" + this.buildReportPlayerInputLinkHtml(request, action.name) + "</p>";
         })
 
@@ -395,16 +348,8 @@ const GAMEUI = {
     {
         let navBarHtml = ""
 
-		let inventoryLinkRequest = {
-			method: "GET",
-			route:"/menu/inventory",
-			queryParams: {}
-		};
-		let equipmentLinkRequest = {
-			method: "GET",
-			route:"/menu/equipment",
-			queryParams: {}
-		};
+		let inventoryLinkRequest = this.generateRouteObject("GET", "/menu/inventory", {});
+		let equipmentLinkRequest = this.generateRouteObject("GET", "/menu/equipment", {});
 		if (this.displayBackButton)
 		{
 			navBarHtml += this.buildBackButtonHtml() + `<span style="margin-right: 10px;"></span>`;
@@ -447,5 +392,17 @@ const GAMEUI = {
 		return "/" + routeTokens.toSpliced(0, deleteCount).join("/");
 	},
 
-
+	/*
+	method - (string) HTTP method type
+	route - (string) route path
+	queryParams - (obj) query parameters
+	*/
+	generateRouteObject(method, route, queryParams)
+	{
+		return {
+			method: method,
+			route: route,
+			queryParams: queryParams ?? {}
+		};
+	},
 }
