@@ -5,9 +5,10 @@ let DATA = {
 
 	_initialize()
 	{
-		LOCATIONS.forEach(location => {
-			this.LOCATIONS[location['id']] = UTILS.copyData(location);
-		})
+		// LOCATIONS.forEach(location => {
+		// 	this.LOCATIONS[location['id']] = UTILS.copyData(location);
+		// })
+		this.LOCATIONS = LOCATIONS;
 
 		ACTIONS.forEach(action => {
 			this.ACTIONS[action['id']] = UTILS.copyData(action);
