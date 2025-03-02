@@ -10,13 +10,15 @@ let DATA = {
 		// })
 		this.LOCATIONS = LOCATIONS;
 
-		ACTIONS.forEach(action => {
-			this.ACTIONS[action['id']] = UTILS.copyData(action);
-		})
+		// ACTIONS.forEach(action => {
+		// 	this.ACTIONS[action['id']] = UTILS.copyData(action);
+		// })
+		this.ACTIONS = ACTIONS;
 
-		ITEMS.forEach(item => {
-			this.ITEMS[item['id']] = UTILS.copyData(item);
-		})
+		// ITEMS.forEach(item => {
+		// 	this.ITEMS[item['id']] = UTILS.copyData(item);
+		// })
+		this.ITEMS = ITEMS;
 	},
 
 	_getLocation(locationId)

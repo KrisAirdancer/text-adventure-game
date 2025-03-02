@@ -80,7 +80,7 @@ let GAME = {
 		STATE._removeItemsFromInventory(routeTokens[1], quantity);
 	},
 
-	// handleSearchAction() should ONlY determine what was found.
+	// handleSearchAction() should ONLY determine what was found.
 	// A different function should be called to update the inventory.
     _handleSearchAction(action)
     {
