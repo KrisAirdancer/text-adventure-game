@@ -10,7 +10,7 @@
 const LOCATIONS = {
     PLAYERCABIN: {
         id: "PLAYERCABIN",
-        name: "Player Cabin",
+        name: "Your Cabin",
         description: "A simple one room log cabin in the trees on the edge of Thistlewood.",
         actions: [
             "TRAVEL_THISTLEWOOD"
