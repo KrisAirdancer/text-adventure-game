@@ -6,9 +6,7 @@ let DATA = {
 	_initialize()
 	{
 		this.LOCATIONS = LOCATIONS;
-
 		this.ACTIONS = ACTIONS;
-
 		this.ITEMS = ITEMS;
 	},
 
