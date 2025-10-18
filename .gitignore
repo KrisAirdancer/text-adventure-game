@@ -1,2 +1,7 @@
 # VSCode
 .vscode
+
+# Python
+.venv-thistlerpg
+__pycache__/
+*.py[cod]
