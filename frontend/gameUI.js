@@ -29,7 +29,7 @@ const GAMEUI = {
     initialize()
     {
 		this.currentDisplay = this.displayEnums.MAIN_GAME_SCREEN;
-        this.currentStateData = JSON.parse(GAME.routeRequest(this.generateRouteObject("GET", "/game-state", {})));
+        this.currentStateData = JSON.parse(GAME.routeRequest(UTILS.copyData(UTILS.generateRouteObj("GET /game-state"))));
 		this.updateUi();
 
         console.log("===========================\nUI Successfully Initialized\n===========================");
@@ -39,9 +39,9 @@ const GAMEUI = {
     {
         console.log("AT: GAMEUI.reportPlayerInput()");
 
-		let routeTokens = UTILS.getRouteTokens(request.route);
+		request = UTILS.generateRouteObj(request);
 
-		switch (routeTokens[0])
+		switch (request.routeTokens[0])
 		{
 			case "menu":
 				this.handleMenuRequest(request);
@@ -93,7 +93,7 @@ const GAMEUI = {
 	handleGameplayActionRequest(request)
 	{
 		this.currentDisplay = this.displayEnums.MAIN_GAME_SCREEN;
-		this.currentStateData = JSON.parse(GAME.routeRequest(request));
+		this.currentStateData = JSON.parse(GAME.routeRequest(UTILS.copyData(request)));
 		this.updateUi();
 	},
 
@@ -158,7 +158,7 @@ const GAMEUI = {
 		let newRoute = "/" + routeTokens.join("/");
 		
 		this.currentStateData = JSON.parse(GAME.routeRequest(
-			this.generateRouteObject(request.method, newRoute, request.queryParams)
+			UTILS.copyData(UTILS.generateRouteObj(request.method, newRoute, request.queryParams))
 		));
 		this.updateUi();
 	},
@@ -167,7 +167,7 @@ const GAMEUI = {
 	{
 		// Equip the item (update game state)
 		this.currentStateData = JSON.parse(GAME.routeRequest(
-			this.generateRouteObject(request.method, this.getTruncatedRoute(request.route, 1), request.queryParams)
+			UTILS.copyData(UTILS.generateRouteObj(request.method, this.getTruncatedRoute(request.route, 1), request.queryParams))
 		));
 
 		this.updateUi();
@@ -177,7 +177,7 @@ const GAMEUI = {
 	{
 		// Unequip the item (update the game state).
 		this.currentStateData = JSON.parse(GAME.routeRequest(
-			this.generateRouteObject(request.method, this.getTruncatedRoute(request.route, 1), request.queryParams)
+			UTILS.copyData(UTILS.generateRouteObj(request.method, this.getTruncatedRoute(request.route, 1), request.queryParams))
 		));
 
 		this.updateUi();
@@ -250,8 +250,8 @@ const GAMEUI = {
 
 	buildEquipUnequipHtml(item)
 	{
-		const equipRequest = this.generateRouteObject("POST", "/menu/equip", {itemId: item.id});
-		const unequipRequest = this.generateRouteObject("POST", "/menu/unequip", {itemId: item.id});
+		const equipRequest = UTILS.generateRouteStr("POST", "/menu/equip", {itemId: item.id});
+		const unequipRequest = UTILS.generateRouteStr("POST", "/menu/unequip", {itemId: item.id});
 
 		const equipmentItem = this.currentStateData.player.equipment[item.type];
 		if (equipmentItem)
@@ -269,7 +269,7 @@ const GAMEUI = {
 
 	buildDropLinkHtml(item)
 	{
-		const dropRequest = this.generateRouteObject("POST", `/menu/drop/${item.id}`, {});
+		const dropRequest = UTILS.generateRouteStr("POST", `/menu/drop/${item.id}`, {});
 		return this.dropItemConfirmation.showConfirmation && item.id === this.dropItemConfirmation.itemId
 				? this.buildDropItemConfirmationHtml(item.id)
 				: this.buildReportPlayerInputLinkHtml(dropRequest, "drop");
@@ -277,8 +277,8 @@ const GAMEUI = {
 
 	buildDropItemConfirmationHtml(itemId)
 	{
-		const yesRequest = this.generateRouteObject("POST", `/menu/confirmed-drop/${itemId}`, {});
-		const noRequest = this.generateRouteObject("POST", `/menu/cancel-drop/${itemId}`, {});
+		const yesRequest = UTILS.generateRouteStr("POST", `/menu/confirmed-drop/${itemId}`, {});
+		const noRequest = UTILS.generateRouteStr("POST", `/menu/cancel-drop/${itemId}`, {});
 
 		let newLinksHtml = `${this.buildReportPlayerInputLinkHtml(yesRequest, "yes")}/${this.buildReportPlayerInputLinkHtml(noRequest, "no")}`;
 		return "drop? " + newLinksHtml;
@@ -303,7 +303,7 @@ const GAMEUI = {
 		for (const [key, slotData] of Object.entries(equipmentSlotNames))
 		{
 			let unequipRequest = slotData.obj
-									? this.generateRouteObject("POST", "/menu/unequip", {itemId: slotData.obj.id})
+									? UTILS.generateRouteStr("POST", "/menu/unequip", {itemId: slotData.obj.id})
 									: null;
 
 			const slotContents = equipment[key]
@@ -318,7 +318,7 @@ const GAMEUI = {
 
 	buildBackButtonHtml()
 	{
-		const request = this.generateRouteObject("GET", "/menu/display-gameplay-screen", {});
+		const request = UTILS.generateRouteStr("GET", "/menu/display-gameplay-screen", {});
 		return this.buildReportPlayerInputLinkHtml(request, "back");
 	},
 
@@ -337,7 +337,7 @@ const GAMEUI = {
 		let actions = this.currentStateData.currentLocation.actions;
         let actionLinksHtml = "";
         actions.forEach(action => {
-			const request = this.generateRouteObject("POST", `/gameplay-action/${action.id}`, {});
+			const request = UTILS.generateRouteStr("POST", `/gameplay-action/${action.id}`, {});
             actionLinksHtml += "<p>" + this.buildReportPlayerInputLinkHtml(request, action.name) + "</p>";
         })
 
@@ -348,8 +348,8 @@ const GAMEUI = {
     {
         let navBarHtml = ""
 
-		let inventoryLinkRequest = this.generateRouteObject("GET", "/menu/inventory", {});
-		let equipmentLinkRequest = this.generateRouteObject("GET", "/menu/equipment", {});
+		let inventoryLinkRequest = UTILS.generateRouteStr("GET", "/menu/inventory", {});
+		let equipmentLinkRequest = UTILS.generateRouteStr("GET", "/menu/equipment", {});
 		if (this.displayBackButton)
 		{
 			navBarHtml += this.buildBackButtonHtml() + `<span style="margin-right: 10px;"></span>`;
@@ -390,19 +390,5 @@ const GAMEUI = {
 	{
 		let routeTokens = UTILS.getRouteTokens(route);
 		return "/" + routeTokens.toSpliced(0, deleteCount).join("/");
-	},
-
-	/*
-	method - (string) HTTP method type
-	route - (string) route path
-	queryParams - (obj) query parameters
-	*/
-	generateRouteObject(method, route, queryParams)
-	{
-		return {
-			method: method,
-			route: route,
-			queryParams: queryParams ?? {}
-		};
-	},
+	}
 }

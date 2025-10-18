@@ -34,6 +34,43 @@ const UTILS = {
 		return route.substring(1).split("/");
 	},
 
+	generateRouteObj(request) {
+		// Split the string into method and path
+		const [method, fullPath] = request.split(" ");
+		const [route, queryString] = fullPath.split("?");
+
+		// Convert query string into an object
+		const queryParams = {};
+		if (queryString) {
+			queryString.split("&").forEach(pair => {
+				const [key, value] = pair.split("=");
+				queryParams[key] = value;
+			});
+		}
+
+		// Tokenize route
+		const routeTokens = route.substring(1).split("/");
+
+		return {
+			method,
+			route,
+			queryParams,
+			routeTokens
+		};	
+	},
+
+		/*
+	method - (string) HTTP method type
+	route - (string) route path
+	queryParams - (obj) query parameters
+	*/
+	// generateRouteObject(method, route, queryParams)
+	generateRouteStr(method, route, queryParams)
+	{
+		const queryParamsString = Object.entries(queryParams).map(([key, value]) => `${key}=${value}`).join("&");
+		return `${method} ${route}` + (queryParamsString ? `?${queryParamsString}` : '');
+	},
+
 	// Source: https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
 	capitalizeFirstLetter(val) {
 		return String(val).charAt(0).toUpperCase() + String(val).slice(1);

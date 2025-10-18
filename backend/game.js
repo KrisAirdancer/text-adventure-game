@@ -22,10 +22,7 @@ let GAME = {
 		console.log("AT: GAME.routeRequest()");
 		console.log("request: ", request);
 
-		let routeTokens = UTILS.getRouteTokens(request.route);
-		console.log(routeTokens[0]);
-
-		switch(routeTokens[0])
+		switch(request.routeTokens[0])
 		{
 			// Everything that is returned to the frontend should be in string format to prevent manipulation of the data by the fronted from changing the underlying data on the backend.
 			case "gameplay-action": // POST /gameplay-action
@@ -49,7 +46,7 @@ let GAME = {
 
     _handleGameplayAction(request)
     {
-		let actionId = UTILS.getRouteTokens(request.route)[1];
+		let actionId = request.routeTokens[1];
 
         const action = DATA._getAction(actionId);
 
