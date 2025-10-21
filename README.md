@@ -15,6 +15,7 @@ Let's see how this goes.
   - `which python`
   - You should see a path like this `/c/Users/<username>/projects/text-adventure-game/.venv-thistlerpg/Scripts/python`
 - To terminate the virtual environment: `deactivate` (really, that's it)
+- Run the project with `fastapi dev main.py`
 
 ## Dependencies
 

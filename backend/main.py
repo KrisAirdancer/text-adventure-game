@@ -1,8 +1,22 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from contextlib import asynccontextmanager
+import json
+from data import DataManager
+from models import Item
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    app.state.dataManager = DataManager()
+    await app.state.dataManager.initialize()
+    print('===== Startup complete =====')
 
+    yield  # App runs here
 
+app = FastAPI(lifespan=lifespan)
+
+# TODO: Remove this endpoint - it's just for testing.
 @app.get("/")
-async def root():
-    return {"message": "Hello World"}
+async def root(request: Request) -> list[Item]:
+	print('AT: /')
+
+	return request.app.state.dataManager.items
