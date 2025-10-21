@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Dict
+from typing import Dict, Optional
 
 class Item(BaseModel):
 	id: str
@@ -9,4 +9,27 @@ class Item(BaseModel):
 	type: str
 	maxNumPerSlot: int
 
-	# TODO: Add an @classmethod constructor to take in a JSON string to initialize the object. This will reduce clutter where the objects are initialized.
+class SearchItemDetails(BaseModel):
+	itemId: str
+	minQuantity: int
+	maxQuantity: int
+	probability: int
+
+class SearchActionDetails(BaseModel):
+	maxItems: int
+	notificationTextTemplate: str
+	noItemsFoundText: str
+	availableItems: list[SearchItemDetails]
+
+class Action(BaseModel):
+	id: str
+	type: str # TODO: Add enums for the types (and for all of the other constants for that matter).
+	name: str
+	description: str
+	travelDestinationId: Optional[str] = None # TODO: What is this for?
+	searchDetails: Optional[SearchActionDetails] = None
+
+# TODO: Delete this class. It is for testing only.
+class AllData(BaseModel):
+	items: list[Item]
+	actions: list[Action]

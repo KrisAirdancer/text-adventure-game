@@ -1,31 +1,35 @@
-{
-  "TRAVEL_THISTLEWOOD": {
+[
+ {
     "id": "TRAVEL_THISTLEWOOD",
+	"type": "TRAVEL",
     "name": "Travel to Thistlewood",
     "description": "Travels the player to Thistlewood.",
     "travelDestinationId": "THISTLEWOOD"
   },
-  "TRAVEL_PLAYERCABIN": {
+  {
     "id": "TRAVEL_PLAYERCABIN",
+	"type": "TRAVEL",
     "name": "Travel to Your Cabin",
     "description": "Travels the player to their cabin in Thistlewood.",
     "travelDestinationId": "PLAYERCABIN"
   },
-  "TRAVEL_THISTLEWOODFOREST": {
+  {
     "id": "TRAVEL_THISTLEWOODFOREST",
+	"type": "TRAVEL",
     "name": "Travel to Thistlewood Forest",
     "description": "Travels the player to Thistlewood Forest.",
     "travelDestinationId": "THISTLEWOODFOREST"
   },
-  "SEARCH_THISTLEWOODFOREST": {
+  {
     "id": "SEARCH_THISTLEWOODFOREST",
+	"type": "SEARCH",
     "name": "Search Thistlewood Forest",
     "description": "Searches Thistlewood Forest for items.",
-    "search": {
+    "searchDetails": {
       "maxItems": 3,
       "notificationTextTemplate": "You find <numFound> <itemName>.",
       "noItemsFoundText": "You find nothing of interest.",
-      "items": [
+      "availableItems": [
         {
           "itemId": "MORELMUSHROOMS",
           "minQuantity": 1,
@@ -47,4 +51,4 @@
       ]
     }
   }
-}
+]

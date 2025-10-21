@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request
 from contextlib import asynccontextmanager
 import json
 from data import DataManager
-from models import Item
+from models import Item, AllData
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -16,7 +16,10 @@ app = FastAPI(lifespan=lifespan)
 
 # TODO: Remove this endpoint - it's just for testing.
 @app.get("/")
-async def root(request: Request) -> list[Item]:
+async def root(request: Request) -> AllData:
 	print('AT: /')
 
-	return request.app.state.dataManager.items
+	return AllData(
+            items = request.app.state.dataManager.items,
+            actions = request.app.state.dataManager.actions
+	)

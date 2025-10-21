@@ -1,7 +1,7 @@
 import json
 
 from pydantic import ValidationError
-from models import Item
+from models import Item, Action
 
 class DataManager:
 	def __init__(self):
@@ -10,11 +10,12 @@ class DataManager:
 		
 	async def initialize(self):
 		print('AT: DataManager.initialize()')
-		self.items: list[Item] = await loadItemsData('./data/items.json')
+		self.items: list[Item] = await loadItemsData()
+		self.actions: list[Action] = await loadActionsData()
 		
-async def loadItemsData(filePath: str) -> list[Item]:
+async def loadItemsData() -> list[Item]:
 	print('AT: DataManager.loadItemsData()')
-	with open(filePath) as file:
+	with open('./data/items.json') as file:
 		itemsJson = json.load(file)
 
 	items = []
@@ -25,3 +26,17 @@ async def loadItemsData(filePath: str) -> list[Item]:
 			print(f'Invalid item: {item}\nError: {e}')
 	
 	return items
+
+async def loadActionsData() -> list[Action]:
+	print('AT: DataManager.loadActionsData()')
+	with open('./data/actions.json') as file:
+		actionsJson = json.load(file)
+
+	actions = []
+	for action in actionsJson:
+		try:
+			actions.append(Action.model_validate(action))
+		except ValidationError as e:
+			print(f'Invalid action: {action}\nError: {e}')
+	
+	return actions
