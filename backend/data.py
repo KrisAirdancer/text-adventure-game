@@ -1,7 +1,7 @@
 import json
 
 from pydantic import ValidationError
-from models import Item, Action, Location
+from models import Item, Action, Location, GameState
 
 class DataManager:
 	def __init__(self):
@@ -11,12 +11,14 @@ class DataManager:
 		self.items: list[Item] = []
 		self.actions: list[Action] = []
 		self.locations: list[Location] = []
+		self.gameState: GameState | None = None
 		
 	async def initialize(self):
 		print('AT: DataManager.initialize()')
 		self.items = await loadItemsData()
 		self.actions = await loadActionsData()
 		self.locations = await loadLocationsData()
+		self.gameState = await loadGameStateData()
 		
 async def loadItemsData() -> list[Item]:
 	print('AT: DataManager.loadItemsData()')
@@ -59,3 +61,10 @@ async def loadLocationsData() -> list[Location]:
 			print(f'Invalid location: {location}\nError: {e}')
 	
 	return locations
+
+async def loadGameStateData() -> GameState:
+	print('AT: DataManager.loadGameStateData()')
+	with open('./data/gameState.json') as file:
+		stateJson = json.load(file)
+
+	return GameState.model_validate(stateJson)

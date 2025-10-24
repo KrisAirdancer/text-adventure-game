@@ -1,0 +1,30 @@
+{
+	"currentLocationId": "PLAYERCABIN",
+    "player": {
+		"inventory": [
+		{ "id": "COPPERCOINS", "count": 100 },
+		{ "id": "BRONZEAXE", "count": 1 },
+		{ "id": "LEATHERBOOTS", "count": 1 },
+		{ "id": "BRONZEBUCKLER", "count": 1 },
+		{ "id": "LEATHERGLOVES", "count": 1 },
+		{ "id": "GOLDNECKLACE", "count": 1 },
+		{ "id": "BRONZECHAINMAILSHIRT", "count": 1 },
+		{ "id": "BRONZECHAINMAILCOIF", "count": 1 },
+		{ "id": "LEATHERLEGS", "count": 1 },
+		{ "id": "LEATHERBOOTS", "count": 1 },
+		{ "id": "GOLDRING", "count": 1 },
+		{ "id": "STICKS", "count": 3 }
+		],
+		"equipment": {
+			"headItemId": null,
+			"neckItemId": null,
+			"bodyItemId": null,
+			"handsItemId": null,
+			"onHandItemId": null,
+			"offHandItemId": null,
+			"ringItemId": null,
+			"legsItemId": null,
+			"feetItemId": null
+		}
+	}
+}
