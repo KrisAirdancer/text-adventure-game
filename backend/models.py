@@ -29,7 +29,14 @@ class Action(BaseModel):
 	travelDestinationId: Optional[str] = None # TODO: What is this for?
 	searchDetails: Optional[SearchActionDetails] = None
 
+class Location(BaseModel):
+	id: str
+	name: str
+	description: str
+	actions: list[str] # Array of location IDs
+
 # TODO: Delete this class. It is for testing only.
 class AllData(BaseModel):
 	items: list[Item]
 	actions: list[Action]
+	locations: list[Location]

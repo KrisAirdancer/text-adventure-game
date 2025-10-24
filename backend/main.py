@@ -21,5 +21,6 @@ async def root(request: Request) -> AllData:
 
 	return AllData(
             items = request.app.state.dataManager.items,
-            actions = request.app.state.dataManager.actions
+            actions = request.app.state.dataManager.actions,
+            locations = request.app.state.dataManager.locations
 	)

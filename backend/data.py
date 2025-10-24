@@ -1,17 +1,22 @@
 import json
 
 from pydantic import ValidationError
-from models import Item, Action
+from models import Item, Action, Location
 
 class DataManager:
 	def __init__(self):
-		self.items: list[Item] = []
 		print('AT: DataManager.__init__()')
+
+		# TODO: Replace these lists with a new Pydantic model of ItemList, ActionList, etc. that contains the list of elements and some metadata.
+		self.items: list[Item] = []
+		self.actions: list[Action] = []
+		self.locations: list[Location] = []
 		
 	async def initialize(self):
 		print('AT: DataManager.initialize()')
-		self.items: list[Item] = await loadItemsData()
-		self.actions: list[Action] = await loadActionsData()
+		self.items = await loadItemsData()
+		self.actions = await loadActionsData()
+		self.locations = await loadLocationsData()
 		
 async def loadItemsData() -> list[Item]:
 	print('AT: DataManager.loadItemsData()')
@@ -40,3 +45,17 @@ async def loadActionsData() -> list[Action]:
 			print(f'Invalid action: {action}\nError: {e}')
 	
 	return actions
+
+async def loadLocationsData() -> list[Location]:
+	print('AT: DataManager.loadLocationsData()')
+	with open('./data/locations.json') as file:
+		locationsJson = json.load(file)
+
+	locations = []
+	for location in locationsJson:
+		try:
+			locations.append(Location.model_validate(location))
+		except ValidationError as e:
+			print(f'Invalid location: {location}\nError: {e}')
+	
+	return locations
