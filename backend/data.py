@@ -1,5 +1,5 @@
 import json
-
+from pathlib import Path
 from pydantic import ValidationError
 from models import Item, Action, Location, GameState
 
@@ -22,7 +22,9 @@ class DataManager:
 		
 async def loadItemsData() -> list[Item]:
 	print('AT: DataManager.loadItemsData()')
-	with open('./data/items.json') as file:
+
+	path = Path(__file__).parent / 'data' / 'items.json'
+	with open(path) as file:
 		itemsJson = json.load(file)
 
 	items = []
@@ -36,7 +38,9 @@ async def loadItemsData() -> list[Item]:
 
 async def loadActionsData() -> list[Action]:
 	print('AT: DataManager.loadActionsData()')
-	with open('./data/actions.json') as file:
+
+	path = Path(__file__).parent / 'data' / 'actions.json'
+	with open(path) as file:
 		actionsJson = json.load(file)
 
 	actions = []
@@ -50,7 +54,9 @@ async def loadActionsData() -> list[Action]:
 
 async def loadLocationsData() -> list[Location]:
 	print('AT: DataManager.loadLocationsData()')
-	with open('./data/locations.json') as file:
+
+	path = Path(__file__).parent / 'data' / 'locations.json'
+	with open(path) as file:
 		locationsJson = json.load(file)
 
 	locations = []
@@ -64,7 +70,9 @@ async def loadLocationsData() -> list[Location]:
 
 async def loadGameStateData() -> GameState:
 	print('AT: DataManager.loadGameStateData()')
-	with open('./data/gameState.json') as file:
+
+	path = Path(__file__).parent / 'data' / 'gameState.json'
+	with open(path) as file:
 		stateJson = json.load(file)
 
 	return GameState.model_validate(stateJson)

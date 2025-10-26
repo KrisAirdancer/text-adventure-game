@@ -1,8 +1,7 @@
 from fastapi import FastAPI, Request
 from contextlib import asynccontextmanager
-import json
 from data import DataManager
-from models import Item, AllData
+from models import AllData
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

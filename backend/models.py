@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Dict, Optional
+from typing import Optional
 
 class Item(BaseModel):
 	id: str
