@@ -1,12 +1,12 @@
 from fastapi import FastAPI, Request
 from contextlib import asynccontextmanager
-from data import DataManager
+from game import Game
 from models import AllData
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    app.state.dataManager = DataManager()
-    await app.state.dataManager.initialize()
+    app.state.game = Game()
+    await app.state.game.initialize()
     print('===== Startup complete =====')
 
     yield  # App runs here
@@ -18,9 +18,4 @@ app = FastAPI(lifespan=lifespan)
 async def root(request: Request) -> AllData:
 	print('AT: /')
 
-	return AllData(
-            items = request.app.state.dataManager.items,
-            actions = request.app.state.dataManager.actions,
-            locations = request.app.state.dataManager.locations,
-            gameState = request.app.state.dataManager.gameState
-	)
+	return request.app.state.game.getAllData()
