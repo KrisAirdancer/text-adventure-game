@@ -5,3 +5,6 @@
 .venv-thistlerpg
 __pycache__/
 *.py[cod]
+
+# Vite
+.vite

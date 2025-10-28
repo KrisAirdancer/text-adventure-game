@@ -31,3 +31,7 @@ a:active {
 #content-area {
     margin-bottom: 10px;
 }
+
+.deleteme {
+	color: #94886e;
+}
