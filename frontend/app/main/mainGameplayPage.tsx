@@ -1,7 +1,17 @@
 export function MainGameplayPage() {
-  return (
-    <main className="h-screen bg-neutral-700">
-		<div className="text-neutral-100 text-xl">Welcome to Thistle RPG!</div>
-    </main>
-  );
+
+	const linkCSS = [
+		"cursor-pointer",
+		"hover:underline",
+		"",
+	].join(" ");
+
+	return (
+		<main className="flex flex-col items-center h-screen p-4 bg-stone-800 text-lg text-stone-100">
+			<div className="flex gap-2 h-auto">
+				<div className={linkCSS}>Inventory</div>
+				<div className={linkCSS}>Equipment</div>
+			</div>
+		</main>
+	);
 }
